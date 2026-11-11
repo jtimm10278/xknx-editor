@@ -32,6 +32,7 @@ from editor_gui import (
     feedback,
     file_dialogs,
     host,
+    offline,
     self_update,
     web,
 )
@@ -290,6 +291,11 @@ def no_connect(argv: list[str]) -> bool:
     """Whether ``--no-connect`` asks this start to connect to no KNX interface, whatever the
     setting Connect at Startup says."""
     return "--no-connect" in argv[1:]
+
+
+def offline_flag(argv: list[str]) -> bool:
+    """Whether ``--offline`` was given: this start fetches nothing from the internet."""
+    return "--offline" in argv[1:]
 
 
 # The password of the project given on the command line, without --password-file.
@@ -612,6 +618,8 @@ class KnxGuiApp:
         # FPS and the idling toggle at the end of the status bar.
         self._show_status_fps = False
         self._show_status_bar = True
+        # --offline was given: offline mode stays on until the editor ends (see _main).
+        self.offline_forced = False
         # The Manufacturer tab was hidden for a selected space (see _sync_device_section), and the
         # tabs of its section in their order then.
         self._manufacturer_hidden = False
@@ -1049,8 +1057,14 @@ class KnxGuiApp:
         if trace_key_store.apply_cached_key():
             self._log.info("trace key loaded")
         self._register_editor()
-        # Best-effort check for a newer release on GitHub (unless the user disabled it).
-        if self._update_check_enabled():
+        if offline.is_offline():
+            self._log.info(
+                "offline mode: nothing is fetched from the internet",
+                reason="command line" if self.offline_forced else "setting",
+            )
+        # Best-effort check for a newer release on GitHub (unless the user disabled it, or the
+        # editor is offline: the check would only fail).
+        if self._update_check_enabled() and not offline.is_offline():
             self._start_update_check(manual=False)
         # With other editors running, the user is asked first (_render_running_editors_modal).
         if not self.running_editors:
@@ -1226,6 +1240,20 @@ class KnxGuiApp:
         end_dialog()
 
     # --- update check (GitHub releases) -----------------------------------
+
+    # --- offline mode (see offline.py) ------------------------------------
+
+    def _offline_setting(self) -> bool:
+        return bool(load_settings("app").get("offline", False))
+
+    def _set_offline(self, enabled: bool) -> None:
+        """Store the setting; it applies at once (unless --offline holds it on for this start)."""
+        data = load_settings("app")
+        data["offline"] = enabled
+        save_settings("app", data)
+        if not self.offline_forced:
+            offline.set_offline(enabled)
+            self._log.info("offline mode on" if enabled else "offline mode off")
 
     def _update_check_enabled(self) -> bool:
         return bool(load_settings("app").get("update_check_enabled", True))
@@ -4176,6 +4204,12 @@ class KnxGuiApp:
         else:
             self._status_part(S.STATUS_NO_PROJECT)
 
+        if offline.is_offline():
+            self._status_part(
+                S.STATUS_OFFLINE,
+                status_color("warning"),
+                tooltip=S.SETTING_OFFLINE_HINT,
+            )
         if self._mcp_plugin.is_running:
             self._status_part(S.STATUS_MCP_RUNNING, status_color("success"))
         self._home_assistant_plugin.render_status(self._status_part)
@@ -6755,6 +6789,19 @@ class KnxGuiApp:
                 shown=lambda: web.active_hub is None,
             ),
             Setting(
+                "offline",
+                lambda: S.SETTING_OFFLINE,
+                "bool",
+                get=lambda: offline.is_offline(),
+                set=lambda enabled: self._set_offline(bool(enabled)),
+                hint=lambda: (
+                    S.SETTING_OFFLINE_FORCED_HINT
+                    if self.offline_forced
+                    else S.SETTING_OFFLINE_HINT
+                ),
+                read_only=lambda: self.offline_forced,
+            ),
+            Setting(
                 "update_check",
                 lambda: S.SETTING_UPDATE_CHECK,
                 "bool",
@@ -7646,6 +7693,9 @@ def _main() -> None:
     )
     product = settings.get("product_language")
     set_product_language(product if isinstance(product, str) else None)
+    # Before anything can fetch (the master data loads while the app is built).
+    offline_forced = offline_flag(sys.argv)
+    offline.set_offline(offline_forced or bool(settings.get("offline", False)))
 
     # App icon: hello_imgui loads assets/app_settings/icon.png as the window/app icon.
     hello_imgui.set_assets_folder(str(Path(__file__).parent / "assets"))
@@ -7657,6 +7707,7 @@ def _main() -> None:
     # Parsed product data lived in the data folder before; it belongs to the cache folder.
     move_product_cache(config_dir() / "ir_cache")
     app = KnxGuiApp(catalog_path)
+    app.offline_forced = offline_forced
     app.startup_file = startup_file(sys.argv)
     app.startup_password_file = startup_password_file(sys.argv)
     app.no_connect = no_connect(sys.argv)

@@ -1673,3 +1673,12 @@ msgstr "Ingen giltig signeringsnyckel är angiven, så den exporterade .knxproj 
 
 msgid "Export Anyway"
 msgstr "Exportera ändå"
+
+msgid "Offline"
+msgstr "Offline"
+
+msgid "Fetch nothing from the internet: no update check, master data refresh, online catalog, documentation lookup or download. The KNX connection is not affected."
+msgstr "Hämta ingenting från internet: ingen uppdateringskontroll, uppdatering av stamdata, onlinekatalog, dokumentationssökning eller nedladdning. KNX-anslutningen påverkas inte."
+
+msgid "On for this start (--offline on the command line)."
+msgstr "På för den här starten (--offline på kommandoraden)."

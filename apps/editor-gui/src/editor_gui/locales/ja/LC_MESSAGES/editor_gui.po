@@ -1660,3 +1660,12 @@ msgstr "有効な署名キーが設定されていないため、エクスポー
 
 msgid "Export Anyway"
 msgstr "それでもエクスポート"
+
+msgid "Offline"
+msgstr "オフライン"
+
+msgid "Fetch nothing from the internet: no update check, master data refresh, online catalog, documentation lookup or download. The KNX connection is not affected."
+msgstr "インターネットから何も取得しません。更新の確認、マスターデータの更新、オンラインカタログ、ドキュメント検索、ダウンロードを行いません。KNX 接続には影響しません。"
+
+msgid "On for this start (--offline on the command line)."
+msgstr "この起動ではオンです（コマンドラインの --offline）。"

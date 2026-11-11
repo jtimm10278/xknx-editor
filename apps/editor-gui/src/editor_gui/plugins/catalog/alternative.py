@@ -19,6 +19,7 @@ from urllib.parse import urlsplit
 
 import httpx
 
+from editor_gui import offline
 from editor_gui.device_info import application_version_text
 from editor_gui.plugins.catalog.online_catalog import OnlineCatalogError
 from editor_gui.settings import load_settings, save_settings
@@ -493,6 +494,10 @@ class AlternativeCatalogClient:
                 status=429,
                 retry_after=math.ceil(self._retry_until - now),
             )
+        try:
+            offline.check(self.settings.base_url + path)
+        except offline.OfflineError as exc:
+            raise AlternativeCatalogError(str(exc.reason)) from exc
         time.sleep(max(0, self._next_request - now))
         self._next_request = time.monotonic() + 0.55
         try:

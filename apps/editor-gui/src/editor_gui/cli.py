@@ -18,6 +18,10 @@ _GENERAL = (
         "Start another editor without offering to switch to one that runs already.",
     ),
     (
+        "--offline",
+        "Fetch nothing from the internet for this start (Settings > General > Offline).",
+    ),
+    (
         "--password-file=FILE",
         "Password of the project file given from the first line of FILE (or "
         "XKNX_PROJECT_PASSWORD) instead of asking for it.",

@@ -1686,3 +1686,12 @@ msgstr "Nie ustawiono prawidłowego klucza podpisywania, więc wyeksportowany pl
 
 msgid "Export Anyway"
 msgstr "Eksportuj mimo to"
+
+msgid "Offline"
+msgstr "Offline"
+
+msgid "Fetch nothing from the internet: no update check, master data refresh, online catalog, documentation lookup or download. The KNX connection is not affected."
+msgstr "Nie pobieraj niczego z internetu: bez sprawdzania aktualizacji, odświeżania danych podstawowych, katalogu online, wyszukiwania dokumentacji ani pobierania. Nie wpływa to na połączenie KNX."
+
+msgid "On for this start (--offline on the command line)."
+msgstr "Włączone dla tego uruchomienia (--offline w wierszu poleceń)."

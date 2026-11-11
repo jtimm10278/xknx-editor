@@ -15,6 +15,7 @@ _ARGUMENTS = (
     "--help",
     "--new-instance",
     "--no-connect",
+    "--offline",
     "--password-file=",
     "--profile",
     "--web[=",

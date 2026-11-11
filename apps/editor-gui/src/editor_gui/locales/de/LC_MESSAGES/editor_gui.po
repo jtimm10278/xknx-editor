@@ -1830,3 +1830,12 @@ msgstr "Es ist kein gültiger Signaturschlüssel gesetzt, daher erhält die expo
 
 msgid "Export Anyway"
 msgstr "Trotzdem exportieren"
+
+msgid "Offline"
+msgstr "Offline"
+
+msgid "Fetch nothing from the internet: no update check, master data refresh, online catalog, documentation lookup or download. The KNX connection is not affected."
+msgstr "Nichts aus dem Internet laden: keine Update-Prüfung, keine Aktualisierung der Stammdaten, kein Online-Katalog, keine Dokumentationssuche und keine Downloads. Die KNX-Verbindung ist davon nicht betroffen."
+
+msgid "On for this start (--offline on the command line)."
+msgstr "Für diesen Start eingeschaltet (--offline auf der Kommandozeile)."

@@ -1733,3 +1733,12 @@ msgstr "Er is geen geldige ondertekeningssleutel ingesteld, dus de geëxporteerd
 
 msgid "Export Anyway"
 msgstr "Toch exporteren"
+
+msgid "Offline"
+msgstr "Offline"
+
+msgid "Fetch nothing from the internet: no update check, master data refresh, online catalog, documentation lookup or download. The KNX connection is not affected."
+msgstr "Niets van internet ophalen: geen updatecontrole, vernieuwing van stamgegevens, online catalogus, documentatie opzoeken of downloads. De KNX-verbinding blijft ongewijzigd."
+
+msgid "On for this start (--offline on the command line)."
+msgstr "Aan voor deze start (--offline op de opdrachtregel)."

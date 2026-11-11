@@ -1999,6 +1999,26 @@ class MenuStrings:
     def SETTING_UPDATE_CHECK(self) -> str:
         return _("Check for Updates on Startup")
 
+    # --- offline mode ---------------------------------------------------
+    @property
+    def SETTING_OFFLINE(self) -> str:
+        return _("Offline")
+
+    @property
+    def SETTING_OFFLINE_HINT(self) -> str:
+        return _(
+            "Fetch nothing from the internet: no update check, master data refresh, online "
+            "catalog, documentation lookup or download. The KNX connection is not affected."
+        )
+
+    @property
+    def SETTING_OFFLINE_FORCED_HINT(self) -> str:
+        return _("On for this start (--offline on the command line).")
+
+    @property
+    def STATUS_OFFLINE(self) -> str:
+        return _("Offline")
+
     @property
     def UPDATE_TITLE(self) -> str:
         return _("Update Available")

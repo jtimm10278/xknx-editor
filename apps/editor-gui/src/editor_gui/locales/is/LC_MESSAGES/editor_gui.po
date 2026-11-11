@@ -1745,3 +1745,12 @@ msgstr "Enginn gildur undirritunarlykill er stilltur, svo útflutt .knxproj fær
 
 msgid "Export Anyway"
 msgstr "Flytja samt út"
+
+msgid "Offline"
+msgstr "Ótengdur"
+
+msgid "Fetch nothing from the internet: no update check, master data refresh, online catalog, documentation lookup or download. The KNX connection is not affected."
+msgstr "Sækja ekkert af netinu: engin uppfærsluleit, endurnýjun grunngagna, vefskrá, leit í skjölun eða niðurhal. KNX-tengingin breytist ekki."
+
+msgid "On for this start (--offline on the command line)."
+msgstr "Kveikt fyrir þessa ræsingu (--offline á skipanalínu)."
