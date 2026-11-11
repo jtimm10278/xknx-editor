@@ -1732,3 +1732,9 @@ msgstr "Nincs beállítva érvényes aláíró kulcs, ezért az exportált .knxp
 
 msgid "Export Anyway"
 msgstr "Exportálás mindenképp"
+
+msgid "Export as a Copy"
+msgstr "Exportálás másolatként"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "(új projektazonosító: az ETS az eredeti mellé importálja, nem cseréli le)"

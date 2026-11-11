@@ -1673,3 +1673,9 @@ msgstr "Δεν έχει οριστεί έγκυρο κλειδί υπογραφ�
 
 msgid "Export Anyway"
 msgstr "Εξαγωγή ούτως ή άλλως"
+
+msgid "Export as a Copy"
+msgstr "Εξαγωγή ως αντίγραφο"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "(νέο αναγνωριστικό έργου: το ETS το εισάγει δίπλα στο πρωτότυπο αντί να το αντικαταστήσει)"

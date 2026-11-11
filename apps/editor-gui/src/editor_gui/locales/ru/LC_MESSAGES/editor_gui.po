@@ -1686,3 +1686,9 @@ msgstr "Действительный ключ подписи не задан, п
 
 msgid "Export Anyway"
 msgstr "Экспортировать всё равно"
+
+msgid "Export as a Copy"
+msgstr "Экспортировать как копию"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "(новый ID проекта: ETS импортирует его рядом с оригиналом, а не вместо него)"

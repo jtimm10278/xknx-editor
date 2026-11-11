@@ -58,6 +58,7 @@ import json
 import logging
 import os
 import re
+import secrets
 import time
 import xml.etree.ElementTree as ET
 import zipfile
@@ -193,7 +194,7 @@ class ExportResult:
     ``manufacturer_count`` (``M-`` folders bundled), ``signed`` (the project folder carries a
     signature; always true for a successful export) and ``certificate`` (a MyKnx project certificate
     was embedded). ``project_name`` is the exported ProjectInformation name and ``master_version``
-    the KNX master-data version written. ``area_count``/``line_count`` describe the topology,
+    the KNX master-data version written, ``project_id`` the project id written (new with ``as_copy``). ``area_count``/``line_count`` describe the topology,
     ``com_object_link_count`` the group-object links written, ``floor_count``/``room_count`` the
     location spaces below buildings, and ``function_count`` the building functions.
     ``product_prune`` reports the product data left out by ``remove_unused_products``.
@@ -215,6 +216,7 @@ class ExportResult:
     signed: bool = False
     certificate: bool = False
     project_name: str = ""
+    project_id: str = ""
     master_version: int = 0
     area_count: int = 0
     line_count: int = 0
@@ -285,6 +287,24 @@ DEFAULT_SCHEMA = "20"  # project/20: read by both ETS5 and ETS6
 
 # A project id: "P-" and 4 hex digits (Project Scheme 4.2.3).
 _PROJECT_ID = re.compile(r"P-[0-9A-Fa-f]{4}")
+
+
+def _exported_project_id(project: Project) -> str:
+    """The id a project is exported under: an imported project its source id (its own id is only
+    unique locally), else its own."""
+    if _PROJECT_ID.fullmatch(project.original_project_id):
+        return project.original_project_id
+    return project.id
+
+
+def copy_project_id(original: str = "") -> str:
+    """A random project id (``P-XXXX``) for an exported copy, never ``original``. Random rather
+    than the next number, so a copy is unlikely to meet a project the target ETS already has."""
+    while True:
+        candidate = f"P-{secrets.randbelow(0xFFFF) + 1:04X}"
+        if candidate.upper() != original.upper():
+            return candidate
+
 
 # Captured ProjectInformation attributes that only some target schemas define, by the schemas.
 _SCHEMA_SPECIFIC_INFO_ATTRS: dict[str, frozenset[str]] = {
@@ -724,6 +744,7 @@ def export_knxproj(
     master_version: int = 1,
     certificate_signer: CertificateSigner | None = None,
     project_name: str | None = None,
+    as_copy: bool = False,
     remove_unused_products: bool = False,
     password: str | None = None,
     cancelled: Callable[[], bool] | None = None,
@@ -772,6 +793,9 @@ def export_knxproj(
       project_name: Optional name for the exported ProjectInformation (shown in the
         project list). When ``None`` the project's stored name is used. Does not persist to
         the source ``.xknx``.
+      as_copy: Write the project under a new random project id and a new Guid, so an ETS that
+        has the original imports this one beside it instead of offering to replace it. The
+        source ``.xknx`` is not changed; ``ExportResult.project_id`` tells the id written.
       remove_unused_products: Leave out the bundled product data no device uses (see
         :mod:`product_prune`). The source ``.xknx`` is not changed.
       password: The password of a password-protected project: it decrypts the project's secrets
@@ -831,6 +855,13 @@ def export_knxproj(
                 # Override the exported ProjectInformation Name (transient: this session is never
                 # committed, so the source .xknx is untouched).
                 project.name = project_name
+            if as_copy:
+                # Transient too, like the name: a new identity for the exported project only.
+                project.original_project_id = copy_project_id(
+                    _exported_project_id(project)
+                )
+                project.guid = str(uuid4())
+            project_id_out = _exported_project_id(project)
             installation = (
                 session.query(Installation).order_by(Installation.index).first()
             )
@@ -951,6 +982,7 @@ def export_knxproj(
         signed=signed,
         certificate=certificate,
         project_name=project_name_out,
+        project_id=project_id_out,
         master_version=master_version,
         area_count=area_count,
         line_count=line_count,
@@ -1582,12 +1614,7 @@ class _Writer:
                 raise ExportCancelled
 
         check_cancelled()
-        # An imported project is written under its source id (its own id is only unique locally).
-        pid = (
-            project.original_project_id
-            if _PROJECT_ID.fullmatch(project.original_project_id)
-            else project.id
-        )
+        pid = _exported_project_id(project)
         self._source_schema = project.schema_version or self._schema
         self._product_members = extra_files or {}
         self._repeat_indexes = {}

@@ -1660,3 +1660,9 @@ msgstr "有効な署名キーが設定されていないため、エクスポー
 
 msgid "Export Anyway"
 msgstr "それでもエクスポート"
+
+msgid "Export as a Copy"
+msgstr "コピーとしてエクスポート"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "（新しいプロジェクト ID：ETS は元のプロジェクトを置き換えず、その横にインポートします）"

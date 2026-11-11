@@ -1686,3 +1686,9 @@ msgstr "Nie ustawiono prawidłowego klucza podpisywania, więc wyeksportowany pl
 
 msgid "Export Anyway"
 msgstr "Eksportuj mimo to"
+
+msgid "Export as a Copy"
+msgstr "Eksportuj jako kopię"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "(nowy identyfikator projektu: ETS zaimportuje go obok oryginału zamiast go zastąpić)"

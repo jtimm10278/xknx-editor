@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import io
 import threading
+import zipfile
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any, TypeVar
@@ -229,6 +230,23 @@ async def test_full_edit_flow(tmp_path: Path) -> None:
             "status"
         ] == "exported"
         assert dest.exists()
+        plain_id = (await _data(client, "project_export_knxproj", dest=str(dest)))[
+            "project_id"
+        ]
+        # A copy: a new project id, and the name given.
+        copy = tmp_path / "copy.knxproj"
+        out = await _data(
+            client,
+            "project_export_knxproj",
+            dest=str(copy),
+            as_copy=True,
+            copy_name="Test copy",
+        )
+        assert out["status"] == "exported"
+        assert out["project_id"] and out["project_id"] != plain_id
+        with zipfile.ZipFile(copy) as zf:
+            info = zf.read(f"{out['project_id']}/project.xml").decode("utf-8")
+        assert 'Name="Test copy"' in info
 
 
 def _kinds(nodes: list[dict[str, Any]]) -> set[str]:

@@ -1660,3 +1660,9 @@ msgstr "Geçerli bir imzalama anahtarı ayarlanmadı; bu nedenle dışa aktarıl
 
 msgid "Export Anyway"
 msgstr "Yine de dışa aktar"
+
+msgid "Export as a Copy"
+msgstr "Kopya olarak dışa aktar"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "(yeni proje kimliği: ETS onu orijinalin yerine değil, yanına içe aktarır)"

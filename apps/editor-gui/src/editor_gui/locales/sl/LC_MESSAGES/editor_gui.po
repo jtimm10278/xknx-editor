@@ -1771,3 +1771,9 @@ msgstr "Veljaven podpisni ključ ni nastavljen, zato izvožena datoteka .knxproj
 
 msgid "Export Anyway"
 msgstr "Vseeno izvozi"
+
+msgid "Export as a Copy"
+msgstr "Izvozi kot kopijo"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "(nov ID projekta: ETS ga uvozi poleg izvirnika, namesto da bi ga zamenjal)"

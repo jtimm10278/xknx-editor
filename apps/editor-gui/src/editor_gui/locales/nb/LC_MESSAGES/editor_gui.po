@@ -1673,3 +1673,9 @@ msgstr "Ingen gyldig signeringsnøkkel er angitt, så den eksporterte .knxproj f
 
 msgid "Export Anyway"
 msgstr "Eksporter likevel"
+
+msgid "Export as a Copy"
+msgstr "Eksporter som kopi"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "(ny prosjekt-ID: ETS importerer den ved siden av originalen i stedet for å erstatte den)"

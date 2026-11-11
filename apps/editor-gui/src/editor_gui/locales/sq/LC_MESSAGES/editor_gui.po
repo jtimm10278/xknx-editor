@@ -1673,3 +1673,9 @@ msgstr "Nuk është caktuar një çelës nënshkrimi i vlefshëm, prandaj .knxpr
 
 msgid "Export Anyway"
 msgstr "Eksporto gjithsesi"
+
+msgid "Export as a Copy"
+msgstr "Eksporto si kopje"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "(ID e re projekti: ETS e importon pranë origjinalit në vend që ta zëvendësojë)"

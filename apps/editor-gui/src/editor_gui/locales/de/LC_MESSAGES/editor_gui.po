@@ -1830,3 +1830,9 @@ msgstr "Es ist kein gültiger Signaturschlüssel gesetzt, daher erhält die expo
 
 msgid "Export Anyway"
 msgstr "Trotzdem exportieren"
+
+msgid "Export as a Copy"
+msgstr "Als Kopie exportieren"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "(neue Projekt-ID: ETS importiert es neben dem Original, statt es zu ersetzen)"
