@@ -27,6 +27,7 @@ from xknxeditor.download.scope import DownloadScope
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable, Mapping, Sequence
     from collections.abc import Set as AbstractSet
+    from concurrent.futures import Future
 
     from xknx import XKNX
     from xknx.telegram import IndividualAddress
@@ -35,6 +36,8 @@ if TYPE_CHECKING:
     from xknxeditor.catalog.core.hardware import FactoryData
     from xknxeditor.download.data_secure import DeviceSecurity
     from xknxeditor.download.download import DownloadResult
+    from xknxeditor.download.dry_run import DryRunResult
+    from xknxeditor.download.factory_image import FactoryImage
     from xknxeditor.download.image import DownloadImage, GroupCommunication
     from xknxeditor.download.ip_config import IpDeviceConfig
     from xknxeditor.download.ip_secure import IpSecureConfig
@@ -553,6 +556,96 @@ async def eval_device(
         application2=second_application,
         access_key=access_key,
     )
+
+
+def stored_image(loaded_image: str | None) -> FactoryImage | None:
+    """The image of a device's last download from its ``LoadedImage`` attribute (base64 of the
+    compressed image an ETS project keeps per device), or None when there is none or it cannot
+    be read."""
+    import base64
+    import binascii
+
+    from xknxeditor.download.factory_image import FactoryImageError, parse_factory_image
+
+    if not loaded_image:
+        return None
+    try:
+        return parse_factory_image(base64.b64decode(loaded_image))
+    except (binascii.Error, ValueError, FactoryImageError):
+        return None
+
+
+async def dry_run_device(
+    device: Device,
+    scope: DownloadScope = DownloadScope.FULL,
+    group_communication: GroupCommunication | None = None,
+    master: MasterData | None = None,
+    factory_image: FactoryData | None = None,
+    second_application: Application | None = None,
+    access_key: int = 0xFFFFFFFF,
+    stored: FactoryImage | None = None,
+) -> DryRunResult:
+    """What programming ``device`` would send, without a bus: the image is built as for
+    :func:`download_device` and the download runs against a recorder (see
+    :mod:`xknxeditor.download.dry_run`); ``stored`` is the image of the device's last download
+    to compare with (see :func:`stored_image`). There is no ``xknx`` here at all."""
+    from xknxeditor.download.dry_run import dry_run_download
+
+    return await dry_run_download(
+        _address(device),
+        _application(device),
+        master=master,
+        image=_image_for(device, group_communication, factory_image),
+        scope=scope,
+        stored_image=stored,
+        application2=second_application,
+        access_key=access_key,
+    )
+
+
+def start_dry_run(
+    device: Device,
+    scope: DownloadScope,
+    group_communication: GroupCommunication | None,
+    master: MasterData | None,
+    access_key: int,
+    loaded_image: str | None,
+) -> Future[DryRunResult]:
+    """Run :func:`dry_run_device` on a thread of its own (it needs no bus and no connection
+    loop) and return its future. The device's product data is read here, on the caller's
+    thread."""
+    import asyncio
+    import threading
+    from concurrent.futures import Future
+
+    factory = device.factory_image() if device.factory_image is not None else None
+    second = (
+        device.second_application() if device.second_application is not None else None
+    )
+    stored = stored_image(loaded_image)
+    future: Future[DryRunResult] = Future()
+
+    def work() -> None:
+        try:
+            future.set_result(
+                asyncio.run(
+                    dry_run_device(
+                        device,
+                        scope,
+                        group_communication,
+                        master,
+                        factory,
+                        second,
+                        access_key,
+                        stored,
+                    )
+                )
+            )
+        except BaseException as exc:  # handed to the caller through the future
+            future.set_exception(exc)
+
+    threading.Thread(target=work, name="dry-run-download", daemon=True).start()
+    return future
 
 
 async def download_device(

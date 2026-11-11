@@ -301,6 +301,7 @@ class ConfigurePanel:
         get_device_info: "Callable[[int], DeviceInfo | None]",
         on_program_device: Callable[[Device, ProgramRequest], None] | None = None,
         on_eval_device: Callable[[Device, DownloadScope], None] | None = None,
+        on_dry_run: Callable[[Device, DownloadScope], None] | None = None,
         open_memory_preview: Callable[[Device], None] | None = None,
         on_param_change_all: Callable[[Device, str, str], None] | None = None,
         notify: Callable[[str], None] | None = None,
@@ -407,6 +408,7 @@ class ConfigurePanel:
         self._on_description_change = on_description_change
         self._on_program_device = on_program_device
         self._on_eval_device = on_eval_device
+        self._on_dry_run = on_dry_run
         self._open_memory_preview = open_memory_preview
         self._get_links = get_links_for_com_object
         self._get_all_gas = get_all_group_addresses
@@ -645,6 +647,8 @@ class ConfigurePanel:
         labels: list[str] = []
         if self._on_eval_device is not None:
             labels.append(S.BTN_EVAL_DEVICE)
+        if self._on_dry_run is not None:
+            labels.append(S.BTN_DRY_RUN)
         if self._on_program_device is not None:
             labels.append(S.BTN_PROGRAM_DEVICE)
         if self._open_memory_preview is not None:
@@ -689,6 +693,21 @@ class ConfigurePanel:
                 self._on_eval_device(device, self._download_scope)
             imgui.end_disabled()
             _no_application_tooltip(device)
+
+        if self._on_dry_run is not None:
+            # Offline: the download runs against a recorder, nothing reaches the bus.
+            _same_line_if_fits(S.BTN_DRY_RUN)
+            enabled = (
+                bool(device.individual_address)
+                and device.has_application
+                and not self._download_scope.individual_address_only
+                and not self._download_scope.name.startswith("UNLOAD")
+            )
+            imgui.begin_disabled(not enabled)
+            if imgui.button(S.BTN_DRY_RUN):
+                self._on_dry_run(device, self._download_scope)
+            imgui.end_disabled()
+            imgui.set_item_tooltip(S.DRY_RUN_TOOLTIP)
 
         if self._on_program_device is not None:
             _same_line_if_fits(S.BTN_PROGRAM_DEVICE)

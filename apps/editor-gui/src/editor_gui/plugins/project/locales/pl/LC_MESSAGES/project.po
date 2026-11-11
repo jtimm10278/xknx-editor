@@ -3356,3 +3356,75 @@ msgstr "Wartość w {device}"
 
 msgid "Not shown"
 msgstr "Nie pokazano"
+
+msgid "Simulate Download"
+msgstr "Symuluj pobieranie"
+
+msgid "Run the download offline against a recorder and list every frame it would send. Nothing is sent to the bus."
+msgstr "Uruchom pobieranie offline na rejestratorze i wypisz każdy telegram, który by wysłało. Nic nie jest wysyłane na magistralę."
+
+msgid "Simulated Download"
+msgstr "Symulowane pobieranie"
+
+msgid "{device} · {scope}"
+msgstr "{device} · {scope}"
+
+msgid "Offline simulation: the editor's download preparation ran against a recorder that answers like the device. Nothing was sent to the bus."
+msgstr "Symulacja offline: przygotowanie pobierania edytora działało na rejestratorze, który odpowiada jak urządzenie. Nic nie zostało wysłane na magistralę."
+
+msgid "The simulation could not run: {error}"
+msgstr "Nie można uruchomić symulacji: {error}"
+
+msgid "Simulating the download…"
+msgstr "Symulowanie pobierania…"
+
+msgid "Frames: {frames} · Writes: {writes} · Memory bytes written: {bytes} · Connections: {connections}"
+msgstr "Telegramy: {frames} · Zapisy: {writes} · Zapisane bajty pamięci: {bytes} · Połączenia: {connections}"
+
+msgid "The download would stop here: {error}"
+msgstr "Pobieranie zatrzymałoby się tutaj: {error}"
+
+msgid "The project keeps no image of this device's last download, so nothing is compared."
+msgstr "Projekt nie przechowuje obrazu ostatniego pobierania tego urządzenia, więc nic nie jest porównywane."
+
+msgid "Bytes compared with the last download: {compared} · Differing: {differing} · Not in the stored image: {missing}"
+msgstr "Bajty porównane z ostatnim pobieraniem: {compared} · Różne: {differing} · Brak w zapisanym obrazie: {missing}"
+
+msgid "Differing in {region}: {count}"
+msgstr "Różne w {region}: {count}"
+
+msgid "Properties compared: {compared} · Differing: {differing}"
+msgstr "Porównane właściwości: {compared} · Różne: {differing}"
+
+msgid "Filter frames"
+msgstr "Filtruj telegramy"
+
+msgid "Only frames that change the device"
+msgstr "Tylko telegramy zmieniające urządzenie"
+
+msgid "Export Simulated Download"
+msgstr "Eksportuj symulowane pobieranie"
+
+msgid "CSV files"
+msgstr "Pliki CSV"
+
+msgid "No frames match."
+msgstr "Brak pasujących telegramów."
+
+msgid "Connection"
+msgstr "Połączenie"
+
+msgid "Service"
+msgstr "Usługa"
+
+msgid "Address or Property"
+msgstr "Adres lub właściwość"
+
+msgid "Memory Area"
+msgstr "Obszar pamięci"
+
+msgid "Data"
+msgstr "Dane"
+
+msgid "An individual address download cannot be simulated."
+msgstr "Nie można symulować pobierania samego adresu fizycznego."

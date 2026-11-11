@@ -3304,3 +3304,75 @@ msgstr "Vlera në {device}"
 
 msgid "Not shown"
 msgstr "Nuk shfaqet"
+
+msgid "Simulate Download"
+msgstr "Simulo shkarkimin"
+
+msgid "Run the download offline against a recorder and list every frame it would send. Nothing is sent to the bus."
+msgstr "Ekzekuto shkarkimin jashtë linje kundrejt një regjistruesi dhe listo çdo telegram që do të dërgonte. Asgjë nuk dërgohet në bus."
+
+msgid "Simulated Download"
+msgstr "Shkarkim i simuluar"
+
+msgid "{device} · {scope}"
+msgstr "{device} · {scope}"
+
+msgid "Offline simulation: the editor's download preparation ran against a recorder that answers like the device. Nothing was sent to the bus."
+msgstr "Simulim jashtë linje: përgatitja e shkarkimit të redaktuesit u ekzekutua kundrejt një regjistruesi që përgjigjet si pajisja. Asgjë nuk u dërgua në bus."
+
+msgid "The simulation could not run: {error}"
+msgstr "Simulimi nuk mund të ekzekutohej: {error}"
+
+msgid "Simulating the download…"
+msgstr "Po simulohet shkarkimi…"
+
+msgid "Frames: {frames} · Writes: {writes} · Memory bytes written: {bytes} · Connections: {connections}"
+msgstr "Telegrame: {frames} · Shkrime: {writes} · Bajte memorieje të shkruar: {bytes} · Lidhje: {connections}"
+
+msgid "The download would stop here: {error}"
+msgstr "Shkarkimi do të ndalonte këtu: {error}"
+
+msgid "The project keeps no image of this device's last download, so nothing is compared."
+msgstr "Projekti nuk ruan asnjë imazh të shkarkimit të fundit të kësaj pajisjeje, prandaj asgjë nuk krahasohet."
+
+msgid "Bytes compared with the last download: {compared} · Differing: {differing} · Not in the stored image: {missing}"
+msgstr "Bajte të krahasuar me shkarkimin e fundit: {compared} · Të ndryshëm: {differing} · Jo në imazhin e ruajtur: {missing}"
+
+msgid "Differing in {region}: {count}"
+msgstr "Të ndryshëm në {region}: {count}"
+
+msgid "Properties compared: {compared} · Differing: {differing}"
+msgstr "Veti të krahasuara: {compared} · Të ndryshme: {differing}"
+
+msgid "Filter frames"
+msgstr "Filtro telegramet"
+
+msgid "Only frames that change the device"
+msgstr "Vetëm telegramet që ndryshojnë pajisjen"
+
+msgid "Export Simulated Download"
+msgstr "Eksporto shkarkimin e simuluar"
+
+msgid "CSV files"
+msgstr "Skedarë CSV"
+
+msgid "No frames match."
+msgstr "Asnjë telegram nuk përputhet."
+
+msgid "Connection"
+msgstr "Lidhja"
+
+msgid "Service"
+msgstr "Shërbimi"
+
+msgid "Address or Property"
+msgstr "Adresa ose vetia"
+
+msgid "Memory Area"
+msgstr "Zona e memories"
+
+msgid "Data"
+msgstr "Të dhënat"
+
+msgid "An individual address download cannot be simulated."
+msgstr "Një shkarkim vetëm i adresës individuale nuk mund të simulohet."

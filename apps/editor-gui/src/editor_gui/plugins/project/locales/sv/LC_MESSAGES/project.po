@@ -3304,3 +3304,75 @@ msgstr "Värde på {device}"
 
 msgid "Not shown"
 msgstr "Visas inte"
+
+msgid "Simulate Download"
+msgstr "Simulera nedladdning"
+
+msgid "Run the download offline against a recorder and list every frame it would send. Nothing is sent to the bus."
+msgstr "Kör nedladdningen offline mot en inspelare och lista varje telegram den skulle skicka. Inget skickas till bussen."
+
+msgid "Simulated Download"
+msgstr "Simulerad nedladdning"
+
+msgid "{device} · {scope}"
+msgstr "{device} · {scope}"
+
+msgid "Offline simulation: the editor's download preparation ran against a recorder that answers like the device. Nothing was sent to the bus."
+msgstr "Offlinesimulering: redigerarens nedladdningsförberedelse kördes mot en inspelare som svarar som enheten. Inget skickades till bussen."
+
+msgid "The simulation could not run: {error}"
+msgstr "Simuleringen kunde inte köras: {error}"
+
+msgid "Simulating the download…"
+msgstr "Simulerar nedladdningen…"
+
+msgid "Frames: {frames} · Writes: {writes} · Memory bytes written: {bytes} · Connections: {connections}"
+msgstr "Telegram: {frames} · Skrivningar: {writes} · Skrivna minnesbyte: {bytes} · Anslutningar: {connections}"
+
+msgid "The download would stop here: {error}"
+msgstr "Nedladdningen skulle stoppa här: {error}"
+
+msgid "The project keeps no image of this device's last download, so nothing is compared."
+msgstr "Projektet sparar ingen avbild av enhetens senaste nedladdning, så inget jämförs."
+
+msgid "Bytes compared with the last download: {compared} · Differing: {differing} · Not in the stored image: {missing}"
+msgstr "Byte jämförda med senaste nedladdningen: {compared} · Avvikande: {differing} · Inte i den sparade avbilden: {missing}"
+
+msgid "Differing in {region}: {count}"
+msgstr "Avvikande i {region}: {count}"
+
+msgid "Properties compared: {compared} · Differing: {differing}"
+msgstr "Jämförda egenskaper: {compared} · Avvikande: {differing}"
+
+msgid "Filter frames"
+msgstr "Filtrera telegram"
+
+msgid "Only frames that change the device"
+msgstr "Endast telegram som ändrar enheten"
+
+msgid "Export Simulated Download"
+msgstr "Exportera simulerad nedladdning"
+
+msgid "CSV files"
+msgstr "CSV-filer"
+
+msgid "No frames match."
+msgstr "Inga telegram matchar."
+
+msgid "Connection"
+msgstr "Anslutning"
+
+msgid "Service"
+msgstr "Tjänst"
+
+msgid "Address or Property"
+msgstr "Adress eller egenskap"
+
+msgid "Memory Area"
+msgstr "Minnesområde"
+
+msgid "Data"
+msgstr "Data"
+
+msgid "An individual address download cannot be simulated."
+msgstr "En nedladdning av enbart den fysiska adressen kan inte simuleras."

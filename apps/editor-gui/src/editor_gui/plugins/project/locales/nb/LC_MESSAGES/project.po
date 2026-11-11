@@ -3304,3 +3304,75 @@ msgstr "Verdi på {device}"
 
 msgid "Not shown"
 msgstr "Ikke vist"
+
+msgid "Simulate Download"
+msgstr "Simuler nedlasting"
+
+msgid "Run the download offline against a recorder and list every frame it would send. Nothing is sent to the bus."
+msgstr "Kjør nedlastingen frakoblet mot en opptaker og vis hvert telegram den ville sende. Ingenting sendes til bussen."
+
+msgid "Simulated Download"
+msgstr "Simulert nedlasting"
+
+msgid "{device} · {scope}"
+msgstr "{device} · {scope}"
+
+msgid "Offline simulation: the editor's download preparation ran against a recorder that answers like the device. Nothing was sent to the bus."
+msgstr "Frakoblet simulering: editorens nedlastingsforberedelse kjørte mot en opptaker som svarer som enheten. Ingenting ble sendt til bussen."
+
+msgid "The simulation could not run: {error}"
+msgstr "Simuleringen kunne ikke kjøres: {error}"
+
+msgid "Simulating the download…"
+msgstr "Simulerer nedlastingen…"
+
+msgid "Frames: {frames} · Writes: {writes} · Memory bytes written: {bytes} · Connections: {connections}"
+msgstr "Telegrammer: {frames} · Skrivinger: {writes} · Skrevne minnebyte: {bytes} · Tilkoblinger: {connections}"
+
+msgid "The download would stop here: {error}"
+msgstr "Nedlastingen ville stoppe her: {error}"
+
+msgid "The project keeps no image of this device's last download, so nothing is compared."
+msgstr "Prosjektet lagrer ikke noe bilde av enhetens siste nedlasting, så ingenting sammenlignes."
+
+msgid "Bytes compared with the last download: {compared} · Differing: {differing} · Not in the stored image: {missing}"
+msgstr "Byte sammenlignet med siste nedlasting: {compared} · Avvikende: {differing} · Ikke i det lagrede bildet: {missing}"
+
+msgid "Differing in {region}: {count}"
+msgstr "Avvikende i {region}: {count}"
+
+msgid "Properties compared: {compared} · Differing: {differing}"
+msgstr "Sammenlignede egenskaper: {compared} · Avvikende: {differing}"
+
+msgid "Filter frames"
+msgstr "Filtrer telegrammer"
+
+msgid "Only frames that change the device"
+msgstr "Bare telegrammer som endrer enheten"
+
+msgid "Export Simulated Download"
+msgstr "Eksporter simulert nedlasting"
+
+msgid "CSV files"
+msgstr "CSV-filer"
+
+msgid "No frames match."
+msgstr "Ingen telegrammer passer."
+
+msgid "Connection"
+msgstr "Tilkobling"
+
+msgid "Service"
+msgstr "Tjeneste"
+
+msgid "Address or Property"
+msgstr "Adresse eller egenskap"
+
+msgid "Memory Area"
+msgstr "Minneområde"
+
+msgid "Data"
+msgstr "Data"
+
+msgid "An individual address download cannot be simulated."
+msgstr "En nedlasting av bare den fysiske adressen kan ikke simuleres."

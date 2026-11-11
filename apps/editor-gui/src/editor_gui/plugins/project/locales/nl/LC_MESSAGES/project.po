@@ -3337,3 +3337,75 @@ msgstr "Waarde op {device}"
 
 msgid "Not shown"
 msgstr "Niet getoond"
+
+msgid "Simulate Download"
+msgstr "Download simuleren"
+
+msgid "Run the download offline against a recorder and list every frame it would send. Nothing is sent to the bus."
+msgstr "De download offline tegen een recorder uitvoeren en elk telegram tonen dat hij zou verzenden. Er wordt niets naar de bus verzonden."
+
+msgid "Simulated Download"
+msgstr "Gesimuleerde download"
+
+msgid "{device} · {scope}"
+msgstr "{device} · {scope}"
+
+msgid "Offline simulation: the editor's download preparation ran against a recorder that answers like the device. Nothing was sent to the bus."
+msgstr "Offline simulatie: de downloadvoorbereiding van de editor liep tegen een recorder die antwoordt als het apparaat. Er is niets naar de bus verzonden."
+
+msgid "The simulation could not run: {error}"
+msgstr "De simulatie kon niet worden uitgevoerd: {error}"
+
+msgid "Simulating the download…"
+msgstr "Download wordt gesimuleerd…"
+
+msgid "Frames: {frames} · Writes: {writes} · Memory bytes written: {bytes} · Connections: {connections}"
+msgstr "Telegrammen: {frames} · Schrijfacties: {writes} · Geschreven geheugenbytes: {bytes} · Verbindingen: {connections}"
+
+msgid "The download would stop here: {error}"
+msgstr "De download zou hier stoppen: {error}"
+
+msgid "The project keeps no image of this device's last download, so nothing is compared."
+msgstr "Het project bevat geen beeld van de laatste download van dit apparaat, dus er wordt niets vergeleken."
+
+msgid "Bytes compared with the last download: {compared} · Differing: {differing} · Not in the stored image: {missing}"
+msgstr "Bytes vergeleken met de laatste download: {compared} · Afwijkend: {differing} · Niet in het opgeslagen beeld: {missing}"
+
+msgid "Differing in {region}: {count}"
+msgstr "Afwijkend in {region}: {count}"
+
+msgid "Properties compared: {compared} · Differing: {differing}"
+msgstr "Vergeleken eigenschappen: {compared} · Afwijkend: {differing}"
+
+msgid "Filter frames"
+msgstr "Telegrammen filteren"
+
+msgid "Only frames that change the device"
+msgstr "Alleen telegrammen die het apparaat wijzigen"
+
+msgid "Export Simulated Download"
+msgstr "Gesimuleerde download exporteren"
+
+msgid "CSV files"
+msgstr "CSV-bestanden"
+
+msgid "No frames match."
+msgstr "Geen telegrammen gevonden."
+
+msgid "Connection"
+msgstr "Verbinding"
+
+msgid "Service"
+msgstr "Dienst"
+
+msgid "Address or Property"
+msgstr "Adres of eigenschap"
+
+msgid "Memory Area"
+msgstr "Geheugengebied"
+
+msgid "Data"
+msgstr "Gegevens"
+
+msgid "An individual address download cannot be simulated."
+msgstr "Een download van alleen het fysieke adres kan niet worden gesimuleerd."

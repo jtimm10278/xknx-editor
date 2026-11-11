@@ -3252,3 +3252,75 @@ msgstr "{device} 上的值"
 
 msgid "Not shown"
 msgstr "未显示"
+
+msgid "Simulate Download"
+msgstr "模拟下载"
+
+msgid "Run the download offline against a recorder and list every frame it would send. Nothing is sent to the bus."
+msgstr "离线针对记录器运行下载，并列出它将发送的每个报文。不会向总线发送任何内容。"
+
+msgid "Simulated Download"
+msgstr "模拟下载结果"
+
+msgid "{device} · {scope}"
+msgstr "{device} · {scope}"
+
+msgid "Offline simulation: the editor's download preparation ran against a recorder that answers like the device. Nothing was sent to the bus."
+msgstr "离线模拟：编辑器的下载准备针对一个像设备一样应答的记录器运行。未向总线发送任何内容。"
+
+msgid "The simulation could not run: {error}"
+msgstr "无法运行模拟：{error}"
+
+msgid "Simulating the download…"
+msgstr "正在模拟下载…"
+
+msgid "Frames: {frames} · Writes: {writes} · Memory bytes written: {bytes} · Connections: {connections}"
+msgstr "报文：{frames} · 写入：{writes} · 写入的存储器字节：{bytes} · 连接：{connections}"
+
+msgid "The download would stop here: {error}"
+msgstr "下载将在此停止：{error}"
+
+msgid "The project keeps no image of this device's last download, so nothing is compared."
+msgstr "项目未保存此设备上次下载的映像，因此不进行比较。"
+
+msgid "Bytes compared with the last download: {compared} · Differing: {differing} · Not in the stored image: {missing}"
+msgstr "与上次下载比较的字节：{compared} · 不同：{differing} · 不在保存的映像中：{missing}"
+
+msgid "Differing in {region}: {count}"
+msgstr "{region} 中不同：{count}"
+
+msgid "Properties compared: {compared} · Differing: {differing}"
+msgstr "比较的属性：{compared} · 不同：{differing}"
+
+msgid "Filter frames"
+msgstr "筛选报文"
+
+msgid "Only frames that change the device"
+msgstr "仅显示更改设备的报文"
+
+msgid "Export Simulated Download"
+msgstr "导出模拟下载"
+
+msgid "CSV files"
+msgstr "CSV 文件"
+
+msgid "No frames match."
+msgstr "没有匹配的报文。"
+
+msgid "Connection"
+msgstr "连接"
+
+msgid "Service"
+msgstr "服务"
+
+msgid "Address or Property"
+msgstr "地址或属性"
+
+msgid "Memory Area"
+msgstr "存储器区域"
+
+msgid "Data"
+msgstr "数据"
+
+msgid "An individual address download cannot be simulated."
+msgstr "无法模拟仅下载个别地址。"

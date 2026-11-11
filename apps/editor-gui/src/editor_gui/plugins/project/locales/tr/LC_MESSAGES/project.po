@@ -3252,3 +3252,75 @@ msgstr "{device} üzerindeki değer"
 
 msgid "Not shown"
 msgstr "Gösterilmiyor"
+
+msgid "Simulate Download"
+msgstr "İndirmeyi simüle et"
+
+msgid "Run the download offline against a recorder and list every frame it would send. Nothing is sent to the bus."
+msgstr "İndirmeyi çevrimdışı bir kaydediciye karşı çalıştır ve göndereceği her telgrafı listele. Veri yoluna hiçbir şey gönderilmez."
+
+msgid "Simulated Download"
+msgstr "Simüle edilen indirme"
+
+msgid "{device} · {scope}"
+msgstr "{device} · {scope}"
+
+msgid "Offline simulation: the editor's download preparation ran against a recorder that answers like the device. Nothing was sent to the bus."
+msgstr "Çevrimdışı simülasyon: düzenleyicinin indirme hazırlığı, cihaz gibi yanıt veren bir kaydediciye karşı çalıştı. Veri yoluna hiçbir şey gönderilmedi."
+
+msgid "The simulation could not run: {error}"
+msgstr "Simülasyon çalıştırılamadı: {error}"
+
+msgid "Simulating the download…"
+msgstr "İndirme simüle ediliyor…"
+
+msgid "Frames: {frames} · Writes: {writes} · Memory bytes written: {bytes} · Connections: {connections}"
+msgstr "Telgraflar: {frames} · Yazmalar: {writes} · Yazılan bellek baytları: {bytes} · Bağlantılar: {connections}"
+
+msgid "The download would stop here: {error}"
+msgstr "İndirme burada dururdu: {error}"
+
+msgid "The project keeps no image of this device's last download, so nothing is compared."
+msgstr "Proje bu cihazın son indirmesinin görüntüsünü saklamıyor, bu yüzden hiçbir şey karşılaştırılmaz."
+
+msgid "Bytes compared with the last download: {compared} · Differing: {differing} · Not in the stored image: {missing}"
+msgstr "Son indirmeyle karşılaştırılan baytlar: {compared} · Farklı: {differing} · Kayıtlı görüntüde yok: {missing}"
+
+msgid "Differing in {region}: {count}"
+msgstr "{region} içinde farklı: {count}"
+
+msgid "Properties compared: {compared} · Differing: {differing}"
+msgstr "Karşılaştırılan özellikler: {compared} · Farklı: {differing}"
+
+msgid "Filter frames"
+msgstr "Telgrafları filtrele"
+
+msgid "Only frames that change the device"
+msgstr "Yalnızca cihazı değiştiren telgraflar"
+
+msgid "Export Simulated Download"
+msgstr "Simüle edilen indirmeyi dışa aktar"
+
+msgid "CSV files"
+msgstr "CSV dosyaları"
+
+msgid "No frames match."
+msgstr "Eşleşen telgraf yok."
+
+msgid "Connection"
+msgstr "Bağlantı"
+
+msgid "Service"
+msgstr "Hizmet"
+
+msgid "Address or Property"
+msgstr "Adres veya özellik"
+
+msgid "Memory Area"
+msgstr "Bellek alanı"
+
+msgid "Data"
+msgstr "Veri"
+
+msgid "An individual address download cannot be simulated."
+msgstr "Yalnızca bireysel adresin indirilmesi simüle edilemez."

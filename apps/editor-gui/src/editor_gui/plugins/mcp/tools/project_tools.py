@@ -38,6 +38,148 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
     def _result(count: int, errors: list[str], key: str) -> dict[str, Any]:
         return {key: count, "errors": errors}
 
+    @tool("read")
+    def project_dry_run_download(
+        node_id: int | None = None,
+        device_address: str | None = None,
+        scope: str = "FULL",
+        only_writes: bool = False,
+        offset: int = 0,
+        limit: int = 500,
+        timeout: float = 120.0,
+    ) -> dict[str, Any]:
+        """Simulate a device's download offline, as the editor's "Simulate Download" button
+        does: the editor's real download preparation and load procedure run against a recorder
+        that answers like the device, so NOTHING is sent and no connection is needed. Identify
+        the device by node_id OR device_address. ``scope`` is a download scope name (FULL,
+        PARAMETERS, GROUP_COMMUNICATION, APPLICATION, …; unload and individual-address scopes
+        are refused); a partial scope is simulated into a device that already runs the
+        projected application. ``only_writes`` keeps the frames that change the device;
+        ``offset``/``limit`` page through the frames.
+
+        Returns {node_id, scope, error ("" when the download ran through, else why it would
+        stop), frames_total, writes, bytes_written, connections, memory_written: [{address,
+        size}], comparison, frames}. ``comparison`` compares what it would write with the image
+        of the device's last download that an imported project keeps (``DeviceInstance/
+        @LoadedImage``): {has_stored_image, compared_bytes, differing_bytes,
+        not_in_stored_image, differing_by_region, differences: [{region, address (the offset
+        for memory in a segment the device allocates), segment_object?, written, stored}],
+        compared_properties, property_differences: [{object_index, property_id, written,
+        stored}], not_comparable_segments}; bytes in hex. Each frame is {index, connection,
+        kind, service, answered, address?, count?, object_index?, property_id?, start_index?,
+        segment_object?, segment_offset?, region?, data (hex)}."""
+        require_project(ctx)
+        plugin = _plugin()
+        from xknxeditor.download.scope import DownloadScope
+
+        try:
+            requested = DownloadScope[scope.upper()]
+        except KeyError as exc:
+            valid = ", ".join(s.name for s in DownloadScope)
+            raise ToolError(
+                f"unknown scope {scope!r}; expected one of: {valid}"
+            ) from exc
+        if requested.individual_address_only or requested.name.startswith("UNLOAD"):
+            raise ToolError(f"a {requested.name} download cannot be simulated")
+
+        def _start() -> Any:
+            device = require_device(project, node_id, device_address)
+            if not device.has_application or not device.individual_address:
+                raise ToolError(
+                    f"device {device.node_id} needs an application and an individual "
+                    "address to be simulated"
+                )
+            return device.node_id, plugin.dry_run_download(device, requested)
+
+        nid, future = ctx.run_locked(_start)
+        try:
+            result = future.result(timeout=timeout)
+        except TimeoutError as exc:
+            raise ToolError(
+                f"the simulation did not finish within {timeout} s"
+            ) from exc
+        except Exception as exc:
+            raise ToolError(f"the simulation could not run: {exc}") from exc
+        frames = (
+            [f for f in result.frames if f.writes] if only_writes else result.frames
+        )
+        page = frames[max(0, offset) : max(0, offset) + max(0, limit)]
+        comparison = result.comparison
+
+        def frame_dict(f: Any) -> dict[str, Any]:
+            data: dict[str, Any] = {
+                "index": f.index,
+                "connection": f.connection,
+                "kind": f.kind.value,
+                "service": f.service,
+                "answered": f.answered,
+                "data": f.data.hex(),
+            }
+            for name in (
+                "address",
+                "count",
+                "object_index",
+                "property_id",
+                "start_index",
+                "segment_object",
+                "segment_offset",
+            ):
+                value = getattr(f, name)
+                if value is not None:
+                    data[name] = value
+            if f.region:
+                data["region"] = f.region
+            return data
+
+        from xknxeditor.download.dry_run import FrameKind
+
+        return {
+            "node_id": nid,
+            "scope": result.scope.name,
+            "error": result.error,
+            "frames_total": len(frames),
+            "writes": result.writes,
+            "bytes_written": result.bytes_written,
+            "connections": result.count(FrameKind.CONNECT),
+            "memory_written": [
+                {"address": address, "size": len(data)}
+                for address, data in result.memory_written
+            ],
+            "comparison": {
+                "has_stored_image": comparison.has_stored_image,
+                "compared_bytes": comparison.compared_bytes,
+                "differing_bytes": comparison.differing_bytes,
+                "not_in_stored_image": comparison.not_in_stored_image,
+                "differing_by_region": comparison.differing_by_region,
+                "differences": [
+                    {
+                        "region": d.region,
+                        "address": d.address,
+                        **(
+                            {"segment_object": d.segment_object}
+                            if d.segment_object is not None
+                            else {}
+                        ),
+                        "written": d.written.hex(),
+                        "stored": d.stored.hex(),
+                    }
+                    for d in comparison.differences
+                ],
+                "compared_properties": comparison.compared_properties,
+                "property_differences": [
+                    {
+                        "object_index": d.object_index,
+                        "property_id": d.property_id,
+                        "written": d.written.hex(),
+                        "stored": d.stored.hex(),
+                    }
+                    for d in comparison.property_differences
+                ],
+                "not_comparable_segments": comparison.not_comparable_segments,
+            },
+            "frames": [frame_dict(f) for f in page],
+        }
+
     @tool("write")
     def project_extended_copy(
         node_id: int | None = None,

@@ -3383,3 +3383,75 @@ msgstr "Hodnota na {device}"
 
 msgid "Not shown"
 msgstr "Nezobrazené"
+
+msgid "Simulate Download"
+msgstr "Simulovať nahratie"
+
+msgid "Run the download offline against a recorder and list every frame it would send. Nothing is sent to the bus."
+msgstr "Spustiť nahratie offline proti záznamníku a vypísať každý telegram, ktorý by odoslalo. Na zbernicu sa nič neodošle."
+
+msgid "Simulated Download"
+msgstr "Simulované nahratie"
+
+msgid "{device} · {scope}"
+msgstr "{device} · {scope}"
+
+msgid "Offline simulation: the editor's download preparation ran against a recorder that answers like the device. Nothing was sent to the bus."
+msgstr "Offline simulácia: príprava nahratia editora bežala proti záznamníku, ktorý odpovedá ako zariadenie. Na zbernicu nebolo nič odoslané."
+
+msgid "The simulation could not run: {error}"
+msgstr "Simuláciu nie je možné spustiť: {error}"
+
+msgid "Simulating the download…"
+msgstr "Simuluje sa nahratie…"
+
+msgid "Frames: {frames} · Writes: {writes} · Memory bytes written: {bytes} · Connections: {connections}"
+msgstr "Telegramy: {frames} · Zápisy: {writes} · Zapísané bajty pamäte: {bytes} · Spojenia: {connections}"
+
+msgid "The download would stop here: {error}"
+msgstr "Nahratie by sa tu zastavilo: {error}"
+
+msgid "The project keeps no image of this device's last download, so nothing is compared."
+msgstr "Projekt neuchováva obraz posledného nahratia tohto zariadenia, nič sa teda neporovnáva."
+
+msgid "Bytes compared with the last download: {compared} · Differing: {differing} · Not in the stored image: {missing}"
+msgstr "Bajty porovnané s posledným nahratím: {compared} · Odlišné: {differing} · Nie sú v uloženom obraze: {missing}"
+
+msgid "Differing in {region}: {count}"
+msgstr "Odlišné v {region}: {count}"
+
+msgid "Properties compared: {compared} · Differing: {differing}"
+msgstr "Porovnané vlastnosti: {compared} · Odlišné: {differing}"
+
+msgid "Filter frames"
+msgstr "Filtrovať telegramy"
+
+msgid "Only frames that change the device"
+msgstr "Iba telegramy, ktoré menia zariadenie"
+
+msgid "Export Simulated Download"
+msgstr "Exportovať simulované nahratie"
+
+msgid "CSV files"
+msgstr "Súbory CSV"
+
+msgid "No frames match."
+msgstr "Žiadne zodpovedajúce telegramy."
+
+msgid "Connection"
+msgstr "Spojenie"
+
+msgid "Service"
+msgstr "Služba"
+
+msgid "Address or Property"
+msgstr "Adresa alebo vlastnosť"
+
+msgid "Memory Area"
+msgstr "Oblasť pamäte"
+
+msgid "Data"
+msgstr "Dáta"
+
+msgid "An individual address download cannot be simulated."
+msgstr "Nahratie iba fyzickej adresy nie je možné simulovať."

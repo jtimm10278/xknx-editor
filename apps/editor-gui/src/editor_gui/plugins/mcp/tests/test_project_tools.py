@@ -1203,3 +1203,151 @@ async def test_triton_import_skips_ambiguous_project_address(
             "skipped": [{"address": "1.1.1", "reason": "ambiguous device address"}],
         }
         assert project.revision == revision
+
+
+async def test_dry_run_download(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from concurrent.futures import Future
+
+    from xknxeditor.download.dry_run import (
+        ByteRange,
+        DryRunResult,
+        FrameKind,
+        ImageComparison,
+        PropertyDifference,
+        RecordedFrame,
+    )
+    from xknxeditor.download.scope import DownloadScope
+
+    mcp, _project = _server(tmp_path)
+    async with Client(mcp) as client:
+        await _data(client, "project_new", path=str(tmp_path / "p.xknx"))
+        node_id = await _device(client, "1.1.20")
+        await _error(
+            client,
+            "project_dry_run_download",
+            "unknown scope",
+            node_id=node_id,
+            scope="SOMETIMES",
+        )
+        await _error(
+            client,
+            "project_dry_run_download",
+            "cannot be simulated",
+            node_id=node_id,
+            scope="UNLOAD",
+        )
+        # The real simulation: without master data this application's procedure cannot be
+        # resolved, which the result reports (nothing was recorded).
+        real = await _data(client, "project_dry_run_download", device_address="1.1.20")
+        assert (real["node_id"], real["scope"]) == (node_id, "FULL")
+        assert "master data is required" in real["error"]
+        assert real["frames_total"] == 0
+
+        def frame(index: int, kind: FrameKind, **kw: Any) -> RecordedFrame:
+            return RecordedFrame(
+                index=index,
+                connection=1,
+                kind=kind,
+                service=kind.value,
+                answered=True,
+                **kw,
+            )
+
+        result = DryRunResult(
+            frames=[
+                frame(1, FrameKind.CONNECT),
+                frame(2, FrameKind.MEMORY_READ, address=0x4000, count=2),
+                frame(
+                    3,
+                    FrameKind.MEMORY_WRITE,
+                    address=0x4000,
+                    data=b"\x01\x02",
+                    region="application program",
+                    segment_object=4,
+                    segment_offset=0,
+                ),
+                frame(
+                    4,
+                    FrameKind.PROPERTY_WRITE,
+                    object_index=4,
+                    property_id=5,
+                    start_index=1,
+                    count=1,
+                    data=b"\x02",
+                ),
+                frame(5, FrameKind.DISCONNECT),
+            ],
+            comparison=ImageComparison(
+                has_stored_image=True,
+                compared_bytes=2,
+                differing_bytes=1,
+                differences=[ByteRange(1, b"\x02", b"\x03", "application program", 4)],
+                compared_properties=1,
+                property_differences=[PropertyDifference(3, 13, b"\x01", b"\x02")],
+            ),
+            scope=DownloadScope.PARAMETERS,
+            memory_written=[(0x4000, b"\x01\x02")],
+        )
+        asked: list[Any] = []
+
+        def fake(_self: Any, device: Any, scope: Any) -> Future[DryRunResult]:
+            asked.append(scope)
+            future: Future[DryRunResult] = Future()
+            future.set_result(result)
+            return future
+
+        monkeypatch.setattr(ProjectPlugin, "dry_run_download", fake)
+        listed = await _data(
+            client, "project_dry_run_download", node_id=node_id, scope="parameters"
+        )
+        assert asked == [DownloadScope.PARAMETERS]
+        assert listed["frames_total"] == 5 and listed["writes"] == 2
+        assert listed["bytes_written"] == 2 and listed["connections"] == 1
+        assert listed["memory_written"] == [{"address": 0x4000, "size": 2}]
+        write = listed["frames"][2]
+        assert write == {
+            "index": 3,
+            "connection": 1,
+            "kind": "memory_write",
+            "service": "memory_write",
+            "answered": True,
+            "data": "0102",
+            "address": 0x4000,
+            "segment_object": 4,
+            "segment_offset": 0,
+            "region": "application program",
+        }
+        comparison = listed["comparison"]
+        assert comparison["differences"] == [
+            {
+                "region": "application program",
+                "address": 1,
+                "segment_object": 4,
+                "written": "02",
+                "stored": "03",
+            }
+        ]
+        assert comparison["differing_by_region"] == {"application program": 1}
+        assert comparison["property_differences"][0]["property_id"] == 13
+        writes = await _data(
+            client,
+            "project_dry_run_download",
+            node_id=node_id,
+            only_writes=True,
+            offset=1,
+            limit=5,
+        )
+        assert writes["frames_total"] == 2
+        assert [f["index"] for f in writes["frames"]] == [4]
+
+        def broken(_self: Any, device: Any, scope: Any) -> Future[DryRunResult]:
+            future: Future[DryRunResult] = Future()
+            future.set_exception(ValueError("no application"))
+            return future
+
+        monkeypatch.setattr(ProjectPlugin, "dry_run_download", broken)
+        await _error(
+            client, "project_dry_run_download", "could not run", node_id=node_id
+        )

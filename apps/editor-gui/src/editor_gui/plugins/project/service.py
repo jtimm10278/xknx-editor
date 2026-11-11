@@ -3298,6 +3298,20 @@ class ProjectService:
                     out.setdefault(com_object.number, set()).add(address)
         return out
 
+    @io_guarded(lambda: None)
+    def loaded_image(self, device: Device) -> str | None:
+        """The ``LoadedImage`` attribute an imported project keeps for ``device`` (the image of
+        its last download, base64), or None."""
+        if self._pid is None:
+            return None
+        row = next(
+            (r for r in self._svc.devices(self._pid) if r.id == device.node_id), None
+        )
+        if row is None:
+            return None
+        value = (row.extra_attributes or {}).get("LoadedImage")
+        return value if isinstance(value, str) and value else None
+
     def group_communication_for(self, device: Device) -> "GroupCommunication | None":
         """Collect a device's group-address links into a :class:`GroupCommunication` for programming.
 

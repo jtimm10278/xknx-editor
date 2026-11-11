@@ -3383,3 +3383,75 @@ msgstr "Valoare pe {device}"
 
 msgid "Not shown"
 msgstr "Neafișat"
+
+msgid "Simulate Download"
+msgstr "Simulează descărcarea"
+
+msgid "Run the download offline against a recorder and list every frame it would send. Nothing is sent to the bus."
+msgstr "Rulează descărcarea offline pe un înregistrator și listează fiecare telegramă pe care ar trimite-o. Nu se trimite nimic pe magistrală."
+
+msgid "Simulated Download"
+msgstr "Descărcare simulată"
+
+msgid "{device} · {scope}"
+msgstr "{device} · {scope}"
+
+msgid "Offline simulation: the editor's download preparation ran against a recorder that answers like the device. Nothing was sent to the bus."
+msgstr "Simulare offline: pregătirea descărcării editorului a rulat pe un înregistrator care răspunde ca dispozitivul. Nu s-a trimis nimic pe magistrală."
+
+msgid "The simulation could not run: {error}"
+msgstr "Simularea nu a putut rula: {error}"
+
+msgid "Simulating the download…"
+msgstr "Se simulează descărcarea…"
+
+msgid "Frames: {frames} · Writes: {writes} · Memory bytes written: {bytes} · Connections: {connections}"
+msgstr "Telegrame: {frames} · Scrieri: {writes} · Octeți de memorie scriși: {bytes} · Conexiuni: {connections}"
+
+msgid "The download would stop here: {error}"
+msgstr "Descărcarea s-ar opri aici: {error}"
+
+msgid "The project keeps no image of this device's last download, so nothing is compared."
+msgstr "Proiectul nu păstrează nicio imagine a ultimei descărcări a acestui dispozitiv, deci nu se compară nimic."
+
+msgid "Bytes compared with the last download: {compared} · Differing: {differing} · Not in the stored image: {missing}"
+msgstr "Octeți comparați cu ultima descărcare: {compared} · Diferiți: {differing} · Nu sunt în imaginea salvată: {missing}"
+
+msgid "Differing in {region}: {count}"
+msgstr "Diferiți în {region}: {count}"
+
+msgid "Properties compared: {compared} · Differing: {differing}"
+msgstr "Proprietăți comparate: {compared} · Diferite: {differing}"
+
+msgid "Filter frames"
+msgstr "Filtrează telegramele"
+
+msgid "Only frames that change the device"
+msgstr "Doar telegramele care modifică dispozitivul"
+
+msgid "Export Simulated Download"
+msgstr "Exportă descărcarea simulată"
+
+msgid "CSV files"
+msgstr "Fișiere CSV"
+
+msgid "No frames match."
+msgstr "Nicio telegramă nu corespunde."
+
+msgid "Connection"
+msgstr "Conexiune"
+
+msgid "Service"
+msgstr "Serviciu"
+
+msgid "Address or Property"
+msgstr "Adresă sau proprietate"
+
+msgid "Memory Area"
+msgstr "Zonă de memorie"
+
+msgid "Data"
+msgstr "Date"
+
+msgid "An individual address download cannot be simulated."
+msgstr "O descărcare doar a adresei individuale nu poate fi simulată."

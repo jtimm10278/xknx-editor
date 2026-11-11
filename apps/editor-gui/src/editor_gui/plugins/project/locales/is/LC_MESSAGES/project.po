@@ -3331,3 +3331,75 @@ msgstr "Gildi á {device}"
 
 msgid "Not shown"
 msgstr "Ekki sýnt"
+
+msgid "Simulate Download"
+msgstr "Herma niðurhal"
+
+msgid "Run the download offline against a recorder and list every frame it would send. Nothing is sent to the bus."
+msgstr "Keyra niðurhalið án tengingar á upptökutæki og sýna hvert skeyti sem það myndi senda. Ekkert er sent á strætóinn."
+
+msgid "Simulated Download"
+msgstr "Hermt niðurhal"
+
+msgid "{device} · {scope}"
+msgstr "{device} · {scope}"
+
+msgid "Offline simulation: the editor's download preparation ran against a recorder that answers like the device. Nothing was sent to the bus."
+msgstr "Hermun án tengingar: undirbúningur niðurhals ritilsins keyrði á upptökutæki sem svarar eins og tækið. Ekkert var sent á strætóinn."
+
+msgid "The simulation could not run: {error}"
+msgstr "Ekki tókst að keyra hermunina: {error}"
+
+msgid "Simulating the download…"
+msgstr "Hermir eftir niðurhali…"
+
+msgid "Frames: {frames} · Writes: {writes} · Memory bytes written: {bytes} · Connections: {connections}"
+msgstr "Skeyti: {frames} · Skrif: {writes} · Skrifuð minnisbæti: {bytes} · Tengingar: {connections}"
+
+msgid "The download would stop here: {error}"
+msgstr "Niðurhalið myndi stöðvast hér: {error}"
+
+msgid "The project keeps no image of this device's last download, so nothing is compared."
+msgstr "Verkefnið geymir enga mynd af síðasta niðurhali þessa tækis, svo ekkert er borið saman."
+
+msgid "Bytes compared with the last download: {compared} · Differing: {differing} · Not in the stored image: {missing}"
+msgstr "Bæti borin saman við síðasta niðurhal: {compared} · Frábrugðin: {differing} · Ekki í vistuðu myndinni: {missing}"
+
+msgid "Differing in {region}: {count}"
+msgstr "Frábrugðin í {region}: {count}"
+
+msgid "Properties compared: {compared} · Differing: {differing}"
+msgstr "Eiginleikar bornir saman: {compared} · Frábrugðnir: {differing}"
+
+msgid "Filter frames"
+msgstr "Sía skeyti"
+
+msgid "Only frames that change the device"
+msgstr "Aðeins skeyti sem breyta tækinu"
+
+msgid "Export Simulated Download"
+msgstr "Flytja út hermt niðurhal"
+
+msgid "CSV files"
+msgstr "CSV-skrár"
+
+msgid "No frames match."
+msgstr "Engin skeyti passa."
+
+msgid "Connection"
+msgstr "Tenging"
+
+msgid "Service"
+msgstr "Þjónusta"
+
+msgid "Address or Property"
+msgstr "Vistfang eða eiginleiki"
+
+msgid "Memory Area"
+msgstr "Minnissvæði"
+
+msgid "Data"
+msgstr "Gögn"
+
+msgid "An individual address download cannot be simulated."
+msgstr "Ekki er hægt að herma niðurhal eingöngu einstaklingsvistfangs."

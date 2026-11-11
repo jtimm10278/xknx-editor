@@ -81,6 +81,7 @@ from editor_gui.plugins.project.ui.device_certificate import (
     DeviceCertificateDialog,
 )
 from editor_gui.plugins.project.ui.device_compare import DeviceComparePanel
+from editor_gui.plugins.project.ui.dry_run_window import DryRunWindow
 from editor_gui.plugins.project.ui.element_details import ElementDetailsPanel
 from editor_gui.plugins.project.ui.generic_plugin_panel import GenericPluginPanel
 from editor_gui.plugins.project.ui.group_value import GroupValueActions
@@ -125,6 +126,7 @@ if TYPE_CHECKING:
     from editor_gui.plugins.project.ui.configure import ProgramRequest
     from xknxeditor.catalog import ProgramSummary
     from xknxeditor.dali import DaliBusState, EcgAssignment, Scene
+    from xknxeditor.download.dry_run import DryRunResult
     from xknxeditor.download.image import GroupCommunication
     from xknxeditor.download.ip_secure import IpSecureConfig
     from xknxeditor.download.scope import DownloadScope
@@ -244,6 +246,7 @@ class ProjectPlugin:
             prepared_image=api.project.prepared_download,
         )
         self._preflight_result = PreflightResultWindow()
+        self._dry_run_window = DryRunWindow(self.dry_run_download)
         self._read_device_dialog = ReadDeviceDialog(self._request_device_info)
         # The device a certificate is asked for, while the dialog is open.
         self._certificate_device: Device | None = None
@@ -358,6 +361,7 @@ class ProjectPlugin:
             get_device_info=api.project.get_device_info,
             on_program_device=self._program_device,
             on_eval_device=self._eval_device,
+            on_dry_run=self._dry_run_window.open,
             open_memory_preview=self._memory_preview.open,
             on_param_change_all=self._handle_param_change_all,
             notify=api.notify,
@@ -3405,6 +3409,28 @@ class ProjectPlugin:
 
         future.add_done_callback(found)
 
+    def dry_run_download(
+        self, device: "Device", scope: "DownloadScope"
+    ) -> "Future[DryRunResult]":
+        """Simulate the download of ``device`` with ``scope`` on a thread of its own: the
+        editor's real download preparation runs against a recorder, so nothing is sent and no
+        connection is needed. The future's result lists every frame the download would send and
+        compares what it would write with the image of the device's last download."""
+        from editor_gui.programming import start_dry_run
+
+        parts = self._api.project.download_parts(device.node_id, scope)
+        if parts.scope.individual_address_only:
+            raise ValueError(S.DRY_RUN_ADDRESS_ONLY)
+        getter = self._api.connection.project_access_key
+        return start_dry_run(
+            device,
+            parts.scope,
+            self._group_communication_for(device),
+            self._api.connection.master,
+            getter() if getter is not None else 0xFFFFFFFF,
+            self._api.project.loaded_image(device),
+        )
+
     def _eval_device(self, device: "Device", scope: "DownloadScope") -> None:
         label = device_label(device)
         # The test reads the live device, so it needs a bus connection; without one (and none
@@ -3632,6 +3658,7 @@ class ProjectPlugin:
         self._object_group_value.render()
         self._button_runner.render()
         self._memory_preview.render()
+        self._dry_run_window.render()
         self._preflight_result.render()
 
     def on_load(self) -> None:

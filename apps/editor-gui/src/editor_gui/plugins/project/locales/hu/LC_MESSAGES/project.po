@@ -3279,3 +3279,75 @@ msgstr "Érték itt: {device}"
 
 msgid "Not shown"
 msgstr "Nincs megjelenítve"
+
+msgid "Simulate Download"
+msgstr "Letöltés szimulálása"
+
+msgid "Run the download offline against a recorder and list every frame it would send. Nothing is sent to the bus."
+msgstr "A letöltés futtatása offline egy rögzítőn, és minden küldendő távirat listázása. Semmi sem kerül a buszra."
+
+msgid "Simulated Download"
+msgstr "Szimulált letöltés"
+
+msgid "{device} · {scope}"
+msgstr "{device} · {scope}"
+
+msgid "Offline simulation: the editor's download preparation ran against a recorder that answers like the device. Nothing was sent to the bus."
+msgstr "Offline szimuláció: a szerkesztő letöltés-előkészítése egy olyan rögzítőn futott, amely úgy válaszol, mint az eszköz. Semmi sem került a buszra."
+
+msgid "The simulation could not run: {error}"
+msgstr "A szimuláció nem futtatható: {error}"
+
+msgid "Simulating the download…"
+msgstr "Letöltés szimulálása…"
+
+msgid "Frames: {frames} · Writes: {writes} · Memory bytes written: {bytes} · Connections: {connections}"
+msgstr "Táviratok: {frames} · Írások: {writes} · Írt memóriabájtok: {bytes} · Kapcsolatok: {connections}"
+
+msgid "The download would stop here: {error}"
+msgstr "A letöltés itt megállna: {error}"
+
+msgid "The project keeps no image of this device's last download, so nothing is compared."
+msgstr "A projekt nem tárolja az eszköz utolsó letöltésének képét, így semmi sincs összehasonlítva."
+
+msgid "Bytes compared with the last download: {compared} · Differing: {differing} · Not in the stored image: {missing}"
+msgstr "Az utolsó letöltéssel összehasonlított bájtok: {compared} · Eltérő: {differing} · Nincs a tárolt képben: {missing}"
+
+msgid "Differing in {region}: {count}"
+msgstr "Eltérő itt: {region}: {count}"
+
+msgid "Properties compared: {compared} · Differing: {differing}"
+msgstr "Összehasonlított tulajdonságok: {compared} · Eltérő: {differing}"
+
+msgid "Filter frames"
+msgstr "Táviratok szűrése"
+
+msgid "Only frames that change the device"
+msgstr "Csak az eszközt módosító táviratok"
+
+msgid "Export Simulated Download"
+msgstr "Szimulált letöltés exportálása"
+
+msgid "CSV files"
+msgstr "CSV-fájlok"
+
+msgid "No frames match."
+msgstr "Nincs egyező távirat."
+
+msgid "Connection"
+msgstr "Kapcsolat"
+
+msgid "Service"
+msgstr "Szolgáltatás"
+
+msgid "Address or Property"
+msgstr "Cím vagy tulajdonság"
+
+msgid "Memory Area"
+msgstr "Memóriaterület"
+
+msgid "Data"
+msgstr "Adatok"
+
+msgid "An individual address download cannot be simulated."
+msgstr "Csak a fizikai cím letöltése nem szimulálható."

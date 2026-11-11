@@ -3356,3 +3356,75 @@ msgstr "Значення на {device}"
 
 msgid "Not shown"
 msgstr "Не показано"
+
+msgid "Simulate Download"
+msgstr "Симулювати завантаження"
+
+msgid "Run the download offline against a recorder and list every frame it would send. Nothing is sent to the bus."
+msgstr "Виконати завантаження офлайн на реєстраторі та показати кожну телеграму, яку воно надіслало б. На шину нічого не надсилається."
+
+msgid "Simulated Download"
+msgstr "Симульоване завантаження"
+
+msgid "{device} · {scope}"
+msgstr "{device} · {scope}"
+
+msgid "Offline simulation: the editor's download preparation ran against a recorder that answers like the device. Nothing was sent to the bus."
+msgstr "Офлайн-симуляція: підготовка завантаження редактора виконувалася на реєстраторі, який відповідає як пристрій. На шину нічого не надіслано."
+
+msgid "The simulation could not run: {error}"
+msgstr "Не вдалося виконати симуляцію: {error}"
+
+msgid "Simulating the download…"
+msgstr "Симуляція завантаження…"
+
+msgid "Frames: {frames} · Writes: {writes} · Memory bytes written: {bytes} · Connections: {connections}"
+msgstr "Телеграми: {frames} · Записи: {writes} · Записано байтів пам'яті: {bytes} · З'єднання: {connections}"
+
+msgid "The download would stop here: {error}"
+msgstr "Завантаження зупинилося б тут: {error}"
+
+msgid "The project keeps no image of this device's last download, so nothing is compared."
+msgstr "Проєкт не зберігає образ останнього завантаження цього пристрою, тому нічого не порівнюється."
+
+msgid "Bytes compared with the last download: {compared} · Differing: {differing} · Not in the stored image: {missing}"
+msgstr "Байтів порівняно з останнім завантаженням: {compared} · Відрізняються: {differing} · Немає в збереженому образі: {missing}"
+
+msgid "Differing in {region}: {count}"
+msgstr "Відрізняються в {region}: {count}"
+
+msgid "Properties compared: {compared} · Differing: {differing}"
+msgstr "Властивостей порівняно: {compared} · Відрізняються: {differing}"
+
+msgid "Filter frames"
+msgstr "Фільтр телеграм"
+
+msgid "Only frames that change the device"
+msgstr "Лише телеграми, що змінюють пристрій"
+
+msgid "Export Simulated Download"
+msgstr "Експорт симульованого завантаження"
+
+msgid "CSV files"
+msgstr "Файли CSV"
+
+msgid "No frames match."
+msgstr "Немає відповідних телеграм."
+
+msgid "Connection"
+msgstr "З'єднання"
+
+msgid "Service"
+msgstr "Служба"
+
+msgid "Address or Property"
+msgstr "Адреса або властивість"
+
+msgid "Memory Area"
+msgstr "Область пам'яті"
+
+msgid "Data"
+msgstr "Дані"
+
+msgid "An individual address download cannot be simulated."
+msgstr "Завантаження лише фізичної адреси не можна симулювати."

@@ -2555,6 +2555,120 @@ class ProjectStrings:
         return _("Test Programming")
 
     @property
+    def BTN_DRY_RUN(self) -> str:
+        return _("Simulate Download")
+
+    @property
+    def DRY_RUN_TOOLTIP(self) -> str:
+        return _(
+            "Run the download offline against a recorder and list every frame it would send. Nothing is sent to the bus."
+        )
+
+    @property
+    def DRY_RUN_TITLE(self) -> str:
+        return _("Simulated Download")
+
+    @property
+    def DRY_RUN_HEADER(self) -> str:
+        return _("{device} · {scope}")
+
+    @property
+    def DRY_RUN_NOTE(self) -> str:
+        return _(
+            "Offline simulation: the editor's download preparation ran against a recorder that answers like the device. Nothing was sent to the bus."
+        )
+
+    @property
+    def DRY_RUN_FAILED(self) -> str:
+        return _("The simulation could not run: {error}")
+
+    @property
+    def DRY_RUN_RUNNING(self) -> str:
+        return _("Simulating the download…")
+
+    @property
+    def DRY_RUN_SUMMARY(self) -> str:
+        return _(
+            "Frames: {frames} · Writes: {writes} · Memory bytes written: {bytes} · Connections: {connections}"
+        )
+
+    @property
+    def DRY_RUN_STOPPED(self) -> str:
+        return _("The download would stop here: {error}")
+
+    @property
+    def DRY_RUN_NO_STORED_IMAGE(self) -> str:
+        return _(
+            "The project keeps no image of this device's last download, so nothing is compared."
+        )
+
+    @property
+    def DRY_RUN_COMPARED(self) -> str:
+        return _(
+            "Bytes compared with the last download: {compared} · Differing: {differing} · Not in the stored image: {missing}"
+        )
+
+    @property
+    def DRY_RUN_REGION(self) -> str:
+        return _("Differing in {region}: {count}")
+
+    @property
+    def DRY_RUN_PROPERTIES(self) -> str:
+        return _("Properties compared: {compared} · Differing: {differing}")
+
+    @property
+    def DRY_RUN_FILTER_HINT(self) -> str:
+        return _("Filter frames")
+
+    @property
+    def DRY_RUN_ONLY_WRITES(self) -> str:
+        return _("Only frames that change the device")
+
+    @property
+    def DRY_RUN_COPY(self) -> str:
+        return _("Copy")
+
+    @property
+    def DRY_RUN_EXPORT(self) -> str:
+        return _("Export…")
+
+    @property
+    def DRY_RUN_EXPORT_TITLE(self) -> str:
+        return _("Export Simulated Download")
+
+    @property
+    def DRY_RUN_CSV_FILTER(self) -> str:
+        return _("CSV files")
+
+    @property
+    def DRY_RUN_NO_FRAMES(self) -> str:
+        return _("No frames match.")
+
+    @property
+    def DRY_RUN_COL_CONNECTION(self) -> str:
+        return _("Connection")
+
+    @property
+    def DRY_RUN_COL_SERVICE(self) -> str:
+        return _("Service")
+
+    @property
+    def DRY_RUN_COL_TARGET(self) -> str:
+        return _("Address or Property")
+
+    @property
+    def DRY_RUN_COL_REGION(self) -> str:
+        return _("Memory Area")
+
+    @property
+    def DRY_RUN_COL_DATA(self) -> str:
+        return _("Data")
+
+    @property
+    def DRY_RUN_ADDRESS_ONLY(self) -> str:
+        return _("An individual address download cannot be simulated.")
+
+    @property
     def PROGRAM_UNLOAD_TITLE(self) -> str:
         return _("Unload Application Program")
 

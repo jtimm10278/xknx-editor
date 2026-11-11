@@ -3304,3 +3304,75 @@ msgstr "Τιμή σε {device}"
 
 msgid "Not shown"
 msgstr "Δεν εμφανίζεται"
+
+msgid "Simulate Download"
+msgstr "Προσομοίωση λήψης"
+
+msgid "Run the download offline against a recorder and list every frame it would send. Nothing is sent to the bus."
+msgstr "Εκτέλεση της λήψης εκτός σύνδεσης σε καταγραφέα και καταγραφή κάθε τηλεγραφήματος που θα έστελνε. Τίποτα δεν στέλνεται στον δίαυλο."
+
+msgid "Simulated Download"
+msgstr "Προσομοιωμένη λήψη"
+
+msgid "{device} · {scope}"
+msgstr "{device} · {scope}"
+
+msgid "Offline simulation: the editor's download preparation ran against a recorder that answers like the device. Nothing was sent to the bus."
+msgstr "Προσομοίωση εκτός σύνδεσης: η προετοιμασία λήψης του επεξεργαστή εκτελέστηκε σε καταγραφέα που απαντά όπως η συσκευή. Τίποτα δεν στάλθηκε στον δίαυλο."
+
+msgid "The simulation could not run: {error}"
+msgstr "Δεν ήταν δυνατή η εκτέλεση της προσομοίωσης: {error}"
+
+msgid "Simulating the download…"
+msgstr "Προσομοίωση της λήψης…"
+
+msgid "Frames: {frames} · Writes: {writes} · Memory bytes written: {bytes} · Connections: {connections}"
+msgstr "Τηλεγραφήματα: {frames} · Εγγραφές: {writes} · Γραμμένα byte μνήμης: {bytes} · Συνδέσεις: {connections}"
+
+msgid "The download would stop here: {error}"
+msgstr "Η λήψη θα σταματούσε εδώ: {error}"
+
+msgid "The project keeps no image of this device's last download, so nothing is compared."
+msgstr "Το έργο δεν διατηρεί είδωλο της τελευταίας λήψης αυτής της συσκευής, επομένως τίποτα δεν συγκρίνεται."
+
+msgid "Bytes compared with the last download: {compared} · Differing: {differing} · Not in the stored image: {missing}"
+msgstr "Byte που συγκρίθηκαν με την τελευταία λήψη: {compared} · Διαφορετικά: {differing} · Όχι στο αποθηκευμένο είδωλο: {missing}"
+
+msgid "Differing in {region}: {count}"
+msgstr "Διαφορετικά σε {region}: {count}"
+
+msgid "Properties compared: {compared} · Differing: {differing}"
+msgstr "Ιδιότητες που συγκρίθηκαν: {compared} · Διαφορετικές: {differing}"
+
+msgid "Filter frames"
+msgstr "Φιλτράρισμα τηλεγραφημάτων"
+
+msgid "Only frames that change the device"
+msgstr "Μόνο τηλεγραφήματα που αλλάζουν τη συσκευή"
+
+msgid "Export Simulated Download"
+msgstr "Εξαγωγή προσομοιωμένης λήψης"
+
+msgid "CSV files"
+msgstr "Αρχεία CSV"
+
+msgid "No frames match."
+msgstr "Κανένα τηλεγράφημα δεν ταιριάζει."
+
+msgid "Connection"
+msgstr "Σύνδεση"
+
+msgid "Service"
+msgstr "Υπηρεσία"
+
+msgid "Address or Property"
+msgstr "Διεύθυνση ή ιδιότητα"
+
+msgid "Memory Area"
+msgstr "Περιοχή μνήμης"
+
+msgid "Data"
+msgstr "Δεδομένα"
+
+msgid "An individual address download cannot be simulated."
+msgstr "Μια λήψη μόνο της φυσικής διεύθυνσης δεν μπορεί να προσομοιωθεί."

@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import contextlib
+from collections.abc import Callable
+from contextvars import ContextVar
 from typing import TYPE_CHECKING
 
 from xknx.exceptions import ManagementConnectionError
@@ -71,6 +73,13 @@ class XknxConnectionManager:
             await self._xknx.management.disconnect(self._address)
 
 
+# Set by a dry run (:mod:`.dry_run`) for its own task: every management session then comes from
+# this factory (a recorder that answers like a device), never from ``xknx``.
+recording_sessions: ContextVar[
+    Callable[[IndividualAddress, DeviceSecurity | None], ConnectionManager] | None
+] = ContextVar("recording_sessions", default=None)
+
+
 def management_session(
     xknx: XKNX,
     address: IndividualAddress,
@@ -78,7 +87,13 @@ def management_session(
     *,
     connectionless: bool = False,
 ) -> ConnectionManager:
-    """A connection manager for ``address``, secured with the Tool Key when ``security`` is set."""
+    """A connection manager for ``address``, secured with the Tool Key when ``security`` is set.
+
+    Inside a dry run (``recording_sessions`` set) the recorder's session instead, for every
+    address, and ``xknx`` is not touched."""
+    recording = recording_sessions.get()
+    if recording is not None:
+        return recording(address, security)
     from .connectionless import ConnectionlessManager
 
     transport: ConnectionManager | None = (

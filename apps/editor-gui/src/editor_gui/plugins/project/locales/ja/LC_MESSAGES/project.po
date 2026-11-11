@@ -3252,3 +3252,75 @@ msgstr "{device} の値"
 
 msgid "Not shown"
 msgstr "表示されません"
+
+msgid "Simulate Download"
+msgstr "ダウンロードをシミュレート"
+
+msgid "Run the download offline against a recorder and list every frame it would send. Nothing is sent to the bus."
+msgstr "レコーダーに対してオフラインでダウンロードを実行し、送信されるすべての電文を一覧表示します。バスには何も送信されません。"
+
+msgid "Simulated Download"
+msgstr "シミュレートされたダウンロード"
+
+msgid "{device} · {scope}"
+msgstr "{device} · {scope}"
+
+msgid "Offline simulation: the editor's download preparation ran against a recorder that answers like the device. Nothing was sent to the bus."
+msgstr "オフラインシミュレーション: エディターのダウンロード準備は、デバイスのように応答するレコーダーに対して実行されました。バスには何も送信されていません。"
+
+msgid "The simulation could not run: {error}"
+msgstr "シミュレーションを実行できませんでした: {error}"
+
+msgid "Simulating the download…"
+msgstr "ダウンロードをシミュレート中…"
+
+msgid "Frames: {frames} · Writes: {writes} · Memory bytes written: {bytes} · Connections: {connections}"
+msgstr "電文: {frames} · 書き込み: {writes} · 書き込まれたメモリバイト: {bytes} · 接続: {connections}"
+
+msgid "The download would stop here: {error}"
+msgstr "ダウンロードはここで停止します: {error}"
+
+msgid "The project keeps no image of this device's last download, so nothing is compared."
+msgstr "プロジェクトにはこのデバイスの最後のダウンロードのイメージがないため、比較は行われません。"
+
+msgid "Bytes compared with the last download: {compared} · Differing: {differing} · Not in the stored image: {missing}"
+msgstr "最後のダウンロードと比較したバイト: {compared} · 相違: {differing} · 保存イメージにない: {missing}"
+
+msgid "Differing in {region}: {count}"
+msgstr "{region} の相違: {count}"
+
+msgid "Properties compared: {compared} · Differing: {differing}"
+msgstr "比較したプロパティ: {compared} · 相違: {differing}"
+
+msgid "Filter frames"
+msgstr "電文をフィルター"
+
+msgid "Only frames that change the device"
+msgstr "デバイスを変更する電文のみ"
+
+msgid "Export Simulated Download"
+msgstr "シミュレートされたダウンロードをエクスポート"
+
+msgid "CSV files"
+msgstr "CSV ファイル"
+
+msgid "No frames match."
+msgstr "一致する電文はありません。"
+
+msgid "Connection"
+msgstr "接続"
+
+msgid "Service"
+msgstr "サービス"
+
+msgid "Address or Property"
+msgstr "アドレスまたはプロパティ"
+
+msgid "Memory Area"
+msgstr "メモリ領域"
+
+msgid "Data"
+msgstr "データ"
+
+msgid "An individual address download cannot be simulated."
+msgstr "個別アドレスのみのダウンロードはシミュレートできません。"

@@ -3304,3 +3304,75 @@ msgstr "Valor en {device}"
 
 msgid "Not shown"
 msgstr "No mostrado"
+
+msgid "Simulate Download"
+msgstr "Simular descarga"
+
+msgid "Run the download offline against a recorder and list every frame it would send. Nothing is sent to the bus."
+msgstr "Ejecutar la descarga sin conexión contra un grabador y listar cada trama que enviaría. No se envía nada al bus."
+
+msgid "Simulated Download"
+msgstr "Descarga simulada"
+
+msgid "{device} · {scope}"
+msgstr "{device} · {scope}"
+
+msgid "Offline simulation: the editor's download preparation ran against a recorder that answers like the device. Nothing was sent to the bus."
+msgstr "Simulación sin conexión: la preparación de la descarga del editor se ejecutó contra un grabador que responde como el dispositivo. No se envió nada al bus."
+
+msgid "The simulation could not run: {error}"
+msgstr "No se pudo ejecutar la simulación: {error}"
+
+msgid "Simulating the download…"
+msgstr "Simulando la descarga…"
+
+msgid "Frames: {frames} · Writes: {writes} · Memory bytes written: {bytes} · Connections: {connections}"
+msgstr "Tramas: {frames} · Escrituras: {writes} · Bytes de memoria escritos: {bytes} · Conexiones: {connections}"
+
+msgid "The download would stop here: {error}"
+msgstr "La descarga se detendría aquí: {error}"
+
+msgid "The project keeps no image of this device's last download, so nothing is compared."
+msgstr "El proyecto no guarda ninguna imagen de la última descarga de este dispositivo, así que no se compara nada."
+
+msgid "Bytes compared with the last download: {compared} · Differing: {differing} · Not in the stored image: {missing}"
+msgstr "Bytes comparados con la última descarga: {compared} · Distintos: {differing} · No en la imagen guardada: {missing}"
+
+msgid "Differing in {region}: {count}"
+msgstr "Distintos en {region}: {count}"
+
+msgid "Properties compared: {compared} · Differing: {differing}"
+msgstr "Propiedades comparadas: {compared} · Distintas: {differing}"
+
+msgid "Filter frames"
+msgstr "Filtrar tramas"
+
+msgid "Only frames that change the device"
+msgstr "Solo tramas que cambian el dispositivo"
+
+msgid "Export Simulated Download"
+msgstr "Exportar descarga simulada"
+
+msgid "CSV files"
+msgstr "Archivos CSV"
+
+msgid "No frames match."
+msgstr "Ninguna trama coincide."
+
+msgid "Connection"
+msgstr "Conexión"
+
+msgid "Service"
+msgstr "Servicio"
+
+msgid "Address or Property"
+msgstr "Dirección o propiedad"
+
+msgid "Memory Area"
+msgstr "Área de memoria"
+
+msgid "Data"
+msgstr "Datos"
+
+msgid "An individual address download cannot be simulated."
+msgstr "No se puede simular una descarga solo de la dirección individual."

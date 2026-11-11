@@ -3435,3 +3435,75 @@ msgstr "Vrednost na {device}"
 
 msgid "Not shown"
 msgstr "Ni prikazano"
+
+msgid "Simulate Download"
+msgstr "Simuliraj prenos"
+
+msgid "Run the download offline against a recorder and list every frame it would send. Nothing is sent to the bus."
+msgstr "Zaženi prenos brez povezave proti snemalniku in izpiši vsak telegram, ki bi ga poslal. Na vodilo se nič ne pošlje."
+
+msgid "Simulated Download"
+msgstr "Simuliran prenos"
+
+msgid "{device} · {scope}"
+msgstr "{device} · {scope}"
+
+msgid "Offline simulation: the editor's download preparation ran against a recorder that answers like the device. Nothing was sent to the bus."
+msgstr "Simulacija brez povezave: priprava prenosa urejevalnika je tekla proti snemalniku, ki odgovarja kot naprava. Na vodilo ni bilo nič poslano."
+
+msgid "The simulation could not run: {error}"
+msgstr "Simulacije ni bilo mogoče zagnati: {error}"
+
+msgid "Simulating the download…"
+msgstr "Simuliranje prenosa…"
+
+msgid "Frames: {frames} · Writes: {writes} · Memory bytes written: {bytes} · Connections: {connections}"
+msgstr "Telegrami: {frames} · Zapisi: {writes} · Zapisani bajti pomnilnika: {bytes} · Povezave: {connections}"
+
+msgid "The download would stop here: {error}"
+msgstr "Prenos bi se tu ustavil: {error}"
+
+msgid "The project keeps no image of this device's last download, so nothing is compared."
+msgstr "Projekt ne hrani slike zadnjega prenosa te naprave, zato se nič ne primerja."
+
+msgid "Bytes compared with the last download: {compared} · Differing: {differing} · Not in the stored image: {missing}"
+msgstr "Bajti, primerjani z zadnjim prenosom: {compared} · Različni: {differing} · Niso v shranjeni sliki: {missing}"
+
+msgid "Differing in {region}: {count}"
+msgstr "Različni v {region}: {count}"
+
+msgid "Properties compared: {compared} · Differing: {differing}"
+msgstr "Primerjane lastnosti: {compared} · Različne: {differing}"
+
+msgid "Filter frames"
+msgstr "Filtriraj telegrame"
+
+msgid "Only frames that change the device"
+msgstr "Samo telegrami, ki spremenijo napravo"
+
+msgid "Export Simulated Download"
+msgstr "Izvozi simuliran prenos"
+
+msgid "CSV files"
+msgstr "Datoteke CSV"
+
+msgid "No frames match."
+msgstr "Noben telegram se ne ujema."
+
+msgid "Connection"
+msgstr "Povezava"
+
+msgid "Service"
+msgstr "Storitev"
+
+msgid "Address or Property"
+msgstr "Naslov ali lastnost"
+
+msgid "Memory Area"
+msgstr "Območje pomnilnika"
+
+msgid "Data"
+msgstr "Podatki"
+
+msgid "An individual address download cannot be simulated."
+msgstr "Prenosa samo fizičnega naslova ni mogoče simulirati."
