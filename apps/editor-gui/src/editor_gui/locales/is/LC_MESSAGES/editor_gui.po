@@ -1745,3 +1745,9 @@ msgstr "Enginn gildur undirritunarlykill er stilltur, svo útflutt .knxproj fær
 
 msgid "Export Anyway"
 msgstr "Flytja samt út"
+
+msgid "Export as a Copy"
+msgstr "Flytja út sem afrit"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "(nýtt verkefnaauðkenni: ETS flytur það inn við hlið upprunalega í stað þess að skipta því út)"

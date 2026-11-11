@@ -25,6 +25,7 @@ def test_local_export_forwards_password(
         _catalog_service=object(),
         _myknx_thread=None,
         _export_remove_unused=False,
+        _export_copy_name=lambda: None,
         _export_schema="23",
         _ets_is5=False,
         _log=Mock(),

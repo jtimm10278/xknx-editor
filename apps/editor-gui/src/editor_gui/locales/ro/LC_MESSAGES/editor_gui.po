@@ -1758,3 +1758,9 @@ msgstr "Nu este setată o cheie de semnare validă, așa că fișierul .knxproj 
 
 msgid "Export Anyway"
 msgstr "Exportă oricum"
+
+msgid "Export as a Copy"
+msgstr "Exportă ca copie"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "(ID de proiect nou: ETS îl importă lângă original în loc să îl înlocuiască)"

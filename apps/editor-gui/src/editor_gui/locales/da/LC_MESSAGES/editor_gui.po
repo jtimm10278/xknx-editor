@@ -1673,3 +1673,9 @@ msgstr "Der er ikke angivet en gyldig signeringsnøgle, så den eksporterede .kn
 
 msgid "Export Anyway"
 msgstr "Eksportér alligevel"
+
+msgid "Export as a Copy"
+msgstr "Eksportér som kopi"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "(nyt projekt-ID: ETS importerer det ved siden af originalen i stedet for at erstatte den)"

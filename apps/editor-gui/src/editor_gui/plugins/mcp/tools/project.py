@@ -1735,13 +1735,18 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
         return {"status": "closed"}
 
     @tool("destructive")
-    def project_export_knxproj(dest: str) -> dict[str, str]:
+    def project_export_knxproj(
+        dest: str, as_copy: bool = False, copy_name: str = ""
+    ) -> dict[str, str]:
         """Export the open project to a .knxproj archive at ``dest`` (with manufacturer bundle).
-        Returns {status, dest} plus an optional ``warning``. ``status="incomplete"`` means
+        ``as_copy`` writes it under a new random project id and Guid, so ETS imports it beside
+        the original instead of offering to replace it; ``copy_name`` then names it (default: the
+        project's name). Returns {status, dest, project_id} plus an optional ``warning``. ``status="incomplete"`` means
         manufacturer references are missing — ETS may reject the archive, so inspect the warning."""
         require_project(ctx)
         warnings: list[str] = []
         missing_refs: list[str] = []
+        written: list[str] = []
 
         def _export() -> None:
             from editor_gui.plugins.project.knxproj_manufacturer import (
@@ -1768,7 +1773,10 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
                 master_cache_dir=config_dir(),
                 module_arguments=project.module_arguments(),
                 group_object_trees=project.group_object_trees(),
+                as_copy=as_copy,
+                project_name=(copy_name or None) if as_copy else None,
             )
+            written.append(result.project_id)
             if result.unverifiable_folders:
                 warnings.append(
                     "folders without a verifiable signature: "
@@ -1784,7 +1792,11 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
         ctx.run_locked(_export, timeout=_SLOW)
         # Missing references mean ETS aborts the import ("key not present"), so the archive is not a
         # usable export: report it as incomplete rather than a success.
-        out = {"status": "incomplete" if missing_refs else "exported", "dest": dest}
+        out = {
+            "status": "incomplete" if missing_refs else "exported",
+            "dest": dest,
+            "project_id": written[0] if written else "",
+        }
         if warnings:
             out["warning"] = "ETS may reject the import — " + "; ".join(warnings)
         return out

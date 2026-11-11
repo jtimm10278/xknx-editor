@@ -1673,3 +1673,9 @@ msgstr "Não há uma chave de assinatura válida definida, por isso o .knxproj e
 
 msgid "Export Anyway"
 msgstr "Exportar mesmo assim"
+
+msgid "Export as a Copy"
+msgstr "Exportar como cópia"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "(novo ID de projeto: o ETS importa-o ao lado do original em vez de o substituir)"

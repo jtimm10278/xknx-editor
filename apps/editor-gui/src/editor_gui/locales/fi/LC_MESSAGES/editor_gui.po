@@ -1673,3 +1673,9 @@ msgstr "Kelvollista allekirjoitusavainta ei ole asetettu, joten viedyllä .knxpr
 
 msgid "Export Anyway"
 msgstr "Vie silti"
+
+msgid "Export as a Copy"
+msgstr "Vie kopiona"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "(uusi projektitunnus: ETS tuo sen alkuperäisen rinnalle eikä korvaa sitä)"

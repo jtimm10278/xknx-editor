@@ -1660,3 +1660,9 @@ msgstr "未设置有效的签名密钥，因此导出的 .knxproj 将没有有�
 
 msgid "Export Anyway"
 msgstr "仍然导出"
+
+msgid "Export as a Copy"
+msgstr "导出为副本"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "（新项目 ID：ETS 会将其导入到原项目旁边，而不是替换原项目）"

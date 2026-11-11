@@ -1758,3 +1758,9 @@ msgstr "Nie je nastavený platný podpisový kľúč, takže exportovaný .knxpr
 
 msgid "Export Anyway"
 msgstr "Napriek tomu exportovať"
+
+msgid "Export as a Copy"
+msgstr "Exportovať ako kópiu"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "(nové ID projektu: ETS ho naimportuje vedľa originálu namiesto toho, aby ho nahradil)"

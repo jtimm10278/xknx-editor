@@ -2185,6 +2185,16 @@ class MenuStrings:
         return _("Close")
 
     @property
+    def EXPORT_AS_COPY(self) -> str:
+        return _("Export as a Copy")
+
+    @property
+    def EXPORT_AS_COPY_HELP(self) -> str:
+        return _(
+            "(new project ID: ETS imports it next to the original instead of replacing it)"
+        )
+
+    @property
     def EXPORT_REMOVE_UNUSED(self) -> str:
         return _("Remove Unused Product Data")
 

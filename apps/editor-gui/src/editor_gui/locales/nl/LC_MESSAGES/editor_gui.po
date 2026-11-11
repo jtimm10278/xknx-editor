@@ -1733,3 +1733,9 @@ msgstr "Er is geen geldige ondertekeningssleutel ingesteld, dus de geëxporteerd
 
 msgid "Export Anyway"
 msgstr "Toch exporteren"
+
+msgid "Export as a Copy"
+msgstr "Exporteren als kopie"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "(nieuwe project-ID: ETS importeert het naast het origineel in plaats van het te vervangen)"

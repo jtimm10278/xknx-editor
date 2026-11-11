@@ -733,6 +733,8 @@ class KnxGuiApp:
         self._compact_result: CompactResult | None = None
         self._compact_result_requested = False
         self._compact_cancel = False
+        # Export option: a copy under a new project id (this export only, never persisted).
+        self._export_as_copy = False
         # Export option: leave out product data no device uses (persisted).
         self._export_remove_unused = bool(
             load_settings("app").get("export_remove_unused_products", False)
@@ -1632,6 +1634,16 @@ class KnxGuiApp:
         # between opens is picked up without restarting the app.
         self._ets_install_checked = False
 
+    def _export_copy_name(self) -> str | None:
+        """With "Export as a Copy" ticked, the copy's name (the project's, tagged like the
+        ProjectStore copy's); else ``None``. Read on the UI thread; the tick is for this export."""
+        if not self._export_as_copy:
+            return None
+        self._export_as_copy = False
+        info = self._project_service.get_project_metadata()
+        name = info.name if info is not None and info.name else "project"
+        return f"{name} ({S.MYKNX_DONGLE_COPY_SUFFIX})"
+
     def _do_export_knxproj(
         self, dest: str, signer: Callable[[str, bytes, str], bytes | None] | None = None
     ) -> None:
@@ -1657,6 +1669,7 @@ class KnxGuiApp:
         module_arguments = self._project_service.module_arguments()
         group_object_trees = self._project_service.group_object_trees()
         remove_unused = self._export_remove_unused
+        copy_name = self._export_copy_name()
         password = self._project_service.project_password
         # Set by the progress window's Cancel; the export stops at its next step.
         cancel_requested = threading.Event()
@@ -1729,6 +1742,8 @@ class KnxGuiApp:
                     master_cache_dir=config_dir(),
                     certificate_signer=certificate_signer,
                     remove_unused_products=remove_unused,
+                    as_copy=copy_name is not None,
+                    project_name=copy_name,
                     cancelled=cancel_requested.is_set,
                     module_arguments=module_arguments,
                     group_object_trees=group_object_trees,
@@ -2207,6 +2222,13 @@ class KnxGuiApp:
                 if imgui.selectable(lbl, code == self._export_schema)[0]:
                     self._set_export_schema(code)
             imgui.end_combo()
+        _, self._export_as_copy = checkbox(S.EXPORT_AS_COPY, self._export_as_copy)
+        imgui.same_line()
+        imgui.push_style_color(
+            imgui.Col_.text, imgui.get_style_color_vec4(imgui.Col_.text_disabled)
+        )
+        imgui.text_wrapped(S.EXPORT_AS_COPY_HELP)
+        imgui.pop_style_color()
         changed, self._export_remove_unused = checkbox(
             S.EXPORT_REMOVE_UNUSED, self._export_remove_unused
         )
@@ -5706,6 +5728,7 @@ class KnxGuiApp:
         module_arguments = self._project_service.module_arguments()
         group_object_trees = self._project_service.group_object_trees()
         remove_unused = self._export_remove_unused
+        copy_name = self._export_copy_name()
         password = self._project_service.project_password
         # ETS 5 reads only project/20; stage at 20 for it regardless of the chosen export format.
         schema = "20" if self._ets_is5 else self._export_schema
@@ -5755,6 +5778,8 @@ class KnxGuiApp:
                     fetch_master=True,
                     master_cache_dir=config_dir(),
                     remove_unused_products=remove_unused,
+                    as_copy=copy_name is not None,
+                    project_name=copy_name,
                     cancelled=cancel_requested.is_set,
                     module_arguments=module_arguments,
                     group_object_trees=group_object_trees,

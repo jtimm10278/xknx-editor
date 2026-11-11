@@ -1686,3 +1686,9 @@ msgstr "Дійсний ключ підпису не задано, тому ек�
 
 msgid "Export Anyway"
 msgstr "Експортувати попри це"
+
+msgid "Export as a Copy"
+msgstr "Експортувати як копію"
+
+msgid "(new project ID: ETS imports it next to the original instead of replacing it)"
+msgstr "(новий ID проєкту: ETS імпортує його поруч з оригіналом, а не замість нього)"
