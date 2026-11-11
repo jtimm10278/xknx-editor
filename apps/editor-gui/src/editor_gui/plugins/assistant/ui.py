@@ -37,6 +37,15 @@ def error_text(code: str, detail: str = "") -> str:
     return f"{text} ({detail})" if detail else text
 
 
+def _dim_wrapped(text: str) -> None:
+    """Dimmed text that wraps at the panel's edge (``text_disabled`` does not wrap)."""
+    imgui.push_style_color(
+        imgui.Col_.text, imgui.get_style().color_(imgui.Col_.text_disabled)
+    )
+    imgui.text_wrapped(text)
+    imgui.pop_style_color()
+
+
 def note_text(code: str) -> str:
     return S.NOTE_CHANGES if code == "changes" else S.NOTE_STOPPED
 
@@ -71,8 +80,8 @@ class AssistantPanel:
         if imgui.begin_child("##assistant_log", imgui.ImVec2(0, -controls)):
             entries = assistant.entries()
             if not entries:
-                imgui.text_disabled(S.INTRO)
-                imgui.text_disabled(S.PRIVACY.format(provider=self._provider_name()))
+                _dim_wrapped(S.INTRO)
+                _dim_wrapped(S.PRIVACY.format(provider=self._provider_name()))
             for i, entry in enumerate(entries):
                 imgui.push_id(i)
                 self._render_entry(entry)
@@ -98,13 +107,13 @@ class AssistantPanel:
                 imgui.text(S.PANEL_ASSISTANT)
             render_markdown(entry.text, COMPACT)
         elif entry.role == "tool":
-            imgui.text_disabled(S.LOOKED_UP.format(tool=entry.text))
+            _dim_wrapped(S.LOOKED_UP.format(tool=entry.text))
         elif entry.role == "error":
             imgui.push_style_color(imgui.Col_.text, status_color("error"))
             imgui.text_wrapped(error_text(entry.text, entry.detail))
             imgui.pop_style_color()
         else:
-            imgui.text_disabled(note_text(entry.text))
+            _dim_wrapped(note_text(entry.text))
 
     def _render_controls(self) -> None:
         assistant = self._assistant
