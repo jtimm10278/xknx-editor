@@ -146,12 +146,14 @@ class ObservableUSBInterfaceThreaded(ObservableKNXIPInterfaceThreaded):
         target: UsbTarget,
         raw_cemi_callback: Callable[[bytes], None] | None = None,
         sent_cemi_callback: Callable[[bytes], None] | None = None,
+        writes_blocked: Callable[[], bool] | None = None,
     ) -> None:
         super().__init__(
             xknx,
             ConnectionConfig(threaded=True),
             raw_cemi_callback=raw_cemi_callback,
             sent_cemi_callback=sent_cemi_callback,
+            writes_blocked=writes_blocked,
         )
         self._target = target
 

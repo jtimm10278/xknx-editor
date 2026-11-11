@@ -27,6 +27,8 @@ from xknx.knxip import (
 from xknx.profile.const import ResourceDevicePropertyId, ResourceObjectType
 from xknx.telegram.apci import ReturnCode
 
+from editor_gui.plugins.connection.write_guard import BusWritesBlocked, is_bus_write
+
 # Seconds to wait for a tunnelling feature response.
 _FEATURE_TIMEOUT = 2.0
 # Seconds a device management connection may take to answer the read of the maximum APDU
@@ -41,6 +43,12 @@ if TYPE_CHECKING:
     from xknx.io.connection import ConnectionConfig
 
 
+def _refuse_write(writes_blocked: Callable[[], bool] | None, cemi: CEMIFrame) -> None:
+    """Raise :class:`BusWritesBlocked` for a write while Block Bus Writes is on."""
+    if writes_blocked is not None and writes_blocked() and is_bus_write(cemi):
+        raise BusWritesBlocked(cemi)
+
+
 def _notify_sent(callback: Callable[[bytes], None], cemi: CEMIFrame) -> None:
     """Pass a sent frame to ``callback``; a failing observer never stops the send."""
     with contextlib.suppress(Exception):
@@ -48,7 +56,7 @@ def _notify_sent(callback: Callable[[bytes], None], cemi: CEMIFrame) -> None:
 
 
 class ObservableKNXIPInterface(KNXIPInterface):
-    __slots__ = ("_raw_cemi_callback", "_sent_cemi_callback")
+    __slots__ = ("_raw_cemi_callback", "_sent_cemi_callback", "_writes_blocked")
 
     def __init__(
         self,
@@ -56,10 +64,13 @@ class ObservableKNXIPInterface(KNXIPInterface):
         connection_config: ConnectionConfig | None = None,
         raw_cemi_callback: Callable[[bytes], None] | None = None,
         sent_cemi_callback: Callable[[bytes], None] | None = None,
+        writes_blocked: Callable[[], bool] | None = None,
     ) -> None:
         super().__init__(xknx, connection_config)
         self._raw_cemi_callback = raw_cemi_callback
         self._sent_cemi_callback = sent_cemi_callback
+        # Block Bus Writes (write_guard.py): asked for every frame, so a change applies at once.
+        self._writes_blocked = writes_blocked
 
     def cemi_received(self, raw_cemi: bytes) -> None:
         if self._raw_cemi_callback:
@@ -68,13 +79,14 @@ class ObservableKNXIPInterface(KNXIPInterface):
 
     async def send_cemi(self, cemi: CEMIFrame) -> None:
         # Every frame the app sends passes here, whichever code path built it.
+        _refuse_write(self._writes_blocked, cemi)
         if self._sent_cemi_callback:
             _notify_sent(self._sent_cemi_callback, cemi)
         await super().send_cemi(cemi)
 
 
 class ObservableKNXIPInterfaceThreaded(KNXIPInterfaceThreaded):
-    __slots__ = ("_raw_cemi_callback", "_sent_cemi_callback")
+    __slots__ = ("_raw_cemi_callback", "_sent_cemi_callback", "_writes_blocked")
 
     def __init__(
         self,
@@ -82,10 +94,13 @@ class ObservableKNXIPInterfaceThreaded(KNXIPInterfaceThreaded):
         connection_config: ConnectionConfig | None = None,
         raw_cemi_callback: Callable[[bytes], None] | None = None,
         sent_cemi_callback: Callable[[bytes], None] | None = None,
+        writes_blocked: Callable[[], bool] | None = None,
     ) -> None:
         super().__init__(xknx, connection_config)
         self._raw_cemi_callback = raw_cemi_callback
         self._sent_cemi_callback = sent_cemi_callback
+        # Block Bus Writes (write_guard.py): asked for every frame, so a change applies at once.
+        self._writes_blocked = writes_blocked
 
     def cemi_received(self, raw_cemi: bytes) -> None:
         if self._raw_cemi_callback:
@@ -94,6 +109,7 @@ class ObservableKNXIPInterfaceThreaded(KNXIPInterfaceThreaded):
 
     async def send_cemi(self, cemi: CEMIFrame) -> None:
         # Every frame the app sends passes here, whichever code path built it.
+        _refuse_write(self._writes_blocked, cemi)
         if self._sent_cemi_callback:
             _notify_sent(self._sent_cemi_callback, cemi)
         await super().send_cemi(cemi)
