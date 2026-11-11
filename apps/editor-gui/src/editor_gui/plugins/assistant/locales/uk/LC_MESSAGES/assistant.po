@@ -1,0 +1,122 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xknx-editor assistant 1.0\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "AI Assistant"
+msgstr "ШІ-асистент"
+
+msgid "Ask about the open project. The assistant looks things up with the editor's own tools and never uses the bus."
+msgstr "Запитуйте про відкритий проєкт. Асистент шукає інструментами самого редактора й ніколи не використовує шину."
+
+msgid "Ask about the open project…"
+msgstr "Запитайте про відкритий проєкт…"
+
+msgid "Send"
+msgstr "Надіслати"
+
+msgid "Stop"
+msgstr "Зупинити"
+
+msgid "New Conversation"
+msgstr "Нова розмова"
+
+msgid "Allow Changes"
+msgstr "Дозволити зміни"
+
+msgid "The assistant may then change the project; Edit > Undo takes each change back. It never deletes, exports, programs devices or uses the bus."
+msgstr "Тоді асистент може змінювати проєкт; Редагувати > Відмінити скасовує кожну зміну. Він ніколи не видаляє, не експортує, не програмує пристрої й не використовує шину."
+
+msgid "Working…"
+msgstr "Працює…"
+
+msgid "You"
+msgstr "Ви"
+
+msgid "Used: {tool}"
+msgstr "Використано: {tool}"
+
+msgid "What the assistant reads in the project is sent to {provider}."
+msgstr "Те, що асистент читає в проєкті, надсилається до {provider}."
+
+msgid "Choose an AI provider and enter your API key in the settings first."
+msgstr "Спершу виберіть ШІ-провайдера та введіть свій API-ключ у налаштуваннях."
+
+msgid "Open Settings"
+msgstr "Відкрити налаштування"
+
+msgid "Allow Changes was switched: a new conversation started."
+msgstr "«Дозволити зміни» перемкнено: почалася нова розмова."
+
+msgid "Stopped."
+msgstr "Зупинено."
+
+msgid "No API key is set."
+msgstr "API-ключ не задано."
+
+msgid "No model is set."
+msgstr "Модель не задано."
+
+msgid "No API address is set."
+msgstr "Адресу API не задано."
+
+msgid "The provider did not accept the API key."
+msgstr "Провайдер не прийняв API-ключ."
+
+msgid "The provider's rate limit was reached; try again shortly."
+msgstr "Досягнуто ліміту запитів провайдера; спробуйте трохи згодом."
+
+msgid "The provider answered with an error."
+msgstr "Провайдер відповів помилкою."
+
+msgid "The provider could not be reached."
+msgstr "Провайдер недоступний."
+
+msgid "The provider's answer could not be read."
+msgstr "Не вдалося прочитати відповідь провайдера."
+
+msgid "The model declined to answer this."
+msgstr "Модель відмовилася відповідати."
+
+msgid "The answer was cut off because it was too long."
+msgstr "Відповідь обрізано, бо вона була задовгою."
+
+msgid "Stopped after {count} steps without an answer."
+msgstr "Зупинено після {count} кроків без відповіді."
+
+msgid "The assistant failed."
+msgstr "Збій асистента."
+
+msgid "The AI Assistant uses an AI provider of your choice with your own API key. The provider bills its use; a chat subscription (such as Claude Pro or ChatGPT Plus) does not include it."
+msgstr "ШІ-асистент використовує обраного вами ШІ-провайдера з вашим власним API-ключем. Провайдер виставляє рахунок за використання; підписка на чат (наприклад, Claude Pro або ChatGPT Plus) його не включає."
+
+msgid "Provider"
+msgstr "Провайдер"
+
+msgid "Other (OpenAI-compatible)"
+msgstr "Інший (сумісний з OpenAI)"
+
+msgid "Model"
+msgstr "Модель"
+
+msgid "The model's name as the provider lists it. Empty: {model}."
+msgstr "Назва моделі, як її вказує провайдер. Порожньо: {model}."
+
+msgid "The model's name as the provider lists it."
+msgstr "Назва моделі, як її вказує провайдер."
+
+msgid "API Key"
+msgstr "API-ключ"
+
+msgid "From the provider's developer console. It is kept in the editor's settings on this computer."
+msgstr "З консолі розробника провайдера. Зберігається в налаштуваннях редактора на цьому комп'ютері."
+
+msgid "API Address"
+msgstr "Адреса API"
+
+msgid "Empty: the provider's own address. Needed for Other."
+msgstr "Порожньо: власна адреса провайдера. Потрібна для «Інший»."

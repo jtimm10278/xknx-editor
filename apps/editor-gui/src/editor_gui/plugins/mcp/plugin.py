@@ -21,6 +21,7 @@ from editor_gui.ports import PortInUseError, bind_port
 
 if TYPE_CHECKING:
     import uvicorn
+    from fastmcp import FastMCP
 
     from editor_gui.plugins.backups.service import BackupService
     from editor_gui.plugins.base import PluginAPI
@@ -148,6 +149,7 @@ class McpServerPlugin:
             "home_assistant": home_assistant,
         }
         self._ctx: McpContext | None = None
+        self._local: FastMCP | None = None
         self._server: uvicorn.Server | None = None
         self._thread: threading.Thread | None = None
         # Guards the hand-over of the server built on its thread against a stop meanwhile.
@@ -164,6 +166,15 @@ class McpServerPlugin:
 
             self._ctx = McpContext(**self._context_args)
         return self._ctx
+
+    def local_server(self) -> FastMCP:
+        """The same tools as a server object used in this process only (no network), built once.
+        The AI Assistant calls its tools through it."""
+        if self._local is None:
+            from editor_gui.plugins.mcp.server import build_server
+
+            self._local = build_server(self._context())
+        return self._local
 
     def start(self, host: str, port: int, token: str = "") -> None:
         """Start the server on ``host``:``port``. The port is taken here, before the server thread

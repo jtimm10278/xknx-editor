@@ -1,0 +1,122 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xknx-editor assistant 1.0\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "AI Assistant"
+msgstr "AI-assistent"
+
+msgid "Ask about the open project. The assistant looks things up with the editor's own tools and never uses the bus."
+msgstr "Vraag naar het geopende project. De assistent zoekt met de eigen hulpmiddelen van de editor en gebruikt nooit de bus."
+
+msgid "Ask about the open project…"
+msgstr "Vraag naar het geopende project…"
+
+msgid "Send"
+msgstr "Verzenden"
+
+msgid "Stop"
+msgstr "Stoppen"
+
+msgid "New Conversation"
+msgstr "Nieuw gesprek"
+
+msgid "Allow Changes"
+msgstr "Wijzigingen toestaan"
+
+msgid "The assistant may then change the project; Edit > Undo takes each change back. It never deletes, exports, programs devices or uses the bus."
+msgstr "De assistent mag dan het project wijzigen; Bewerken > Ongedaan maken draait elke wijziging terug. Hij verwijdert, exporteert en programmeert nooit en gebruikt nooit de bus."
+
+msgid "Working…"
+msgstr "Bezig…"
+
+msgid "You"
+msgstr "U"
+
+msgid "Used: {tool}"
+msgstr "Gebruikt: {tool}"
+
+msgid "What the assistant reads in the project is sent to {provider}."
+msgstr "Wat de assistent in het project leest, wordt naar {provider} gestuurd."
+
+msgid "Choose an AI provider and enter your API key in the settings first."
+msgstr "Kies eerst een AI-aanbieder en voer uw API-sleutel in bij de instellingen."
+
+msgid "Open Settings"
+msgstr "Instellingen openen"
+
+msgid "Allow Changes was switched: a new conversation started."
+msgstr "‘Wijzigingen toestaan’ is omgezet: er is een nieuw gesprek begonnen."
+
+msgid "Stopped."
+msgstr "Gestopt."
+
+msgid "No API key is set."
+msgstr "Geen API-sleutel ingesteld."
+
+msgid "No model is set."
+msgstr "Geen model ingesteld."
+
+msgid "No API address is set."
+msgstr "Geen API-adres ingesteld."
+
+msgid "The provider did not accept the API key."
+msgstr "De aanbieder heeft de API-sleutel niet geaccepteerd."
+
+msgid "The provider's rate limit was reached; try again shortly."
+msgstr "De aanvraaglimiet van de aanbieder is bereikt; probeer het zo opnieuw."
+
+msgid "The provider answered with an error."
+msgstr "De aanbieder antwoordde met een fout."
+
+msgid "The provider could not be reached."
+msgstr "De aanbieder is niet bereikbaar."
+
+msgid "The provider's answer could not be read."
+msgstr "Het antwoord van de aanbieder is niet leesbaar."
+
+msgid "The model declined to answer this."
+msgstr "Het model weigerde te antwoorden."
+
+msgid "The answer was cut off because it was too long."
+msgstr "Het antwoord is afgekapt omdat het te lang was."
+
+msgid "Stopped after {count} steps without an answer."
+msgstr "Gestopt na {count} stappen zonder antwoord."
+
+msgid "The assistant failed."
+msgstr "De assistent is mislukt."
+
+msgid "The AI Assistant uses an AI provider of your choice with your own API key. The provider bills its use; a chat subscription (such as Claude Pro or ChatGPT Plus) does not include it."
+msgstr "De AI-assistent gebruikt een AI-aanbieder naar keuze met uw eigen API-sleutel. De aanbieder rekent het gebruik af; een chatabonnement (zoals Claude Pro of ChatGPT Plus) dekt het niet."
+
+msgid "Provider"
+msgstr "Aanbieder"
+
+msgid "Other (OpenAI-compatible)"
+msgstr "Andere (OpenAI-compatibel)"
+
+msgid "Model"
+msgstr "Model"
+
+msgid "The model's name as the provider lists it. Empty: {model}."
+msgstr "De naam van het model zoals de aanbieder die vermeldt. Leeg: {model}."
+
+msgid "The model's name as the provider lists it."
+msgstr "De naam van het model zoals de aanbieder die vermeldt."
+
+msgid "API Key"
+msgstr "API-sleutel"
+
+msgid "From the provider's developer console. It is kept in the editor's settings on this computer."
+msgstr "Uit de ontwikkelaarsconsole van de aanbieder. Hij wordt bewaard in de instellingen van de editor op deze computer."
+
+msgid "API Address"
+msgstr "API-adres"
+
+msgid "Empty: the provider's own address. Needed for Other."
+msgstr "Leeg: het eigen adres van de aanbieder. Nodig voor ‘Andere’."

@@ -1,0 +1,122 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xknx-editor assistant 1.0\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "AI Assistant"
+msgstr "AI-assistent"
+
+msgid "Ask about the open project. The assistant looks things up with the editor's own tools and never uses the bus."
+msgstr "Spørg om det åbne projekt. Assistenten slår op med editorens egne værktøjer og bruger aldrig bussen."
+
+msgid "Ask about the open project…"
+msgstr "Spørg om det åbne projekt…"
+
+msgid "Send"
+msgstr "Send"
+
+msgid "Stop"
+msgstr "Stop"
+
+msgid "New Conversation"
+msgstr "Ny samtale"
+
+msgid "Allow Changes"
+msgstr "Tillad ændringer"
+
+msgid "The assistant may then change the project; Edit > Undo takes each change back. It never deletes, exports, programs devices or uses the bus."
+msgstr "Assistenten må så ændre projektet; Rediger > Fortryd tager hver ændring tilbage. Den sletter, eksporterer og programmerer aldrig og bruger aldrig bussen."
+
+msgid "Working…"
+msgstr "Arbejder…"
+
+msgid "You"
+msgstr "Du"
+
+msgid "Used: {tool}"
+msgstr "Brugt: {tool}"
+
+msgid "What the assistant reads in the project is sent to {provider}."
+msgstr "Det, assistenten læser i projektet, sendes til {provider}."
+
+msgid "Choose an AI provider and enter your API key in the settings first."
+msgstr "Vælg først en AI-udbyder og indtast din API-nøgle i indstillingerne."
+
+msgid "Open Settings"
+msgstr "Åbn indstillinger"
+
+msgid "Allow Changes was switched: a new conversation started."
+msgstr "\"Tillad ændringer\" blev skiftet: en ny samtale er startet."
+
+msgid "Stopped."
+msgstr "Stoppet."
+
+msgid "No API key is set."
+msgstr "Ingen API-nøgle angivet."
+
+msgid "No model is set."
+msgstr "Ingen model angivet."
+
+msgid "No API address is set."
+msgstr "Ingen API-adresse angivet."
+
+msgid "The provider did not accept the API key."
+msgstr "Udbyderen accepterede ikke API-nøglen."
+
+msgid "The provider's rate limit was reached; try again shortly."
+msgstr "Udbyderens grænse for forespørgsler er nået; prøv igen om lidt."
+
+msgid "The provider answered with an error."
+msgstr "Udbyderen svarede med en fejl."
+
+msgid "The provider could not be reached."
+msgstr "Udbyderen kunne ikke nås."
+
+msgid "The provider's answer could not be read."
+msgstr "Udbyderens svar kunne ikke læses."
+
+msgid "The model declined to answer this."
+msgstr "Modellen afviste at svare."
+
+msgid "The answer was cut off because it was too long."
+msgstr "Svaret blev afkortet, fordi det var for langt."
+
+msgid "Stopped after {count} steps without an answer."
+msgstr "Stoppet efter {count} trin uden svar."
+
+msgid "The assistant failed."
+msgstr "Assistenten fejlede."
+
+msgid "The AI Assistant uses an AI provider of your choice with your own API key. The provider bills its use; a chat subscription (such as Claude Pro or ChatGPT Plus) does not include it."
+msgstr "AI-assistenten bruger en AI-udbyder efter eget valg med din egen API-nøgle. Udbyderen fakturerer brugen; et chatabonnement (som Claude Pro eller ChatGPT Plus) dækker det ikke."
+
+msgid "Provider"
+msgstr "Udbyder"
+
+msgid "Other (OpenAI-compatible)"
+msgstr "Anden (OpenAI-kompatibel)"
+
+msgid "Model"
+msgstr "Model"
+
+msgid "The model's name as the provider lists it. Empty: {model}."
+msgstr "Modellens navn, som udbyderen angiver det. Tom: {model}."
+
+msgid "The model's name as the provider lists it."
+msgstr "Modellens navn, som udbyderen angiver det."
+
+msgid "API Key"
+msgstr "API-nøgle"
+
+msgid "From the provider's developer console. It is kept in the editor's settings on this computer."
+msgstr "Fra udbyderens udviklerkonsol. Den gemmes i editorens indstillinger på denne computer."
+
+msgid "API Address"
+msgstr "API-adresse"
+
+msgid "Empty: the provider's own address. Needed for Other."
+msgstr "Tom: udbyderens egen adresse. Kræves for \"Anden\"."

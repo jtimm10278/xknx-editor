@@ -1,0 +1,122 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xknx-editor assistant 1.0\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "AI Assistant"
+msgstr "Pomočnik UI"
+
+msgid "Ask about the open project. The assistant looks things up with the editor's own tools and never uses the bus."
+msgstr "Vprašajte o odprtem projektu. Pomočnik išče z orodji urejevalnika in nikoli ne uporablja vodila."
+
+msgid "Ask about the open project…"
+msgstr "Vprašajte o odprtem projektu…"
+
+msgid "Send"
+msgstr "Pošlji"
+
+msgid "Stop"
+msgstr "Ustavi"
+
+msgid "New Conversation"
+msgstr "Nov pogovor"
+
+msgid "Allow Changes"
+msgstr "Dovoli spremembe"
+
+msgid "The assistant may then change the project; Edit > Undo takes each change back. It never deletes, exports, programs devices or uses the bus."
+msgstr "Pomočnik lahko nato spreminja projekt; Urejanje > Razveljavi prekliče vsako spremembo. Nikoli ne briše, ne izvaža, ne programira naprav in ne uporablja vodila."
+
+msgid "Working…"
+msgstr "Dela…"
+
+msgid "You"
+msgstr "Vi"
+
+msgid "Used: {tool}"
+msgstr "Uporabljeno: {tool}"
+
+msgid "What the assistant reads in the project is sent to {provider}."
+msgstr "Kar pomočnik prebere v projektu, se pošlje ponudniku {provider}."
+
+msgid "Choose an AI provider and enter your API key in the settings first."
+msgstr "Najprej v nastavitvah izberite ponudnika UI in vnesite svoj ključ API."
+
+msgid "Open Settings"
+msgstr "Odpri nastavitve"
+
+msgid "Allow Changes was switched: a new conversation started."
+msgstr "»Dovoli spremembe« je bilo preklopljeno: začel se je nov pogovor."
+
+msgid "Stopped."
+msgstr "Ustavljeno."
+
+msgid "No API key is set."
+msgstr "Ključ API ni nastavljen."
+
+msgid "No model is set."
+msgstr "Model ni nastavljen."
+
+msgid "No API address is set."
+msgstr "Naslov API ni nastavljen."
+
+msgid "The provider did not accept the API key."
+msgstr "Ponudnik ni sprejel ključa API."
+
+msgid "The provider's rate limit was reached; try again shortly."
+msgstr "Dosežena je omejitev zahtev ponudnika; poskusite znova čez trenutek."
+
+msgid "The provider answered with an error."
+msgstr "Ponudnik je odgovoril z napako."
+
+msgid "The provider could not be reached."
+msgstr "Ponudnika ni mogoče doseči."
+
+msgid "The provider's answer could not be read."
+msgstr "Odgovora ponudnika ni mogoče prebrati."
+
+msgid "The model declined to answer this."
+msgstr "Model je zavrnil odgovor."
+
+msgid "The answer was cut off because it was too long."
+msgstr "Odgovor je bil prirezan, ker je bil predolg."
+
+msgid "Stopped after {count} steps without an answer."
+msgstr "Ustavljeno po {count} korakih brez odgovora."
+
+msgid "The assistant failed."
+msgstr "Pomočnik ni uspel."
+
+msgid "The AI Assistant uses an AI provider of your choice with your own API key. The provider bills its use; a chat subscription (such as Claude Pro or ChatGPT Plus) does not include it."
+msgstr "Pomočnik UI uporablja ponudnika UI po vaši izbiri z vašim lastnim ključem API. Ponudnik zaračuna uporabo; naročnina na klepet (npr. Claude Pro ali ChatGPT Plus) je ne vključuje."
+
+msgid "Provider"
+msgstr "Ponudnik"
+
+msgid "Other (OpenAI-compatible)"
+msgstr "Drugo (združljivo z OpenAI)"
+
+msgid "Model"
+msgstr "Model"
+
+msgid "The model's name as the provider lists it. Empty: {model}."
+msgstr "Ime modela, kot ga navaja ponudnik. Prazno: {model}."
+
+msgid "The model's name as the provider lists it."
+msgstr "Ime modela, kot ga navaja ponudnik."
+
+msgid "API Key"
+msgstr "Ključ API"
+
+msgid "From the provider's developer console. It is kept in the editor's settings on this computer."
+msgstr "Iz razvijalske konzole ponudnika. Shrani se v nastavitvah urejevalnika na tem računalniku."
+
+msgid "API Address"
+msgstr "Naslov API"
+
+msgid "Empty: the provider's own address. Needed for Other."
+msgstr "Prazno: lastni naslov ponudnika. Potrebno za »Drugo«."

@@ -1,0 +1,122 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xknx-editor assistant 1.0\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "AI Assistant"
+msgstr "Assistente IA"
+
+msgid "Ask about the open project. The assistant looks things up with the editor's own tools and never uses the bus."
+msgstr "Chiedi del progetto aperto. L'assistente cerca con gli strumenti dell'editor e non usa mai il bus."
+
+msgid "Ask about the open project…"
+msgstr "Chiedi del progetto aperto…"
+
+msgid "Send"
+msgstr "Invia"
+
+msgid "Stop"
+msgstr "Ferma"
+
+msgid "New Conversation"
+msgstr "Nuova conversazione"
+
+msgid "Allow Changes"
+msgstr "Consenti modifiche"
+
+msgid "The assistant may then change the project; Edit > Undo takes each change back. It never deletes, exports, programs devices or uses the bus."
+msgstr "L'assistente potrà allora modificare il progetto; Modifica > Annulla annulla ogni modifica. Non elimina, non esporta, non programma dispositivi e non usa mai il bus."
+
+msgid "Working…"
+msgstr "In corso…"
+
+msgid "You"
+msgstr "Tu"
+
+msgid "Used: {tool}"
+msgstr "Usato: {tool}"
+
+msgid "What the assistant reads in the project is sent to {provider}."
+msgstr "Ciò che l'assistente legge nel progetto viene inviato a {provider}."
+
+msgid "Choose an AI provider and enter your API key in the settings first."
+msgstr "Scegli prima un fornitore di IA e inserisci la tua chiave API nelle impostazioni."
+
+msgid "Open Settings"
+msgstr "Apri impostazioni"
+
+msgid "Allow Changes was switched: a new conversation started."
+msgstr "«Consenti modifiche» è cambiato: è iniziata una nuova conversazione."
+
+msgid "Stopped."
+msgstr "Fermato."
+
+msgid "No API key is set."
+msgstr "Nessuna chiave API impostata."
+
+msgid "No model is set."
+msgstr "Nessun modello impostato."
+
+msgid "No API address is set."
+msgstr "Nessun indirizzo API impostato."
+
+msgid "The provider did not accept the API key."
+msgstr "Il fornitore non ha accettato la chiave API."
+
+msgid "The provider's rate limit was reached; try again shortly."
+msgstr "Raggiunto il limite di richieste del fornitore; riprova tra poco."
+
+msgid "The provider answered with an error."
+msgstr "Il fornitore ha risposto con un errore."
+
+msgid "The provider could not be reached."
+msgstr "Impossibile raggiungere il fornitore."
+
+msgid "The provider's answer could not be read."
+msgstr "Impossibile leggere la risposta del fornitore."
+
+msgid "The model declined to answer this."
+msgstr "Il modello ha rifiutato di rispondere."
+
+msgid "The answer was cut off because it was too long."
+msgstr "La risposta è stata troncata perché troppo lunga."
+
+msgid "Stopped after {count} steps without an answer."
+msgstr "Fermato dopo {count} passaggi senza risposta."
+
+msgid "The assistant failed."
+msgstr "L'assistente non è riuscito."
+
+msgid "The AI Assistant uses an AI provider of your choice with your own API key. The provider bills its use; a chat subscription (such as Claude Pro or ChatGPT Plus) does not include it."
+msgstr "L'assistente IA usa il fornitore di IA che scegli con la tua chiave API. Il fornitore fattura l'uso; un abbonamento chat (come Claude Pro o ChatGPT Plus) non lo include."
+
+msgid "Provider"
+msgstr "Fornitore"
+
+msgid "Other (OpenAI-compatible)"
+msgstr "Altro (compatibile OpenAI)"
+
+msgid "Model"
+msgstr "Modello"
+
+msgid "The model's name as the provider lists it. Empty: {model}."
+msgstr "Il nome del modello come lo indica il fornitore. Vuoto: {model}."
+
+msgid "The model's name as the provider lists it."
+msgstr "Il nome del modello come lo indica il fornitore."
+
+msgid "API Key"
+msgstr "Chiave API"
+
+msgid "From the provider's developer console. It is kept in the editor's settings on this computer."
+msgstr "Dalla console sviluppatori del fornitore. È conservata nelle impostazioni dell'editor su questo computer."
+
+msgid "API Address"
+msgstr "Indirizzo API"
+
+msgid "Empty: the provider's own address. Needed for Other."
+msgstr "Vuoto: l'indirizzo del fornitore. Necessario per «Altro»."

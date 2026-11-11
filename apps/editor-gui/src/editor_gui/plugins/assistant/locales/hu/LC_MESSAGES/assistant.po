@@ -1,0 +1,122 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xknx-editor assistant 1.0\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "AI Assistant"
+msgstr "MI-asszisztens"
+
+msgid "Ask about the open project. The assistant looks things up with the editor's own tools and never uses the bus."
+msgstr "Kérdezzen a megnyitott projektről. Az asszisztens a szerkesztő saját eszközeivel keres, és soha nem használja a buszt."
+
+msgid "Ask about the open project…"
+msgstr "Kérdezzen a megnyitott projektről…"
+
+msgid "Send"
+msgstr "Küldés"
+
+msgid "Stop"
+msgstr "Leállítás"
+
+msgid "New Conversation"
+msgstr "Új beszélgetés"
+
+msgid "Allow Changes"
+msgstr "Módosítások engedélyezése"
+
+msgid "The assistant may then change the project; Edit > Undo takes each change back. It never deletes, exports, programs devices or uses the bus."
+msgstr "Az asszisztens ekkor módosíthatja a projektet; a Szerkesztés > Visszavonás minden módosítást visszavon. Soha nem töröl, exportál, programoz eszközt, és nem használja a buszt."
+
+msgid "Working…"
+msgstr "Dolgozik…"
+
+msgid "You"
+msgstr "Ön"
+
+msgid "Used: {tool}"
+msgstr "Használt eszköz: {tool}"
+
+msgid "What the assistant reads in the project is sent to {provider}."
+msgstr "Amit az asszisztens a projektből olvas, azt elküldi ide: {provider}."
+
+msgid "Choose an AI provider and enter your API key in the settings first."
+msgstr "Előbb válasszon MI-szolgáltatót, és adja meg API-kulcsát a beállításokban."
+
+msgid "Open Settings"
+msgstr "Beállítások megnyitása"
+
+msgid "Allow Changes was switched: a new conversation started."
+msgstr "A „Módosítások engedélyezése” átváltott: új beszélgetés kezdődött."
+
+msgid "Stopped."
+msgstr "Leállítva."
+
+msgid "No API key is set."
+msgstr "Nincs megadva API-kulcs."
+
+msgid "No model is set."
+msgstr "Nincs megadva modell."
+
+msgid "No API address is set."
+msgstr "Nincs megadva API-cím."
+
+msgid "The provider did not accept the API key."
+msgstr "A szolgáltató nem fogadta el az API-kulcsot."
+
+msgid "The provider's rate limit was reached; try again shortly."
+msgstr "Elérte a szolgáltató kéréskorlátját; próbálja újra hamarosan."
+
+msgid "The provider answered with an error."
+msgstr "A szolgáltató hibával válaszolt."
+
+msgid "The provider could not be reached."
+msgstr "A szolgáltató nem érhető el."
+
+msgid "The provider's answer could not be read."
+msgstr "A szolgáltató válasza nem olvasható."
+
+msgid "The model declined to answer this."
+msgstr "A modell elutasította a választ."
+
+msgid "The answer was cut off because it was too long."
+msgstr "A válasz túl hosszú volt, ezért levágták."
+
+msgid "Stopped after {count} steps without an answer."
+msgstr "Leállítva {count} lépés után válasz nélkül."
+
+msgid "The assistant failed."
+msgstr "Az asszisztens hibát vétett."
+
+msgid "The AI Assistant uses an AI provider of your choice with your own API key. The provider bills its use; a chat subscription (such as Claude Pro or ChatGPT Plus) does not include it."
+msgstr "Az MI-asszisztens az Ön által választott MI-szolgáltatót használja az Ön saját API-kulcsával. A használatot a szolgáltató számlázza; egy csevegő-előfizetés (például Claude Pro vagy ChatGPT Plus) nem tartalmazza."
+
+msgid "Provider"
+msgstr "Szolgáltató"
+
+msgid "Other (OpenAI-compatible)"
+msgstr "Egyéb (OpenAI-kompatibilis)"
+
+msgid "Model"
+msgstr "Modell"
+
+msgid "The model's name as the provider lists it. Empty: {model}."
+msgstr "A modell neve, ahogy a szolgáltató megadja. Üres: {model}."
+
+msgid "The model's name as the provider lists it."
+msgstr "A modell neve, ahogy a szolgáltató megadja."
+
+msgid "API Key"
+msgstr "API-kulcs"
+
+msgid "From the provider's developer console. It is kept in the editor's settings on this computer."
+msgstr "A szolgáltató fejlesztői konzoljából. A szerkesztő beállításaiban tárolódik ezen a számítógépen."
+
+msgid "API Address"
+msgstr "API-cím"
+
+msgid "Empty: the provider's own address. Needed for Other."
+msgstr "Üres: a szolgáltató saját címe. Az „Egyéb” esetén szükséges."

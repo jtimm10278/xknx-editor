@@ -82,6 +82,9 @@ from editor_gui.myknx_oauth import (
     save_credentials as save_myknx_oauth_credentials,
 )
 from editor_gui.os_open import open_url
+from editor_gui.plugins.assistant import AssistantPlugin
+from editor_gui.plugins.assistant.plugin import SETTINGS_PAGE as ASSISTANT_SETTINGS_PAGE
+from editor_gui.plugins.assistant.strings import S as _assistant_strings
 from editor_gui.plugins.backups import BackupsPlugin
 from editor_gui.plugins.backups.plugin import SETTINGS_PAGE as BACKUPS_SETTINGS_PAGE
 from editor_gui.plugins.base import API_VERSION, Logger, PanelDefinition, PluginAPI
@@ -1014,6 +1017,11 @@ class KnxGuiApp:
             self._recover_plugin.service,
             home_assistant=self._home_assistant_plugin.service,
         )
+        # The AI Assistant answers through the same tools, served in this process only.
+        self._assistant_plugin = AssistantPlugin(
+            self._plugin_api, self._mcp_plugin.local_server
+        )
+        self._assistant_plugin.open_settings = self._settings_window.open
 
         self._plugins: list[Any] = [
             self._catalog_plugin,
@@ -1029,6 +1037,7 @@ class KnxGuiApp:
             self._timeline_plugin,
             self._health_plugin,
             self._logger_plugin,
+            self._assistant_plugin,
         ]
 
     def setup(self) -> None:
@@ -6683,6 +6692,14 @@ class KnxGuiApp:
                     self._monitor_plugin.settings(self._open_folder),
                 ),
             ]
+            self._settings_page_list.append(
+                SettingsPage(
+                    ASSISTANT_SETTINGS_PAGE,
+                    lambda: _assistant_strings.SETTINGS_PAGE,
+                    self._assistant_plugin.settings(),
+                    intro=lambda: _assistant_strings.SETTINGS_INTRO,
+                )
+            )
             if host.home_assistant():
                 self._settings_page_list.append(
                     SettingsPage(
@@ -7426,6 +7443,7 @@ def _dock_label_getters() -> "dict[str, Callable[[], str]]":
         "cockpit": lambda: _cockpit.PANEL_COCKPIT,
         "timeline": lambda: _timeline.PANEL_TIMELINE,
         "recover": lambda: _recover.WINDOW_TITLE,
+        "assistant": lambda: _assistant_strings.PANEL_ASSISTANT,
     }
 
 
@@ -7463,6 +7481,7 @@ _DOCK_TAB_ORDER = [
     "tools",
     "bus_diagram",
     "recover",
+    "assistant",
     # Bottom bus/log group, then the project info and log.
     "monitor",
     "timeline",

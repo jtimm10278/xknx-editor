@@ -1,0 +1,122 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xknx-editor assistant 1.0\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "AI Assistant"
+msgstr "Asistente de IA"
+
+msgid "Ask about the open project. The assistant looks things up with the editor's own tools and never uses the bus."
+msgstr "Pregunte sobre el proyecto abierto. El asistente consulta con las herramientas del propio editor y nunca usa el bus."
+
+msgid "Ask about the open project…"
+msgstr "Pregunte sobre el proyecto abierto…"
+
+msgid "Send"
+msgstr "Enviar"
+
+msgid "Stop"
+msgstr "Detener"
+
+msgid "New Conversation"
+msgstr "Nueva conversación"
+
+msgid "Allow Changes"
+msgstr "Permitir cambios"
+
+msgid "The assistant may then change the project; Edit > Undo takes each change back. It never deletes, exports, programs devices or uses the bus."
+msgstr "El asistente podrá entonces cambiar el proyecto; Editar > Deshacer revierte cada cambio. Nunca borra, exporta ni programa dispositivos, ni usa el bus."
+
+msgid "Working…"
+msgstr "Trabajando…"
+
+msgid "You"
+msgstr "Usted"
+
+msgid "Used: {tool}"
+msgstr "Usado: {tool}"
+
+msgid "What the assistant reads in the project is sent to {provider}."
+msgstr "Lo que el asistente lee del proyecto se envía a {provider}."
+
+msgid "Choose an AI provider and enter your API key in the settings first."
+msgstr "Elija primero un proveedor de IA e introduzca su clave de API en la configuración."
+
+msgid "Open Settings"
+msgstr "Abrir configuración"
+
+msgid "Allow Changes was switched: a new conversation started."
+msgstr "Se cambió «Permitir cambios»: ha empezado una conversación nueva."
+
+msgid "Stopped."
+msgstr "Detenido."
+
+msgid "No API key is set."
+msgstr "No hay clave de API."
+
+msgid "No model is set."
+msgstr "No hay modelo."
+
+msgid "No API address is set."
+msgstr "No hay dirección de API."
+
+msgid "The provider did not accept the API key."
+msgstr "El proveedor no aceptó la clave de API."
+
+msgid "The provider's rate limit was reached; try again shortly."
+msgstr "Se alcanzó el límite de solicitudes del proveedor; inténtelo de nuevo en breve."
+
+msgid "The provider answered with an error."
+msgstr "El proveedor respondió con un error."
+
+msgid "The provider could not be reached."
+msgstr "No se pudo contactar con el proveedor."
+
+msgid "The provider's answer could not be read."
+msgstr "No se pudo leer la respuesta del proveedor."
+
+msgid "The model declined to answer this."
+msgstr "El modelo se negó a responder."
+
+msgid "The answer was cut off because it was too long."
+msgstr "La respuesta se cortó por ser demasiado larga."
+
+msgid "Stopped after {count} steps without an answer."
+msgstr "Detenido tras {count} pasos sin respuesta."
+
+msgid "The assistant failed."
+msgstr "El asistente falló."
+
+msgid "The AI Assistant uses an AI provider of your choice with your own API key. The provider bills its use; a chat subscription (such as Claude Pro or ChatGPT Plus) does not include it."
+msgstr "El asistente de IA usa el proveedor de IA que elija con su propia clave de API. El proveedor factura el uso; una suscripción de chat (como Claude Pro o ChatGPT Plus) no lo incluye."
+
+msgid "Provider"
+msgstr "Proveedor"
+
+msgid "Other (OpenAI-compatible)"
+msgstr "Otro (compatible con OpenAI)"
+
+msgid "Model"
+msgstr "Modelo"
+
+msgid "The model's name as the provider lists it. Empty: {model}."
+msgstr "El nombre del modelo tal como lo indica el proveedor. Vacío: {model}."
+
+msgid "The model's name as the provider lists it."
+msgstr "El nombre del modelo tal como lo indica el proveedor."
+
+msgid "API Key"
+msgstr "Clave de API"
+
+msgid "From the provider's developer console. It is kept in the editor's settings on this computer."
+msgstr "De la consola de desarrollador del proveedor. Se guarda en la configuración del editor en este equipo."
+
+msgid "API Address"
+msgstr "Dirección de API"
+
+msgid "Empty: the provider's own address. Needed for Other."
+msgstr "Vacío: la dirección propia del proveedor. Necesaria para «Otro»."

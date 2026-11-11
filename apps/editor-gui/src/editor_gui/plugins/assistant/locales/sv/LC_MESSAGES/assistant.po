@@ -1,0 +1,122 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xknx-editor assistant 1.0\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "AI Assistant"
+msgstr "AI-assistent"
+
+msgid "Ask about the open project. The assistant looks things up with the editor's own tools and never uses the bus."
+msgstr "Fråga om det öppna projektet. Assistenten slår upp med redigerarens egna verktyg och använder aldrig bussen."
+
+msgid "Ask about the open project…"
+msgstr "Fråga om det öppna projektet…"
+
+msgid "Send"
+msgstr "Skicka"
+
+msgid "Stop"
+msgstr "Stoppa"
+
+msgid "New Conversation"
+msgstr "Ny konversation"
+
+msgid "Allow Changes"
+msgstr "Tillåt ändringar"
+
+msgid "The assistant may then change the project; Edit > Undo takes each change back. It never deletes, exports, programs devices or uses the bus."
+msgstr "Assistenten får då ändra projektet; Redigera > Ångra tar tillbaka varje ändring. Den raderar, exporterar och programmerar aldrig och använder aldrig bussen."
+
+msgid "Working…"
+msgstr "Arbetar…"
+
+msgid "You"
+msgstr "Du"
+
+msgid "Used: {tool}"
+msgstr "Använt: {tool}"
+
+msgid "What the assistant reads in the project is sent to {provider}."
+msgstr "Det assistenten läser i projektet skickas till {provider}."
+
+msgid "Choose an AI provider and enter your API key in the settings first."
+msgstr "Välj först en AI-leverantör och ange din API-nyckel i inställningarna."
+
+msgid "Open Settings"
+msgstr "Öppna inställningar"
+
+msgid "Allow Changes was switched: a new conversation started."
+msgstr "”Tillåt ändringar” ändrades: en ny konversation har startat."
+
+msgid "Stopped."
+msgstr "Stoppad."
+
+msgid "No API key is set."
+msgstr "Ingen API-nyckel angiven."
+
+msgid "No model is set."
+msgstr "Ingen modell angiven."
+
+msgid "No API address is set."
+msgstr "Ingen API-adress angiven."
+
+msgid "The provider did not accept the API key."
+msgstr "Leverantören godtog inte API-nyckeln."
+
+msgid "The provider's rate limit was reached; try again shortly."
+msgstr "Leverantörens gräns för förfrågningar har nåtts; försök igen strax."
+
+msgid "The provider answered with an error."
+msgstr "Leverantören svarade med ett fel."
+
+msgid "The provider could not be reached."
+msgstr "Leverantören kunde inte nås."
+
+msgid "The provider's answer could not be read."
+msgstr "Leverantörens svar kunde inte läsas."
+
+msgid "The model declined to answer this."
+msgstr "Modellen avböjde att svara."
+
+msgid "The answer was cut off because it was too long."
+msgstr "Svaret kortades eftersom det var för långt."
+
+msgid "Stopped after {count} steps without an answer."
+msgstr "Stoppad efter {count} steg utan svar."
+
+msgid "The assistant failed."
+msgstr "Assistenten misslyckades."
+
+msgid "The AI Assistant uses an AI provider of your choice with your own API key. The provider bills its use; a chat subscription (such as Claude Pro or ChatGPT Plus) does not include it."
+msgstr "AI-assistenten använder en AI-leverantör du väljer, med din egen API-nyckel. Leverantören fakturerar användningen; ett chattabonnemang (som Claude Pro eller ChatGPT Plus) ingår inte."
+
+msgid "Provider"
+msgstr "Leverantör"
+
+msgid "Other (OpenAI-compatible)"
+msgstr "Annan (OpenAI-kompatibel)"
+
+msgid "Model"
+msgstr "Modell"
+
+msgid "The model's name as the provider lists it. Empty: {model}."
+msgstr "Modellens namn så som leverantören anger det. Tomt: {model}."
+
+msgid "The model's name as the provider lists it."
+msgstr "Modellens namn så som leverantören anger det."
+
+msgid "API Key"
+msgstr "API-nyckel"
+
+msgid "From the provider's developer console. It is kept in the editor's settings on this computer."
+msgstr "Från leverantörens utvecklarkonsol. Den sparas i redigerarens inställningar på den här datorn."
+
+msgid "API Address"
+msgstr "API-adress"
+
+msgid "Empty: the provider's own address. Needed for Other."
+msgstr "Tomt: leverantörens egen adress. Krävs för ”Annan”."

@@ -33,6 +33,7 @@ dependencies = [
     "xknxeditor-proj",
     "xknxeditor-recover",
     "xknxeditor-vendor",
+    "anthropic>=1",
 ]
 
 [project.scripts]

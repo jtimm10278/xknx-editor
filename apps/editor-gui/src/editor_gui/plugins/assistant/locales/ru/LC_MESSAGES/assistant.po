@@ -1,0 +1,122 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xknx-editor assistant 1.0\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "AI Assistant"
+msgstr "ИИ-ассистент"
+
+msgid "Ask about the open project. The assistant looks things up with the editor's own tools and never uses the bus."
+msgstr "Спрашивайте об открытом проекте. Ассистент ищет средствами самого редактора и никогда не использует шину."
+
+msgid "Ask about the open project…"
+msgstr "Спросите об открытом проекте…"
+
+msgid "Send"
+msgstr "Отправить"
+
+msgid "Stop"
+msgstr "Остановить"
+
+msgid "New Conversation"
+msgstr "Новый разговор"
+
+msgid "Allow Changes"
+msgstr "Разрешить изменения"
+
+msgid "The assistant may then change the project; Edit > Undo takes each change back. It never deletes, exports, programs devices or uses the bus."
+msgstr "Тогда ассистент может изменять проект; Редактировать > Отменить отменяет каждое изменение. Он никогда не удаляет, не экспортирует, не программирует устройства и не использует шину."
+
+msgid "Working…"
+msgstr "Работает…"
+
+msgid "You"
+msgstr "Вы"
+
+msgid "Used: {tool}"
+msgstr "Использовано: {tool}"
+
+msgid "What the assistant reads in the project is sent to {provider}."
+msgstr "То, что ассистент читает в проекте, отправляется в {provider}."
+
+msgid "Choose an AI provider and enter your API key in the settings first."
+msgstr "Сначала выберите ИИ-провайдера и введите свой API-ключ в настройках."
+
+msgid "Open Settings"
+msgstr "Открыть настройки"
+
+msgid "Allow Changes was switched: a new conversation started."
+msgstr "«Разрешить изменения» переключено: начат новый разговор."
+
+msgid "Stopped."
+msgstr "Остановлено."
+
+msgid "No API key is set."
+msgstr "API-ключ не задан."
+
+msgid "No model is set."
+msgstr "Модель не задана."
+
+msgid "No API address is set."
+msgstr "Адрес API не задан."
+
+msgid "The provider did not accept the API key."
+msgstr "Провайдер не принял API-ключ."
+
+msgid "The provider's rate limit was reached; try again shortly."
+msgstr "Достигнут лимит запросов провайдера; повторите чуть позже."
+
+msgid "The provider answered with an error."
+msgstr "Провайдер ответил ошибкой."
+
+msgid "The provider could not be reached."
+msgstr "Провайдер недоступен."
+
+msgid "The provider's answer could not be read."
+msgstr "Не удалось прочитать ответ провайдера."
+
+msgid "The model declined to answer this."
+msgstr "Модель отказалась отвечать."
+
+msgid "The answer was cut off because it was too long."
+msgstr "Ответ обрезан, потому что был слишком длинным."
+
+msgid "Stopped after {count} steps without an answer."
+msgstr "Остановлено после {count} шагов без ответа."
+
+msgid "The assistant failed."
+msgstr "Сбой ассистента."
+
+msgid "The AI Assistant uses an AI provider of your choice with your own API key. The provider bills its use; a chat subscription (such as Claude Pro or ChatGPT Plus) does not include it."
+msgstr "ИИ-ассистент использует выбранного вами ИИ-провайдера с вашим собственным API-ключом. Провайдер выставляет счёт за использование; подписка на чат (например, Claude Pro или ChatGPT Plus) его не включает."
+
+msgid "Provider"
+msgstr "Провайдер"
+
+msgid "Other (OpenAI-compatible)"
+msgstr "Другой (совместимый с OpenAI)"
+
+msgid "Model"
+msgstr "Модель"
+
+msgid "The model's name as the provider lists it. Empty: {model}."
+msgstr "Название модели, как его указывает провайдер. Пусто: {model}."
+
+msgid "The model's name as the provider lists it."
+msgstr "Название модели, как его указывает провайдер."
+
+msgid "API Key"
+msgstr "API-ключ"
+
+msgid "From the provider's developer console. It is kept in the editor's settings on this computer."
+msgstr "Из консоли разработчика провайдера. Хранится в настройках редактора на этом компьютере."
+
+msgid "API Address"
+msgstr "Адрес API"
+
+msgid "Empty: the provider's own address. Needed for Other."
+msgstr "Пусто: собственный адрес провайдера. Нужен для «Другой»."

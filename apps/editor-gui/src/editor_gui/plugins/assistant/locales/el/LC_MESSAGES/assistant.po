@@ -1,0 +1,122 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xknx-editor assistant 1.0\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "AI Assistant"
+msgstr "Βοηθός ΤΝ"
+
+msgid "Ask about the open project. The assistant looks things up with the editor's own tools and never uses the bus."
+msgstr "Ρωτήστε για το ανοιχτό έργο. Ο βοηθός αναζητά με τα εργαλεία του επεξεργαστή και δεν χρησιμοποιεί ποτέ τον δίαυλο."
+
+msgid "Ask about the open project…"
+msgstr "Ρωτήστε για το ανοιχτό έργο…"
+
+msgid "Send"
+msgstr "Αποστολή"
+
+msgid "Stop"
+msgstr "Διακοπή"
+
+msgid "New Conversation"
+msgstr "Νέα συνομιλία"
+
+msgid "Allow Changes"
+msgstr "Να επιτρέπονται αλλαγές"
+
+msgid "The assistant may then change the project; Edit > Undo takes each change back. It never deletes, exports, programs devices or uses the bus."
+msgstr "Ο βοηθός μπορεί τότε να αλλάζει το έργο· η Επεξεργασία > Αναίρεση αναιρεί κάθε αλλαγή. Δεν διαγράφει, δεν εξάγει, δεν προγραμματίζει συσκευές και δεν χρησιμοποιεί ποτέ τον δίαυλο."
+
+msgid "Working…"
+msgstr "Εργάζεται…"
+
+msgid "You"
+msgstr "Εσείς"
+
+msgid "Used: {tool}"
+msgstr "Χρησιμοποιήθηκε: {tool}"
+
+msgid "What the assistant reads in the project is sent to {provider}."
+msgstr "Ό,τι διαβάζει ο βοηθός στο έργο αποστέλλεται στο {provider}."
+
+msgid "Choose an AI provider and enter your API key in the settings first."
+msgstr "Επιλέξτε πρώτα πάροχο ΤΝ και εισαγάγετε το κλειδί API στις ρυθμίσεις."
+
+msgid "Open Settings"
+msgstr "Άνοιγμα ρυθμίσεων"
+
+msgid "Allow Changes was switched: a new conversation started."
+msgstr "Το «Να επιτρέπονται αλλαγές» άλλαξε: ξεκίνησε νέα συνομιλία."
+
+msgid "Stopped."
+msgstr "Διακόπηκε."
+
+msgid "No API key is set."
+msgstr "Δεν έχει οριστεί κλειδί API."
+
+msgid "No model is set."
+msgstr "Δεν έχει οριστεί μοντέλο."
+
+msgid "No API address is set."
+msgstr "Δεν έχει οριστεί διεύθυνση API."
+
+msgid "The provider did not accept the API key."
+msgstr "Ο πάροχος δεν αποδέχτηκε το κλειδί API."
+
+msgid "The provider's rate limit was reached; try again shortly."
+msgstr "Συμπληρώθηκε το όριο αιτημάτων του παρόχου· δοκιμάστε ξανά σε λίγο."
+
+msgid "The provider answered with an error."
+msgstr "Ο πάροχος απάντησε με σφάλμα."
+
+msgid "The provider could not be reached."
+msgstr "Ο πάροχος δεν είναι προσβάσιμος."
+
+msgid "The provider's answer could not be read."
+msgstr "Η απάντηση του παρόχου δεν διαβάζεται."
+
+msgid "The model declined to answer this."
+msgstr "Το μοντέλο αρνήθηκε να απαντήσει."
+
+msgid "The answer was cut off because it was too long."
+msgstr "Η απάντηση περικόπηκε επειδή ήταν πολύ μεγάλη."
+
+msgid "Stopped after {count} steps without an answer."
+msgstr "Διακόπηκε μετά από {count} βήματα χωρίς απάντηση."
+
+msgid "The assistant failed."
+msgstr "Ο βοηθός απέτυχε."
+
+msgid "The AI Assistant uses an AI provider of your choice with your own API key. The provider bills its use; a chat subscription (such as Claude Pro or ChatGPT Plus) does not include it."
+msgstr "Ο βοηθός ΤΝ χρησιμοποιεί πάροχο ΤΝ της επιλογής σας με το δικό σας κλειδί API. Ο πάροχος χρεώνει τη χρήση· μια συνδρομή συνομιλίας (π.χ. Claude Pro ή ChatGPT Plus) δεν την περιλαμβάνει."
+
+msgid "Provider"
+msgstr "Πάροχος"
+
+msgid "Other (OpenAI-compatible)"
+msgstr "Άλλος (συμβατός με OpenAI)"
+
+msgid "Model"
+msgstr "Μοντέλο"
+
+msgid "The model's name as the provider lists it. Empty: {model}."
+msgstr "Το όνομα του μοντέλου όπως το αναφέρει ο πάροχος. Κενό: {model}."
+
+msgid "The model's name as the provider lists it."
+msgstr "Το όνομα του μοντέλου όπως το αναφέρει ο πάροχος."
+
+msgid "API Key"
+msgstr "Κλειδί API"
+
+msgid "From the provider's developer console. It is kept in the editor's settings on this computer."
+msgstr "Από την κονσόλα προγραμματιστών του παρόχου. Φυλάσσεται στις ρυθμίσεις του επεξεργαστή σε αυτόν τον υπολογιστή."
+
+msgid "API Address"
+msgstr "Διεύθυνση API"
+
+msgid "Empty: the provider's own address. Needed for Other."
+msgstr "Κενό: η διεύθυνση του ίδιου του παρόχου. Απαιτείται για «Άλλος»."

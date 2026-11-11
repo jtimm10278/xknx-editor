@@ -1,0 +1,122 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xknx-editor assistant 1.0\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "AI Assistant"
+msgstr "Assistant IA"
+
+msgid "Ask about the open project. The assistant looks things up with the editor's own tools and never uses the bus."
+msgstr "Posez vos questions sur le projet ouvert. L'assistant cherche avec les outils de l'éditeur et n'utilise jamais le bus."
+
+msgid "Ask about the open project…"
+msgstr "Question sur le projet ouvert…"
+
+msgid "Send"
+msgstr "Envoyer"
+
+msgid "Stop"
+msgstr "Arrêter"
+
+msgid "New Conversation"
+msgstr "Nouvelle conversation"
+
+msgid "Allow Changes"
+msgstr "Autoriser les modifications"
+
+msgid "The assistant may then change the project; Edit > Undo takes each change back. It never deletes, exports, programs devices or uses the bus."
+msgstr "L'assistant peut alors modifier le projet ; Éditer > Annuler reprend chaque modification. Il ne supprime, n'exporte ni ne programme jamais rien et n'utilise jamais le bus."
+
+msgid "Working…"
+msgstr "En cours…"
+
+msgid "You"
+msgstr "Vous"
+
+msgid "Used: {tool}"
+msgstr "Utilisé : {tool}"
+
+msgid "What the assistant reads in the project is sent to {provider}."
+msgstr "Ce que l'assistant lit dans le projet est envoyé à {provider}."
+
+msgid "Choose an AI provider and enter your API key in the settings first."
+msgstr "Choisissez d'abord un fournisseur d'IA et saisissez votre clé API dans les réglages."
+
+msgid "Open Settings"
+msgstr "Ouvrir les réglages"
+
+msgid "Allow Changes was switched: a new conversation started."
+msgstr "« Autoriser les modifications » a changé : une nouvelle conversation a commencé."
+
+msgid "Stopped."
+msgstr "Arrêté."
+
+msgid "No API key is set."
+msgstr "Aucune clé API définie."
+
+msgid "No model is set."
+msgstr "Aucun modèle défini."
+
+msgid "No API address is set."
+msgstr "Aucune adresse API définie."
+
+msgid "The provider did not accept the API key."
+msgstr "Le fournisseur n'a pas accepté la clé API."
+
+msgid "The provider's rate limit was reached; try again shortly."
+msgstr "La limite de requêtes du fournisseur est atteinte ; réessayez dans un instant."
+
+msgid "The provider answered with an error."
+msgstr "Le fournisseur a répondu par une erreur."
+
+msgid "The provider could not be reached."
+msgstr "Le fournisseur est injoignable."
+
+msgid "The provider's answer could not be read."
+msgstr "La réponse du fournisseur est illisible."
+
+msgid "The model declined to answer this."
+msgstr "Le modèle a refusé de répondre."
+
+msgid "The answer was cut off because it was too long."
+msgstr "La réponse a été coupée car elle était trop longue."
+
+msgid "Stopped after {count} steps without an answer."
+msgstr "Arrêté après {count} étapes sans réponse."
+
+msgid "The assistant failed."
+msgstr "L'assistant a échoué."
+
+msgid "The AI Assistant uses an AI provider of your choice with your own API key. The provider bills its use; a chat subscription (such as Claude Pro or ChatGPT Plus) does not include it."
+msgstr "L'assistant IA utilise le fournisseur d'IA de votre choix avec votre propre clé API. Le fournisseur facture l'utilisation ; un abonnement de chat (comme Claude Pro ou ChatGPT Plus) ne la comprend pas."
+
+msgid "Provider"
+msgstr "Fournisseur"
+
+msgid "Other (OpenAI-compatible)"
+msgstr "Autre (compatible OpenAI)"
+
+msgid "Model"
+msgstr "Modèle"
+
+msgid "The model's name as the provider lists it. Empty: {model}."
+msgstr "Le nom du modèle tel que le fournisseur l'indique. Vide : {model}."
+
+msgid "The model's name as the provider lists it."
+msgstr "Le nom du modèle tel que le fournisseur l'indique."
+
+msgid "API Key"
+msgstr "Clé API"
+
+msgid "From the provider's developer console. It is kept in the editor's settings on this computer."
+msgstr "Depuis la console développeur du fournisseur. Elle est conservée dans les réglages de l'éditeur sur cet ordinateur."
+
+msgid "API Address"
+msgstr "Adresse API"
+
+msgid "Empty: the provider's own address. Needed for Other."
+msgstr "Vide : l'adresse propre du fournisseur. Requise pour « Autre »."
