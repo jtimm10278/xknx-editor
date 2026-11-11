@@ -1673,3 +1673,12 @@ msgstr "Não há uma chave de assinatura válida definida, por isso o .knxproj e
 
 msgid "Export Anyway"
 msgstr "Exportar mesmo assim"
+
+msgid "Offline"
+msgstr "Offline"
+
+msgid "Fetch nothing from the internet: no update check, master data refresh, online catalog, documentation lookup or download. The KNX connection is not affected."
+msgstr "Não obter nada da internet: sem verificação de atualizações, atualização dos dados mestre, catálogo online, pesquisa de documentação ou transferências. A ligação KNX não é afetada."
+
+msgid "On for this start (--offline on the command line)."
+msgstr "Ativado para este arranque (--offline na linha de comandos)."

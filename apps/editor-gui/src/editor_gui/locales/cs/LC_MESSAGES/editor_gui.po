@@ -1686,3 +1686,12 @@ msgstr "Není nastaven platný podpisový klíč, takže exportovaný .knxproj n
 
 msgid "Export Anyway"
 msgstr "Přesto exportovat"
+
+msgid "Offline"
+msgstr "Offline"
+
+msgid "Fetch nothing from the internet: no update check, master data refresh, online catalog, documentation lookup or download. The KNX connection is not affected."
+msgstr "Nic nestahovat z internetu: žádná kontrola aktualizací, obnova kmenových dat, online katalog, hledání dokumentace ani stahování. Připojení KNX to neovlivňuje."
+
+msgid "On for this start (--offline on the command line)."
+msgstr "Zapnuto pro toto spuštění (--offline na příkazovém řádku)."

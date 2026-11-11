@@ -1732,3 +1732,12 @@ msgstr "Nincs beállítva érvényes aláíró kulcs, ezért az exportált .knxp
 
 msgid "Export Anyway"
 msgstr "Exportálás mindenképp"
+
+msgid "Offline"
+msgstr "Offline"
+
+msgid "Fetch nothing from the internet: no update check, master data refresh, online catalog, documentation lookup or download. The KNX connection is not affected."
+msgstr "Semmit ne töltsön le az internetről: nincs frissítéskeresés, törzsadat-frissítés, online katalógus, dokumentációkeresés vagy letöltés. A KNX-kapcsolatot ez nem érinti."
+
+msgid "On for this start (--offline on the command line)."
+msgstr "Bekapcsolva erre az indításra (--offline a parancssorban)."

@@ -1758,3 +1758,12 @@ msgstr "Nu este setată o cheie de semnare validă, așa că fișierul .knxproj 
 
 msgid "Export Anyway"
 msgstr "Exportă oricum"
+
+msgid "Offline"
+msgstr "Offline"
+
+msgid "Fetch nothing from the internet: no update check, master data refresh, online catalog, documentation lookup or download. The KNX connection is not affected."
+msgstr "Nu se preia nimic de pe internet: fără verificarea actualizărilor, reîmprospătarea datelor master, catalog online, căutare de documentație sau descărcări. Conexiunea KNX nu este afectată."
+
+msgid "On for this start (--offline on the command line)."
+msgstr "Activat pentru această pornire (--offline în linia de comandă)."

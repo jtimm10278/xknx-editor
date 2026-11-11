@@ -1673,3 +1673,12 @@ msgstr "Nuk është caktuar një çelës nënshkrimi i vlefshëm, prandaj .knxpr
 
 msgid "Export Anyway"
 msgstr "Eksporto gjithsesi"
+
+msgid "Offline"
+msgstr "Jashtë linje"
+
+msgid "Fetch nothing from the internet: no update check, master data refresh, online catalog, documentation lookup or download. The KNX connection is not affected."
+msgstr "Mos merr asgjë nga interneti: pa kontroll përditësimesh, rifreskim të të dhënave bazë, katalog në linjë, kërkim dokumentacioni apo shkarkime. Lidhja KNX nuk preket."
+
+msgid "On for this start (--offline on the command line)."
+msgstr "Aktiv për këtë nisje (--offline në rreshtin e komandës)."

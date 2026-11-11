@@ -1673,3 +1673,12 @@ msgstr "Δεν έχει οριστεί έγκυρο κλειδί υπογραφ�
 
 msgid "Export Anyway"
 msgstr "Εξαγωγή ούτως ή άλλως"
+
+msgid "Offline"
+msgstr "Εκτός σύνδεσης"
+
+msgid "Fetch nothing from the internet: no update check, master data refresh, online catalog, documentation lookup or download. The KNX connection is not affected."
+msgstr "Καμία λήψη από το διαδίκτυο: χωρίς έλεγχο ενημερώσεων, ανανέωση βασικών δεδομένων, online κατάλογο, αναζήτηση τεκμηρίωσης ή λήψεις. Η σύνδεση KNX δεν επηρεάζεται."
+
+msgid "On for this start (--offline on the command line)."
+msgstr "Ενεργό για αυτή την εκκίνηση (--offline στη γραμμή εντολών)."

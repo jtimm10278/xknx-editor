@@ -20,6 +20,7 @@ from urllib.parse import quote_plus, urlparse
 
 from fastmcp.exceptions import ToolError
 
+from editor_gui import offline
 from editor_gui.cache import docs_cache_dir
 from editor_gui.doc_links import MANUFACTURER_DOC_DOMAINS as _MANUFACTURER_DOC_DOMAINS
 from editor_gui.doc_links import MANUFACTURER_DOMAINS as _MANUFACTURER_DOMAINS
@@ -152,6 +153,10 @@ def _http_get(url: str) -> bytes:
     try:
         with httpx.Client(follow_redirects=False, timeout=30.0) as client:
             for _ in range(_MAX_REDIRECTS):
+                try:
+                    offline.check(url)
+                except offline.OfflineError as exc:
+                    raise ToolError(str(exc.reason)) from exc
                 resp = client.get(url, headers={"User-Agent": "xknx-editor"})
                 if resp.next_request is None:
                     resp.raise_for_status()

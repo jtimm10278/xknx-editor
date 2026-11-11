@@ -1686,3 +1686,12 @@ msgstr "Дійсний ключ підпису не задано, тому ек�
 
 msgid "Export Anyway"
 msgstr "Експортувати попри це"
+
+msgid "Offline"
+msgstr "Офлайн"
+
+msgid "Fetch nothing from the internet: no update check, master data refresh, online catalog, documentation lookup or download. The KNX connection is not affected."
+msgstr "Нічого не завантажувати з інтернету: без перевірки оновлень, оновлення майстер-даних, онлайн-каталогу, пошуку документації та завантажень. Підключення KNX не змінюється."
+
+msgid "On for this start (--offline on the command line)."
+msgstr "Увімкнено для цього запуску (--offline у командному рядку)."

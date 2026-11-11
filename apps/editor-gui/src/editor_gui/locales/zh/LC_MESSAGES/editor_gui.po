@@ -1660,3 +1660,12 @@ msgstr "未设置有效的签名密钥，因此导出的 .knxproj 将没有有�
 
 msgid "Export Anyway"
 msgstr "仍然导出"
+
+msgid "Offline"
+msgstr "离线"
+
+msgid "Fetch nothing from the internet: no update check, master data refresh, online catalog, documentation lookup or download. The KNX connection is not affected."
+msgstr "不从互联网获取任何内容：不检查更新、不刷新主数据、不使用在线目录、不查找文档、不下载。KNX 连接不受影响。"
+
+msgid "On for this start (--offline on the command line)."
+msgstr "本次启动已开启（命令行 --offline）。"

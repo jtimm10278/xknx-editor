@@ -1771,3 +1771,12 @@ msgstr "Veljaven podpisni ključ ni nastavljen, zato izvožena datoteka .knxproj
 
 msgid "Export Anyway"
 msgstr "Vseeno izvozi"
+
+msgid "Offline"
+msgstr "Brez povezave"
+
+msgid "Fetch nothing from the internet: no update check, master data refresh, online catalog, documentation lookup or download. The KNX connection is not affected."
+msgstr "Ne prenašaj ničesar z interneta: brez preverjanja posodobitev, osveževanja glavnih podatkov, spletnega kataloga, iskanja dokumentacije ali prenosov. Povezava KNX ni prizadeta."
+
+msgid "On for this start (--offline on the command line)."
+msgstr "Vklopljeno za ta zagon (--offline v ukazni vrstici)."

@@ -27,6 +27,8 @@ from urllib.parse import (
 
 import structlog
 
+from editor_gui import offline
+
 _log = structlog.get_logger("doc_links")
 
 # Official domains for common KNX manufacturers, keyed by a lowercase substring of the catalog
@@ -150,6 +152,7 @@ def _get_text(
         return budget.texts[key]
     result = None
     try:
+        offline.check(url)
         with (
             httpx.Client(
                 follow_redirects=True, timeout=_timeout(), headers=_UA
@@ -537,6 +540,7 @@ def _pdf_matches(url: str, identifier: str) -> bool:
     from pypdf import PdfReader
 
     try:
+        offline.check(url)
         data = bytearray()
         with httpx.stream(
             "GET", url, follow_redirects=True, timeout=_timeout(), headers=_UA

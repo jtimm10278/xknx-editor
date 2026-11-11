@@ -1660,3 +1660,12 @@ msgstr "Geçerli bir imzalama anahtarı ayarlanmadı; bu nedenle dışa aktarıl
 
 msgid "Export Anyway"
 msgstr "Yine de dışa aktar"
+
+msgid "Offline"
+msgstr "Çevrimdışı"
+
+msgid "Fetch nothing from the internet: no update check, master data refresh, online catalog, documentation lookup or download. The KNX connection is not affected."
+msgstr "İnternetten hiçbir şey alma: güncelleme denetimi, ana veri yenilemesi, çevrimiçi katalog, belge arama veya indirme yok. KNX bağlantısı etkilenmez."
+
+msgid "On for this start (--offline on the command line)."
+msgstr "Bu başlatma için açık (komut satırında --offline)."
