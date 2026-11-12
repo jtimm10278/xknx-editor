@@ -33,6 +33,9 @@ from xknx.telegram.apci import (
     DeviceDescriptorRead,
     DeviceDescriptorResponse,
     FunctionPropertyCommand,
+    FunctionPropertyExtCommand,
+    FunctionPropertyExtStateRead,
+    FunctionPropertyExtStateResponse,
     FunctionPropertyStateRead,
     FunctionPropertyStateResponse,
     MemoryExtendedRead,
@@ -44,12 +47,20 @@ from xknx.telegram.apci import (
     MemoryWrite,
     PropertyDescriptionRead,
     PropertyDescriptionResponse,
+    PropertyExtDescriptionRead,
+    PropertyExtDescriptionResponse,
+    PropertyExtValueRead,
+    PropertyExtValueResponse,
+    PropertyExtValueWriteCon,
+    PropertyExtValueWriteConRes,
+    PropertyExtValueWriteUnCon,
     PropertyValueRead,
     PropertyValueResponse,
     PropertyValueWrite,
     Restart,
     RestartMasterReset,
     RestartMasterResetResponse,
+    ReturnCode,
     UserMemoryRead,
     UserMemoryResponse,
     UserMemoryWrite,
@@ -100,6 +111,14 @@ _OBJECT_NAMES = {
     9: "group object table",
 }
 _ALLOCATE = b"\x03\x0b"  # load event "additional load control", allocate a segment
+
+
+@dataclass(frozen=True, slots=True)
+class SimpleNamespaceType:
+    """An interface object type the image addresses (a relative segment or a property by type),
+    handed to :meth:`SimulatedDevice.prepare` like a load control naming it."""
+
+    obj_type: int
 
 
 class DryRunRefused(DownloadError):
@@ -223,6 +242,9 @@ class DryRunResult:
     # Why the download stopped before its end ("" when it ran through); the frames up to there
     # are kept.
     error: str = ""
+    # What the simulated device was set up to answer because the download checks it (e.g. the
+    # hardware type a compare step expects): the dry run assumes the projected hardware.
+    assumptions: list[str] = field(default_factory=list[str])
 
     @property
     def writes(self) -> int:
@@ -248,12 +270,18 @@ class SimulatedDevice:
     ) -> None:
         self.descriptor = descriptor
         self.object_types = dict(object_types or {})
+        # Every device has its device object at index 0; a search by type starts there.
+        self.object_types.setdefault(0, 0)
         self.memory: dict[int, int] = {}
         self.user_memory: dict[int, int] = {}
         self.properties: dict[tuple[int, int], bytes] = {}
         self.element_sizes: dict[tuple[int, int], int] = {}
         self.load_states: dict[int, LoadState] = {}
         self.function_properties: dict[tuple[int, int], bytes] = {}
+        # Extended property services (by object type and instance).
+        self.ext_properties: dict[tuple[int, int, int], bytes] = {}
+        self.ext_sizes: dict[tuple[int, int, int], int] = {}
+        self.ext_functions: dict[tuple[int, int, int], bytes] = {}
         # Object index -> (start address, size) of the segment allocated for it.
         self.allocations: dict[int, tuple[int, int]] = {}
         self._next_allocation = _ALLOCATION_START
@@ -328,6 +356,77 @@ class SimulatedDevice:
                 type_=16 + width,
                 max_count=100,
             )
+        if isinstance(payload, PropertyExtValueWriteCon | PropertyExtValueWriteUnCon):
+            key = (
+                payload.interface_object_type,
+                payload.object_instance,
+                payload.property_id,
+            )
+            self._write_ext(key, payload.start_index, payload.nr_of_elem, payload.data)
+            return PropertyExtValueWriteConRes(
+                interface_object_type=payload.interface_object_type,
+                object_instance=payload.object_instance,
+                property_id=payload.property_id,
+                return_code=ReturnCode.E_SUCCESS,
+                nr_of_elem=payload.nr_of_elem,
+                start_index=payload.start_index,
+            )
+        if isinstance(payload, PropertyExtValueRead):
+            key = (
+                payload.interface_object_type,
+                payload.object_instance,
+                payload.property_id,
+            )
+            data = self.ext_properties.get(key, b"")
+            width = self.ext_sizes.get(key)
+            if width is not None and payload.start_index > 0:
+                start = (payload.start_index - 1) * width
+                data = data[start : start + payload.nr_of_elem * width]
+            return PropertyExtValueResponse(
+                interface_object_type=payload.interface_object_type,
+                object_instance=payload.object_instance,
+                property_id=payload.property_id,
+                nr_of_elem=payload.nr_of_elem if data else 0,
+                start_index=payload.start_index,
+                data=data,
+            )
+        if isinstance(payload, PropertyExtDescriptionRead):
+            key = (
+                payload.interface_object_type,
+                payload.object_instance,
+                payload.property_id,
+            )
+            return PropertyExtDescriptionResponse(
+                interface_object_type=payload.interface_object_type,
+                object_instance=payload.object_instance,
+                property_id=payload.property_id,
+                description_type=0,
+                property_index=payload.property_index,
+                dpt_main=0,
+                dpt_sub=0,
+                writable=True,
+                pdt=16 + (self.ext_sizes.get(key) or 1),
+                max_nr_of_elem=100,
+                read_level=0,
+                write_level=0,
+            )
+        if isinstance(
+            payload, FunctionPropertyExtCommand | FunctionPropertyExtStateRead
+        ):
+            key = (
+                payload.interface_object_type,
+                payload.object_instance,
+                payload.property_id,
+            )
+            if isinstance(payload, FunctionPropertyExtCommand):
+                self.ext_functions[key] = payload.data
+            return FunctionPropertyExtStateResponse(
+                interface_object_type=payload.interface_object_type,
+                object_instance=payload.object_instance,
+                property_id=payload.property_id,
+                return_code=ReturnCode.E_SUCCESS,
+                data=self.ext_functions.get(key, b""),
+            )
         if isinstance(payload, DeviceDescriptorRead):
             return DeviceDescriptorResponse(descriptor=0, value=self.descriptor)
         if isinstance(payload, AuthorizeRequest):
@@ -344,6 +443,18 @@ class SimulatedDevice:
         raise DryRunRefused(
             f"the simulated device has no answer to {type(payload).__name__}"
         )
+
+    def _write_ext(
+        self, key: tuple[int, int, int], start_index: int, count: int, data: bytes
+    ) -> None:
+        width = len(data) // max(1, count)
+        held = bytearray(self.ext_properties.get(key, b""))
+        start = (max(1, start_index) - 1) * width
+        end = start + len(data)
+        held.extend(bytes(max(0, end - len(held))))
+        held[start:end] = data
+        self.ext_properties[key] = bytes(held)
+        self.ext_sizes[key] = max(1, width)
 
     @staticmethod
     def _write(memory: dict[int, int], address: int, data: bytes) -> None:
@@ -371,6 +482,45 @@ class SimulatedDevice:
             else:
                 out.append(self.memory.get(loc, 0))
         return bytes(out)
+
+    def prepare(self, controls: list[object]) -> list[str]:
+        """Answer as the projected hardware would: give every interface object type the
+        procedure addresses an object (when the mask data has none), and hold the values its
+        property compares expect (e.g. the hardware type). Returns what was assumed."""
+        assumed: list[str] = []
+        for control in controls:
+            object_type = getattr(control, "obj_type", None)
+            if (
+                isinstance(object_type, int)
+                and object_type not in self.object_types.values()
+            ):
+                index = max(self.object_types, default=0) + 1
+                self.object_types[index] = object_type
+                assumed.append(f"interface object type {object_type} at index {index}")
+        for control in controls:
+            if type(control).__name__ != "LdCtrlCompareProp":
+                continue
+            data = getattr(control, "inline_data", None)
+            prop = getattr(control, "prop_id", None)
+            if not data or not isinstance(prop, int):
+                continue
+            index = getattr(control, "obj_idx", None)
+            if index is None:
+                wanted = getattr(control, "obj_type", None)
+                occurrence = getattr(control, "occurrence", 0) or 0
+                matches = [
+                    i for i, t in sorted(self.object_types.items()) if t == wanted
+                ]
+                index = matches[occurrence] if len(matches) > occurrence else None
+            if not isinstance(index, int) or (index, prop) in self.properties:
+                continue
+            start = max(1, getattr(control, "start_element", 1) or 1)
+            count = max(1, getattr(control, "count", 1) or 1)
+            width = max(1, len(data) // count)
+            self.properties[(index, prop)] = bytes((start - 1) * width) + bytes(data)
+            self.element_sizes[(index, prop)] = width
+            assumed.append(f"object {index} property {prop} = {bytes(data).hex()}")
+        return assumed
 
     def object_name(self, index: int) -> str:
         """What the object at ``index`` holds, for naming its memory."""
@@ -510,6 +660,13 @@ class Recorder:
                 value = getattr(payload, name, None)
                 if isinstance(value, int):
                     fields[name] = value
+            object_type = getattr(payload, "interface_object_type", None)
+            if isinstance(object_type, int):
+                instance = getattr(payload, "object_instance", 0)
+                fields["region"] = f"object type {object_type}/{instance}"
+                elements = getattr(payload, "nr_of_elem", None)
+                if isinstance(elements, int):
+                    fields["count"] = elements
             data = getattr(payload, "data", None)
             if isinstance(data, bytes | bytearray):
                 fields["data"] = bytes(data)
@@ -543,8 +700,17 @@ def frame_kind(payload: APCI) -> FrameKind:
         return FrameKind.USER_MEMORY_WRITE
     if isinstance(payload, UserMemoryRead):
         return FrameKind.USER_MEMORY_READ
-    if isinstance(payload, PropertyValueWrite):
+    if isinstance(
+        payload,
+        PropertyValueWrite | PropertyExtValueWriteCon | PropertyExtValueWriteUnCon,
+    ):
         return FrameKind.PROPERTY_WRITE
+    if isinstance(payload, PropertyExtValueRead):
+        return FrameKind.PROPERTY_READ
+    if isinstance(payload, PropertyExtDescriptionRead):
+        return FrameKind.PROPERTY_DESCRIPTION_READ
+    if isinstance(payload, FunctionPropertyExtCommand | FunctionPropertyExtStateRead):
+        return FrameKind.FUNCTION_PROPERTY
     if isinstance(payload, PropertyValueRead):
         return FrameKind.PROPERTY_READ
     if isinstance(payload, PropertyDescriptionRead):
@@ -840,6 +1006,31 @@ async def dry_run_download(
         SimulatedDevice(mask_descriptor(application), object_types, stored_image),
         regions,
     )
+    assumptions: list[str] = []
+    if image is not None:
+        try:
+            from .download import (
+                _resolve_controls,  # pyright: ignore[reportPrivateUsage]
+            )
+
+            controls = _resolve_controls(
+                application,
+                master,
+                image,
+                DownloadScope.FULL,
+                application2=application2,
+            )
+        except Exception:  # the download itself reports why it cannot resolve them
+            controls = []
+        typed = [
+            *(SimpleNamespaceType(s.object_type) for s in image.relative_segments),
+            *(
+                SimpleNamespaceType(p.object_type)
+                for p in image.properties
+                if p.object_type is not None
+            ),
+        ]
+        assumptions = recorder.device.prepare([*typed, *controls])
 
     async def run(run_scope: DownloadScope) -> None:
         token = recording_sessions.set(recorder.session)
@@ -885,6 +1076,7 @@ async def dry_run_download(
                 written[frame.address + i] = byte
     return DryRunResult(
         error=error,
+        assumptions=assumptions,
         frames=recorder.frames,
         comparison=compare_with_stored(
             recorder.frames,
