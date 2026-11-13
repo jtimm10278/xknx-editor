@@ -453,6 +453,9 @@ class ProjectPlugin:
         # Generic Plug-in sources per application id and views per device, see
         # generic_plugin_view.
         self._generic_sources: dict[str, Sources | None] = {}
+        # Whether the plug-in's download steps can be built, per device, with the view it
+        # was found for.
+        self._generic_steps: dict[int, tuple[GenericView, bool]] = {}
         self._generic_views: dict[
             tuple[int, bool], tuple[tuple[object, ...], GenericView | None]
         ] = {}
@@ -1393,7 +1396,8 @@ class ProjectPlugin:
             plugin_merge_controls,
         )
 
-        if self.generic_plugin_view(device) is None:
+        view = self.generic_plugin_view(device)
+        if view is None or not view.application_matches:
             return None
         sources = self._generic_plugin_sources(device, _generic_baggage_ids(device))
         if sources is None or sources.description.alloc_length is None:
@@ -1417,6 +1421,20 @@ class ProjectPlugin:
                 return None
             return plugin_merge_controls(image, sources.description.alloc_length)
         return None
+
+    def generic_plugin_steps_available(self, device: "Device") -> bool:
+        """Whether the editor can build the Siemens Generic Plug-in's download steps for
+        ``device`` (see :meth:`generic_plugin_load_controls`); cached per device until its
+        settings change."""
+        view = self.generic_plugin_view(device)
+        if view is None:
+            return False
+        cached = self._generic_steps.get(device.node_id)
+        if cached is not None and cached[0] is view:
+            return cached[1]
+        available = self.generic_plugin_load_controls(device) is not None
+        self._generic_steps[device.node_id] = (view, available)
+        return available
 
     def generic_plugin_set_value(
         self, device: "Device", ref_id: str, value: str
@@ -3767,12 +3785,15 @@ class ProjectPlugin:
         import editor_gui.programming as programming
 
         programming.plugin_load_controls = self.generic_plugin_load_controls
+        programming.plugin_steps_available = self.generic_plugin_steps_available
 
     def on_unload(self) -> None:
         import editor_gui.programming as programming
 
         if programming.plugin_load_controls == self.generic_plugin_load_controls:
             programming.plugin_load_controls = None
+        if programming.plugin_steps_available == self.generic_plugin_steps_available:
+            programming.plugin_steps_available = None
 
 
 def _address_key(address: str) -> tuple[int, ...]:

@@ -1183,6 +1183,13 @@ class ConnectionService:
             )
         from editor_gui.device_plugins import download_needs_plugin_confirmation
 
+        if device.download_plugin_required and not download_needs_plugin_confirmation(
+            device
+        ):
+            self._log.info(
+                "Programming with the manufacturer's plugin steps built by the editor",
+                device=device.name,
+            )
         if download_needs_plugin_confirmation(device):
             if not without_plugin:
                 self._log.error(

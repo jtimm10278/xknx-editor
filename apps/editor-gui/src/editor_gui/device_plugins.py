@@ -117,8 +117,9 @@ def download_overwrites_plugin_config(device: Device) -> bool:
 def download_needs_plugin_confirmation(device: Device) -> bool:
     """Whether a standard download of `device` must be confirmed first: either the hardware refuses
     it without the plugin (``NoDownloadWithoutPlugin``), or it would overwrite plugin-owned
-    configuration (:func:`download_overwrites_plugin_config`). An individual-address write is never
-    gated by this."""
+    configuration (:func:`download_overwrites_plugin_config`), unless the editor builds the
+    plugin's download steps itself (``programming.plugin_steps_available``). An
+    individual-address write is never gated by this."""
     from editor_gui.plugin_providers import provider_for
 
     provider = provider_for(device)
@@ -126,6 +127,14 @@ def download_needs_plugin_confirmation(device: Device) -> bool:
         capabilities = provider.capabilities(device)
         if capabilities.preflight and capabilities.programming_error is None:
             return False
+    from editor_gui import programming
+
+    if (
+        device.download_plugin_required
+        and programming.plugin_steps_available is not None
+        and programming.plugin_steps_available(device)
+    ):
+        return False  # the editor builds the plugin's download steps itself
     return device.download_plugin_required or download_overwrites_plugin_config(device)
 
 

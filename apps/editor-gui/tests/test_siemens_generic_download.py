@@ -102,3 +102,62 @@ def test_the_hook_adds_its_controls_to_the_download_image(
     # No hook, or no controls for this device: the image as built.
     assert _image_for(monkeypatch, None).plugin_load_controls == {}
     assert _image_for(monkeypatch, lambda device: None).plugin_load_controls == {}
+
+
+def test_the_plugin_question_only_when_the_editor_lacks_its_steps(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    needs_plugin = SimpleNamespace(download_plugin_required=True)
+    plain = SimpleNamespace(download_plugin_required=False)
+    monkeypatch.setattr(programming, "plugin_steps_available", None)
+    assert programming.needs_manufacturer_plugin(cast("Any", needs_plugin))
+    assert not programming.needs_manufacturer_plugin(cast("Any", plain))
+    monkeypatch.setattr(programming, "plugin_steps_available", lambda device: True)
+    assert not programming.needs_manufacturer_plugin(cast("Any", needs_plugin))
+    monkeypatch.setattr(programming, "plugin_steps_available", lambda device: False)
+    assert programming.needs_manufacturer_plugin(cast("Any", needs_plugin))
+
+
+def _steps_plugin(views: list[Any], controls: list[Any]) -> Any:
+    from editor_gui.plugins.project.plugin import ProjectPlugin
+
+    plugin = cast("Any", object.__new__(ProjectPlugin))
+    plugin._generic_steps = {}
+    plugin.generic_plugin_view = lambda _device: views[-1]
+    calls: list[int] = []
+
+    def load_controls(_device: Any) -> Any:
+        calls.append(1)
+        return controls[-1]
+
+    plugin.generic_plugin_load_controls = load_controls
+    plugin.calls = calls
+    return plugin
+
+
+def test_steps_available_is_cached_until_the_settings_change() -> None:
+    first, second = object(), object()
+    views: list[Any] = [first]
+    controls: list[Any] = [{7: ()}]
+    plugin = _steps_plugin(views, controls)
+    device = SimpleNamespace(node_id=3)
+    assert plugin.generic_plugin_steps_available(device)
+    assert plugin.generic_plugin_steps_available(device)
+    assert len(plugin.calls) == 1
+    # Changed settings give a new view: asked again.
+    views.append(second)
+    controls.append(None)
+    assert not plugin.generic_plugin_steps_available(device)
+    assert len(plugin.calls) == 2
+    views.append(None)
+    assert not plugin.generic_plugin_steps_available(device)
+
+
+def test_no_steps_for_settings_of_another_application() -> None:
+    from editor_gui.plugins.project.plugin import ProjectPlugin
+
+    plugin = cast("Any", object.__new__(ProjectPlugin))
+    plugin.generic_plugin_view = lambda _device: SimpleNamespace(
+        application_matches=False
+    )
+    assert plugin.generic_plugin_load_controls(SimpleNamespace(app=None)) is None

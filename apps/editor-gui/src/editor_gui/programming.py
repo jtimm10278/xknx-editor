@@ -65,6 +65,18 @@ def _application(device: Device) -> Application:
 plugin_load_controls: (
     Callable[[Device], Mapping[int, tuple[object, ...]] | None] | None
 ) = None
+# Whether the editor builds the steps of a device's manufacturer download plug-in itself (see
+# ``plugin_load_controls``); set by the project plugin. None: for no device.
+plugin_steps_available: Callable[[Device], bool] | None = None
+
+
+def needs_manufacturer_plugin(device: Device) -> bool:
+    """Whether ``device`` can only be programmed with its manufacturer's download plug-in
+    (NoDownloadWithoutPlugin) and the editor cannot build that plug-in's steps itself: only
+    then is programming it refused unless the user confirms going without."""
+    if not device.download_plugin_required:
+        return False
+    return not (plugin_steps_available is not None and plugin_steps_available(device))
 
 
 def _image_for(
