@@ -30,6 +30,7 @@ from .description import (
     ParameterType,
     TypeKind,
 )
+from .edit import EditSpec, edit_spec
 
 # How often the walk is repeated at most for Assign values to settle.
 _MAX_PASSES = 8
@@ -77,6 +78,9 @@ class Row:
         False  # value_text is a time in the format its name gives, with the raw time
     )
     fitted: bool = True  # False: a setting of an extension module that is not fitted
+    # How the setting can be changed; None when it can't (a rule sets it, a module not
+    # fitted, a value taken from the device, or a type that can't be written).
+    edit: EditSpec | None = None
 
 
 @dataclass(slots=True)
@@ -395,6 +399,9 @@ class _Builder:
             scaled=percent_text(value, ptype, param) is not None,
             clock=clock_text(value, ptype, label) is not None,
             fitted=fitted,
+            edit=edit_spec(self.d, ref_id, self.texts)
+            if fitted and ref_id not in walk.assigned
+            else None,
         )
 
 

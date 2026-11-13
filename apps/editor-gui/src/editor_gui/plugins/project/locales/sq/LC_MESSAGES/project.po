@@ -3376,3 +3376,27 @@ msgstr "Të dhënat"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Një shkarkim vetëm i adresës individuale nuk mund të simulohet."
+
+msgid "Locked Device"
+msgstr "Pajisje e kyçur"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "{address} është pajisje e kyçur (Cilësimet > Lidhja): nuk dërgohet asgjë që mund ta ndryshojë, përveç nëse e zhkyçni, dhe atëherë vetëm për këtë shkarkim."
+
+msgid "Unlock this device for this download"
+msgstr "Zhkyçe këtë pajisje për këtë shkarkim"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "{address} është pajisje e kyçur (Cilësimet > Lidhja) dhe nuk u zhkyç për këtë shkarkim."
+
+msgid "Change settings"
+msgstr "Ndrysho cilësimet"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "Ndryshimet ruhen në projekt (Zhbëj i kthen mbrapsht); shkarkimi i radhës i shkruan në pajisje."
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "Një numër i plotë nga {minimum} deri në {maximum} {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "Nuk u ndryshua: {reason}"

@@ -3516,3 +3516,27 @@ msgstr "Daten"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Ein Download nur der physikalischen Adresse kann nicht simuliert werden."
+
+msgid "Locked Device"
+msgstr "Gesperrtes Gerät"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "{address} ist ein gesperrtes Gerät (Einstellungen > Verbindung): Nichts, was es ändern könnte, wird gesendet, außer Sie entsperren es, und dann nur für diesen Download."
+
+msgid "Unlock this device for this download"
+msgstr "Dieses Gerät für diesen Download entsperren"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "{address} ist ein gesperrtes Gerät (Einstellungen > Verbindung) und wurde für diesen Download nicht entsperrt."
+
+msgid "Change settings"
+msgstr "Einstellungen ändern"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "Änderungen werden im Projekt gespeichert (Rückgängig nimmt sie zurück); der nächste Download schreibt sie in das Gerät."
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "Eine ganze Zahl von {minimum} bis {maximum} {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "Nicht geändert: {reason}"

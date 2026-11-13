@@ -3351,3 +3351,27 @@ msgstr "Adatok"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Csak a fizikai cím letöltése nem szimulálható."
+
+msgid "Locked Device"
+msgstr "Zárolt eszköz"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "{address} zárolt eszköz (Beállítások > Kapcsolat): semmi olyat nem küld a program, ami megváltoztathatná, hacsak fel nem oldja a zárolását, és akkor is csak erre a letöltésre."
+
+msgid "Unlock this device for this download"
+msgstr "Az eszköz zárolásának feloldása erre a letöltésre"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "{address} zárolt eszköz (Beállítások > Kapcsolat), és a zárolása nem lett feloldva erre a letöltésre."
+
+msgid "Change settings"
+msgstr "Beállítások módosítása"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "A módosítások a projektben maradnak (a Visszavonás visszavonja őket); a következő letöltés írja be őket az eszközbe."
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "Egész szám {minimum} és {maximum} között {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "Nem módosult: {reason}"

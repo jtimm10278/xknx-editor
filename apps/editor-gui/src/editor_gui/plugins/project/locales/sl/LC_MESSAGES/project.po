@@ -3507,3 +3507,27 @@ msgstr "Podatki"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Prenosa samo fizičnega naslova ni mogoče simulirati."
+
+msgid "Locked Device"
+msgstr "Zaklenjena naprava"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "{address} je zaklenjena naprava (Nastavitve > Povezava): nič, kar bi jo lahko spremenilo, se ne pošlje, razen če jo odklenete, in tedaj samo za ta prenos."
+
+msgid "Unlock this device for this download"
+msgstr "Odkleni to napravo za ta prenos"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "{address} je zaklenjena naprava (Nastavitve > Povezava) in za ta prenos ni bila odklenjena."
+
+msgid "Change settings"
+msgstr "Spremeni nastavitve"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "Spremembe se shranijo v projekt (Razveljavi jih prekliče); naslednji prenos jih zapiše v napravo."
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "Celo število od {minimum} do {maximum} {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "Ni spremenjeno: {reason}"

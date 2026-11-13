@@ -3376,3 +3376,27 @@ msgstr "Data"
 
 msgid "An individual address download cannot be simulated."
 msgstr "En nedlasting av bare den fysiske adressen kan ikke simuleres."
+
+msgid "Locked Device"
+msgstr "Låst enhet"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "{address} er en låst enhet (Innstillinger > Tilkobling): ingenting som kan endre den sendes med mindre du låser den opp, og da bare for denne nedlastingen."
+
+msgid "Unlock this device for this download"
+msgstr "Lås opp denne enheten for denne nedlastingen"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "{address} er en låst enhet (Innstillinger > Tilkobling) og ble ikke låst opp for denne nedlastingen."
+
+msgid "Change settings"
+msgstr "Endre innstillinger"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "Endringer lagres i prosjektet (Angre tar dem tilbake); neste nedlasting skriver dem til enheten."
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "Et heltall fra {minimum} til {maximum} {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "Ikke endret: {reason}"

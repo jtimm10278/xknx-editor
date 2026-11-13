@@ -378,6 +378,8 @@ async def test_generic_plugin_parameters(
         assert first["parameters"][0]["fitted"] is True
         assert first["parameters"][0]["scaled"] is False
         assert first["parameters"][0]["clock"] is False
+        assert first["parameters"][0]["editable"] is False
+        assert "choices" not in first["parameters"][0]
 
 
 async def test_generic_plugin_compare(
@@ -1351,3 +1353,44 @@ async def test_dry_run_download(
         await _error(
             client, "project_dry_run_download", "could not run", node_id=node_id
         )
+
+
+async def test_generic_plugin_set_parameter(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    calls: list[tuple[str, str, str]] = []
+
+    def set_value(_self: Any, device: Any, ref_id: str, value: str) -> str:
+        calls.append((device.individual_address, ref_id, value))
+        return "" if value == "dm_A" else f"{value!r} is not one of dm_Off, dm_A"
+
+    monkeypatch.setattr(ProjectPlugin, "generic_plugin_set_value", set_value)
+    monkeypatch.setattr(
+        ProjectPlugin, "generic_plugin_view", lambda _self, _device, **_kw: None
+    )
+    mcp, _project = _server(tmp_path)
+    async with Client(mcp) as client:
+        await _data(client, "project_new", path=str(tmp_path / "p.xknx"))
+        await _device(client, "1.1.20")
+        changed = await _data(
+            client,
+            "project_generic_plugin_set_parameter",
+            device_address="1.1.20",
+            ref_id="r_mode",
+            value="dm_A",
+        )
+        assert changed == {
+            "status": "changed",
+            "ref_id": "r_mode",
+            "value": "dm_A",
+            "value_text": "dm_A",
+        }
+        await _error(
+            client,
+            "project_generic_plugin_set_parameter",
+            "not changed",
+            device_address="1.1.20",
+            ref_id="r_mode",
+            value="dm_C",
+        )
+    assert calls == [("1.1.20", "r_mode", "dm_A"), ("1.1.20", "r_mode", "dm_C")]

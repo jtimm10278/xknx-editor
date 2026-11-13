@@ -446,7 +446,9 @@ class ProjectPlugin:
             _detect_display_type=self._detect_triton_type,
         )
         self._generic_plugin_panel = GenericPluginPanel(
-            self.generic_plugin_view, self.generic_plugin_compare_candidates
+            self.generic_plugin_view,
+            self.generic_plugin_compare_candidates,
+            self.generic_plugin_set_value,
         )
         # Generic Plug-in sources per application id and views per device, see
         # generic_plugin_view.
@@ -1393,28 +1395,7 @@ class ProjectPlugin:
 
         if self.generic_plugin_view(device) is None:
             return None
-        sources = self._generic_plugin_sources(
-            device,
-            [
-                str(b.ref_id)
-                for b in cast(
-                    "list[Any]",
-                    getattr(
-                        getattr(
-                            getattr(device.app.program, "static", None),
-                            "extension",
-                            None,
-                        ),
-                        "baggage",
-                        None,
-                    )
-                    or [],
-                )
-                if is_xml_baggage(str(getattr(b, "ref_id", "") or ""))
-            ]
-            if device.app is not None
-            else [],
-        )
+        sources = self._generic_plugin_sources(device, _generic_baggage_ids(device))
         if sources is None or sources.description.alloc_length is None:
             return None
         info = self._api.project.get_device_info(device.node_id)
@@ -1436,6 +1417,68 @@ class ProjectPlugin:
                 return None
             return plugin_merge_controls(image, sources.description.alloc_length)
         return None
+
+    def generic_plugin_set_value(
+        self, device: "Device", ref_id: str, value: str
+    ) -> str:
+        """Set the Generic Plug-in setting ``ref_id`` of ``device`` to ``value`` (its symbolic
+        value, e.g. "yn_Yes", or a whole number) in the settings the plug-in stored, as one undo
+        step; the next download writes it. Returns "" when done, else why not."""
+        from editor_gui.plugin_blob_readers.siemens_generic import (
+            EditError,
+            check_value,
+            parse_settings,
+            set_value,
+        )
+
+        view = self.generic_plugin_view(device)
+        if view is None:
+            return "the device has no Generic Plug-in settings"
+        if not view.application_matches:
+            return "the stored settings belong to another application"
+        sources = self._generic_plugin_sources(device, _generic_baggage_ids(device))
+        if sources is None:
+            return "the plug-in description is not available"
+        row = next(
+            (
+                r
+                for p in view.pages
+                for r in p.rows
+                if r.ref_id == ref_id and not r.separator
+            ),
+            None,
+        )
+        if row is None:
+            return f"{ref_id} is not a setting shown for this device"
+        if row.edit is None:
+            return f"{ref_id} cannot be changed (a rule sets it, or its module is not fitted)"
+        if reason := check_value(sources.description, ref_id, value):
+            return reason
+        for entry in cast("list[Any]", getattr(device, "binary_data", None) or []):
+            data = getattr(entry, "data", None)
+            name = str(getattr(entry, "name", "") or "")
+            if (
+                not data
+                or not name
+                or parse_settings(bytes(cast("bytes", data))) is None
+            ):
+                continue
+            try:
+                changed = set_value(bytes(cast("bytes", data)), ref_id, value)
+            except EditError as exc:
+                return str(exc)
+            self._api.project.persist_device_blob(
+                device, name, changed, label="Generic Plug-in setting"
+            )
+            self._api.log.info(
+                "generic plug-in setting changed",
+                plugin="project",
+                device=device.individual_address,
+                setting=ref_id,
+                value=value,
+            )
+            return ""
+        return "the device has no Generic Plug-in settings"
 
     def generic_plugin_compare_candidates(self, device: "Device") -> list["Device"]:
         """The other devices of the project with the same application as ``device`` whose
@@ -3735,3 +3778,16 @@ class ProjectPlugin:
 def _address_key(address: str) -> tuple[int, ...]:
     """Sort key of an individual address "1.2.3" (unparsable parts sort first)."""
     return tuple(int(p) if p.isdigit() else -1 for p in address.split("."))
+
+
+def _generic_baggage_ids(device: "Device") -> list[str]:
+    """The XML baggages of ``device``'s application (where a Generic Plug-in description is)."""
+    if device.app is None:
+        return []
+    static = getattr(device.app.program, "static", None)
+    extension = getattr(static, "extension", None)
+    return [
+        str(b.ref_id)
+        for b in cast("list[Any]", getattr(extension, "baggage", None) or [])
+        if is_xml_baggage(str(getattr(b, "ref_id", "") or ""))
+    ]

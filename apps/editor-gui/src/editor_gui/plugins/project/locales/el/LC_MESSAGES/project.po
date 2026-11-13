@@ -3376,3 +3376,27 @@ msgstr "Δεδομένα"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Μια λήψη μόνο της φυσικής διεύθυνσης δεν μπορεί να προσομοιωθεί."
+
+msgid "Locked Device"
+msgstr "Κλειδωμένη συσκευή"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "Η {address} είναι κλειδωμένη συσκευή (Ρυθμίσεις > Σύνδεση): δεν αποστέλλεται τίποτα που θα μπορούσε να την αλλάξει, εκτός αν την ξεκλειδώσετε, και τότε μόνο για αυτή τη λήψη."
+
+msgid "Unlock this device for this download"
+msgstr "Ξεκλείδωμα αυτής της συσκευής για αυτή τη λήψη"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "Η {address} είναι κλειδωμένη συσκευή (Ρυθμίσεις > Σύνδεση) και δεν ξεκλειδώθηκε για αυτή τη λήψη."
+
+msgid "Change settings"
+msgstr "Αλλαγή ρυθμίσεων"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "Οι αλλαγές αποθηκεύονται στο έργο (η Αναίρεση τις αναιρεί)· η επόμενη λήψη τις γράφει στη συσκευή."
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "Ακέραιος αριθμός από {minimum} έως {maximum} {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "Δεν άλλαξε: {reason}"

@@ -2274,6 +2274,25 @@ class ProjectStrings:
         return _("{value} (scaled, raw {raw})")
 
     @property
+    def GENERIC_PLUGIN_EDIT(self) -> str:
+        return _("Change settings")
+
+    @property
+    def GENERIC_PLUGIN_EDIT_HINT(self) -> str:
+        return _(
+            "Changes are kept in the project (Undo takes them back); the next download writes "
+            "them to the device."
+        )
+
+    @property
+    def GENERIC_PLUGIN_EDIT_RANGE(self) -> str:
+        return _("A whole number from {minimum} to {maximum} {unit}")
+
+    @property
+    def GENERIC_PLUGIN_EDIT_REFUSED(self) -> str:
+        return _("Not changed: {reason}")
+
+    @property
     def GENERIC_PLUGIN_SHOW_UNFITTED(self) -> str:
         return _("Show settings for modules not fitted")
 

@@ -3376,3 +3376,27 @@ msgstr "Datos"
 
 msgid "An individual address download cannot be simulated."
 msgstr "No se puede simular una descarga solo de la dirección individual."
+
+msgid "Locked Device"
+msgstr "Dispositivo bloqueado"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "{address} es un dispositivo bloqueado (Ajustes > Conexión): no se envía nada que pueda cambiarlo a menos que lo desbloquee, y entonces solo para esta descarga."
+
+msgid "Unlock this device for this download"
+msgstr "Desbloquear este dispositivo para esta descarga"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "{address} es un dispositivo bloqueado (Ajustes > Conexión) y no se desbloqueó para esta descarga."
+
+msgid "Change settings"
+msgstr "Cambiar ajustes"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "Los cambios se guardan en el proyecto (Deshacer los revierte); la próxima descarga los escribe en el dispositivo."
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "Un número entero de {minimum} a {maximum} {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "No cambiado: {reason}"

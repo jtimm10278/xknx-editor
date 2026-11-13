@@ -3409,3 +3409,27 @@ msgstr "Gegevens"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Een download van alleen het fysieke adres kan niet worden gesimuleerd."
+
+msgid "Locked Device"
+msgstr "Vergrendeld apparaat"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "{address} is een vergrendeld apparaat (Instellingen > Verbinding): niets wat het kan wijzigen wordt verzonden tenzij u het ontgrendelt, en dan alleen voor deze download."
+
+msgid "Unlock this device for this download"
+msgstr "Dit apparaat ontgrendelen voor deze download"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "{address} is een vergrendeld apparaat (Instellingen > Verbinding) en is niet ontgrendeld voor deze download."
+
+msgid "Change settings"
+msgstr "Instellingen wijzigen"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "Wijzigingen worden in het project bewaard (Ongedaan maken draait ze terug); de volgende download schrijft ze naar het apparaat."
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "Een geheel getal van {minimum} tot {maximum} {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "Niet gewijzigd: {reason}"

@@ -3376,3 +3376,27 @@ msgstr "Données"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Un téléchargement de l'adresse individuelle seule ne peut pas être simulé."
+
+msgid "Locked Device"
+msgstr "Appareil verrouillé"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "{address} est un appareil verrouillé (Paramètres > Connexion) : rien de ce qui pourrait le modifier n'est envoyé, sauf si vous le déverrouillez, et alors uniquement pour ce téléchargement."
+
+msgid "Unlock this device for this download"
+msgstr "Déverrouiller cet appareil pour ce téléchargement"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "{address} est un appareil verrouillé (Paramètres > Connexion) et n'a pas été déverrouillé pour ce téléchargement."
+
+msgid "Change settings"
+msgstr "Modifier les paramètres"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "Les modifications sont conservées dans le projet (Annuler les reprend) ; le prochain téléchargement les écrit dans l'appareil."
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "Un nombre entier de {minimum} à {maximum} {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "Non modifié : {reason}"

@@ -3428,3 +3428,27 @@ msgstr "Дані"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Завантаження лише фізичної адреси не можна симулювати."
+
+msgid "Locked Device"
+msgstr "Заблокований пристрій"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "{address} — заблокований пристрій (Налаштування > Підключення): нічого, що могло б його змінити, не надсилається, доки ви його не розблокуєте, і тоді лише для цього завантаження."
+
+msgid "Unlock this device for this download"
+msgstr "Розблокувати цей пристрій для цього завантаження"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "{address} — заблокований пристрій (Налаштування > Підключення), і для цього завантаження його не було розблоковано."
+
+msgid "Change settings"
+msgstr "Змінити налаштування"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "Зміни зберігаються в проєкті (Скасувати їх відкочує); наступне завантаження записує їх у пристрій."
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "Ціле число від {minimum} до {maximum} {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "Не змінено: {reason}"

@@ -3376,3 +3376,27 @@ msgstr "Tiedot"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Pelkän yksilöosoitteen latausta ei voi simuloida."
+
+msgid "Locked Device"
+msgstr "Lukittu laite"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "{address} on lukittu laite (Asetukset > Yhteys): mitään, mikä voisi muuttaa sitä, ei lähetetä, ellet avaa sen lukitusta, ja silloinkin vain tätä latausta varten."
+
+msgid "Unlock this device for this download"
+msgstr "Avaa tämän laitteen lukitus tätä latausta varten"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "{address} on lukittu laite (Asetukset > Yhteys), eikä sen lukitusta avattu tätä latausta varten."
+
+msgid "Change settings"
+msgstr "Muuta asetuksia"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "Muutokset tallennetaan projektiin (Kumoa peruu ne); seuraava lataus kirjoittaa ne laitteeseen."
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "Kokonaisluku väliltä {minimum}–{maximum} {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "Ei muutettu: {reason}"

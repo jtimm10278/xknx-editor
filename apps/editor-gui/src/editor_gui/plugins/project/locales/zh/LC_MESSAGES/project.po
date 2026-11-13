@@ -3324,3 +3324,27 @@ msgstr "数据"
 
 msgid "An individual address download cannot be simulated."
 msgstr "无法模拟仅下载个别地址。"
+
+msgid "Locked Device"
+msgstr "锁定的设备"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "{address} 是锁定的设备（设置 > 连接）：除非您将其解锁，否则不会发送任何可能更改它的内容，解锁也仅适用于本次下载。"
+
+msgid "Unlock this device for this download"
+msgstr "为本次下载解锁此设备"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "{address} 是锁定的设备（设置 > 连接），且未为本次下载解锁。"
+
+msgid "Change settings"
+msgstr "更改设置"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "更改保存在项目中（撤销可将其撤回）；下次下载时写入设备。"
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "{minimum} 到 {maximum} 之间的整数 {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "未更改：{reason}"

@@ -3403,3 +3403,27 @@ msgstr "Gögn"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Ekki er hægt að herma niðurhal eingöngu einstaklingsvistfangs."
+
+msgid "Locked Device"
+msgstr "Læst tæki"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "{address} er læst tæki (Stillingar > Tenging): ekkert sem gæti breytt því er sent nema þú opnir það, og þá aðeins fyrir þetta niðurhal."
+
+msgid "Unlock this device for this download"
+msgstr "Opna þetta tæki fyrir þetta niðurhal"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "{address} er læst tæki (Stillingar > Tenging) og var ekki opnað fyrir þetta niðurhal."
+
+msgid "Change settings"
+msgstr "Breyta stillingum"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "Breytingar eru geymdar í verkefninu (Afturkalla tekur þær til baka); næsta niðurhal skrifar þær í tækið."
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "Heiltala frá {minimum} til {maximum} {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "Ekki breytt: {reason}"

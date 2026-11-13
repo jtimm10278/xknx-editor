@@ -1,12 +1,14 @@
-"""Read-only "Generic Plug-in" tab: the settings the Siemens Generic Plug-in stored for a device.
+"""The "Generic Plug-in" tab: the settings the Siemens Generic Plug-in stored for a device.
 
 Shows each parameter block of the plug-in as a collapsing section with the setting's name, its
 value (enumeration text and symbolic value; "Percent" numbers scaled, with the raw value) and
 whether the memory image of the last download holds that value. Settings of extension modules
 that are not fitted can be shown on request. Another device of the same application can be put
 beside it: an extra column with its values, differences marked. The views come from
-``editor_gui.plugin_blob_readers.siemens_generic`` through callbacks the project plugin injects;
-nothing here edits or downloads.
+``editor_gui.plugin_blob_readers.siemens_generic`` through callbacks the project plugin injects.
+With "Change settings" on, a setting that can be changed gets a drop-down of its values, or a
+field for a whole number checked against its range; the project plugin stores the change in the
+plug-in settings (one undo step) and the next download writes it.
 """
 
 from __future__ import annotations
@@ -39,6 +41,8 @@ if TYPE_CHECKING:
 
 ViewProvider = Callable[..., "GenericView | None"]  # (device, show_unfitted=False)
 CandidateProvider = Callable[["Device"], "list[Device]"]
+# (device, parameter ref id, value) -> "" when changed, else why not.
+ValueSetter = Callable[["Device", str, str], str]
 
 
 def page_title(page: Page | ComparePage) -> str:
@@ -176,7 +180,12 @@ class GenericPluginPanel:
 
     _view_for: ViewProvider
     _candidates_for: CandidateProvider | None = None
+    _set_value: ValueSetter | None = None
     _filter: str = ""
+    _editing: bool = False
+    # Number fields being typed in, by parameter ref id, and the last refused change.
+    _typed: dict[str, str] = field(default_factory=dict[str, str])
+    _refused: str = ""
     _only_mismatches: bool = False
     _only_differences: bool = False
     _show_unfitted: bool = False
@@ -220,6 +229,19 @@ class GenericPluginPanel:
         _, self._show_unfitted = imgui.checkbox(
             S.GENERIC_PLUGIN_SHOW_UNFITTED, self._show_unfitted
         )
+        if self._set_value is not None and view.application_matches:
+            changed, self._editing = imgui.checkbox(
+                S.GENERIC_PLUGIN_EDIT, self._editing
+            )
+            imgui.set_item_tooltip(S.GENERIC_PLUGIN_EDIT_HINT)
+            if changed:
+                self._typed.clear()
+                self._refused = ""
+        if self._refused:
+            imgui.text_colored(
+                status_color("error"),
+                S.GENERIC_PLUGIN_EDIT_REFUSED.format(reason=self._refused),
+            )
         if other is not None and comparison is not None:
             _, self._only_differences = imgui.checkbox(
                 S.GENERIC_PLUGIN_ONLY_DIFFERENCES, self._only_differences
@@ -276,7 +298,7 @@ class GenericPluginPanel:
                 continue
             shown += len(rows)
             if self._header(page, index, len(rows), closed, filtering):
-                self._render_table(rows)
+                self._render_table(rows, device if self._editing else None)
             imgui.pop_id()
         if shown == 0:
             imgui.text_disabled(S.PLUGIN_PARAMS_FILTER_EMPTY)
@@ -325,7 +347,7 @@ class GenericPluginPanel:
             closed.add(key)
         return False
 
-    def _render_table(self, rows: list[Row]) -> None:
+    def _render_table(self, rows: list[Row], editing: Device | None = None) -> None:
         flags = (
             imgui.TableFlags_.borders
             | imgui.TableFlags_.row_bg
@@ -351,10 +373,49 @@ class GenericPluginPanel:
                 continue
             _text(row.label, row.fitted)
             imgui.table_next_column()
-            _text(value_text(row), row.stored and row.fitted)
+            if editing is not None and row.edit is not None:
+                self._value_editor(editing, row)
+            else:
+                _text(value_text(row), row.stored and row.fitted)
             imgui.table_next_column()
             _memory_cell(row)
         imgui.end_table()
+
+    def _change(self, device: Device, row: Row, value: str) -> None:
+        if self._set_value is None or value == row.value:
+            return
+        self._refused = self._set_value(device, row.ref_id, value)
+
+    def _value_editor(self, device: Device, row: Row) -> None:
+        """The drop-down or number field of a setting that can be changed."""
+        spec = row.edit
+        assert spec is not None
+        imgui.set_next_item_width(-1)
+        if spec.choices:
+            if begin_combo(f"##generic_value_{row.ref_id}", value_text(row)):
+                for choice in spec.choices:
+                    if imgui.selectable(
+                        f"{choice.text}##{choice.value}", choice.value == row.value
+                    )[0]:
+                        self._change(device, row, choice.value)
+                imgui.end_combo()
+            return
+        typed = self._typed.get(row.ref_id, row.value)
+        entered, typed = imgui.input_text(
+            f"##generic_value_{row.ref_id}",
+            typed,
+            imgui.InputTextFlags_.chars_decimal
+            | imgui.InputTextFlags_.enter_returns_true,
+        )
+        self._typed[row.ref_id] = typed
+        imgui.set_item_tooltip(
+            S.GENERIC_PLUGIN_EDIT_RANGE.format(
+                minimum=spec.minimum, maximum=spec.maximum, unit=spec.unit
+            ).strip()
+        )
+        if entered or imgui.is_item_deactivated_after_edit():
+            self._typed.pop(row.ref_id, None)
+            self._change(device, row, typed.strip())
 
     def _render_compare_table(self, rows: list[CompareRow], other: Device) -> None:
         flags = (

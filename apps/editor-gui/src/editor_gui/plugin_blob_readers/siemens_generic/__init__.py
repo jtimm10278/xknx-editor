@@ -15,6 +15,7 @@ from dataclasses import dataclass
 
 from .blob import PluginSettings, parse_settings
 from .description import Description, parse_description, parse_translations
+from .edit import Choice, EditError, EditSpec, check_value, edit_spec, set_value
 from .view import (
     ComparePage,
     CompareRow,
@@ -28,9 +29,12 @@ from .view import (
 )
 
 __all__ = [
+    "Choice",
     "ComparePage",
     "CompareRow",
     "Description",
+    "EditError",
+    "EditSpec",
     "GenericView",
     "MemoryCheck",
     "Page",
@@ -39,7 +43,9 @@ __all__ = [
     "Sources",
     "ViewComparison",
     "build_view",
+    "check_value",
     "compare_views",
+    "edit_spec",
     "find_sources",
     "is_xml_baggage",
     "parse_description",
@@ -47,6 +53,7 @@ __all__ = [
     "parse_translations",
     "pick_language",
     "read_view",
+    "set_value",
 ]
 
 

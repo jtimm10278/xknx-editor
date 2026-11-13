@@ -3428,3 +3428,27 @@ msgstr "Data"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Nahrání pouze fyzické adresy nelze simulovat."
+
+msgid "Locked Device"
+msgstr "Uzamčené zařízení"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "{address} je uzamčené zařízení (Nastavení > Připojení): nic, co by ho mohlo změnit, se neodešle, dokud ho neodemknete, a pak jen pro toto nahrávání."
+
+msgid "Unlock this device for this download"
+msgstr "Odemknout toto zařízení pro toto nahrávání"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "{address} je uzamčené zařízení (Nastavení > Připojení) a pro toto nahrávání nebylo odemčeno."
+
+msgid "Change settings"
+msgstr "Změnit nastavení"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "Změny se ukládají v projektu (Zpět je vezme zpět); příští nahrávání je zapíše do zařízení."
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "Celé číslo od {minimum} do {maximum} {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "Nezměněno: {reason}"

@@ -579,6 +579,51 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
 
         return ctx.run_locked(_read)
 
+    @tool("write")
+    def project_generic_plugin_set_parameter(
+        ref_id: str,
+        value: str,
+        node_id: int | None = None,
+        device_address: str | None = None,
+    ) -> dict[str, Any]:
+        """Change one setting of a device's Siemens ETS3 Generic Plug-in, as the Generic
+        Plug-in tab does with "Change settings" on. Identify the device by node_id OR
+        device_address; ``ref_id`` is the setting's ref_id from
+        project_generic_plugin_parameters (it must be shown there with editable true), ``value``
+        one of its choices' values (e.g. "yn_Yes") or a whole number from its minimum to its
+        maximum (the raw number also for "Percent" settings and times). Stored in the project's
+        copy of the plug-in settings as one undo step (project_undo takes it back); nothing is
+        sent to the bus: the next download (connection_program_device) writes it. Settings
+        shown or hidden by the new value appear in the next project_generic_plugin_parameters.
+        Returns {status: "changed", ref_id, value, value_text}."""
+        require_project(ctx)
+        plugin = _plugin()
+
+        def _write() -> dict[str, Any]:
+            device = require_device(project, node_id, device_address)
+            reason = plugin.generic_plugin_set_value(device, ref_id, value)
+            if reason:
+                raise ToolError(f"not changed: {reason}")
+            changed = project.find_device_by_node_id(device.node_id) or device
+            view = plugin.generic_plugin_view(changed)
+            row = next(
+                (
+                    r
+                    for p in (view.pages if view else [])
+                    for r in p.rows
+                    if r.ref_id == ref_id and not r.separator
+                ),
+                None,
+            )
+            return {
+                "status": "changed",
+                "ref_id": ref_id,
+                "value": row.value if row else value,
+                "value_text": row.value_text if row else value,
+            }
+
+        return ctx.run_locked(_write)
+
     @tool("read")
     def project_generic_plugin_parameters(
         node_id: int | None = None,
@@ -605,8 +650,10 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
         percentages), clock (true for those times),
         default_value, stored (false: the default), assigned (set by a rule of the
         description), fitted, memory ("match", "mismatch", "not_in_memory" or "unchecked"),
-        address?, memory_value?, memory_value_text?}; a separator line has {separator: true,
-        label}. Read only: nothing can be changed or downloaded."""
+        address?, memory_value?, memory_value_text?, editable, choices? ([{value, text}] of
+        an enumeration), minimum?, maximum?, unit? (of a whole number)}; a separator line has
+        {separator: true, label}. Change an editable setting with
+        project_generic_plugin_set_parameter."""
         require_project(ctx)
         plugin = _plugin()
 
@@ -658,6 +705,16 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
                     if row.memory_value:
                         data["memory_value"] = row.memory_value
                         data["memory_value_text"] = row.memory_value_text
+                    data["editable"] = row.edit is not None and view.application_matches
+                    if row.edit is not None and row.edit.choices:
+                        data["choices"] = [
+                            {"value": c.value, "text": c.text} for c in row.edit.choices
+                        ]
+                    elif row.edit is not None:
+                        data["minimum"] = row.edit.minimum
+                        data["maximum"] = row.edit.maximum
+                        if row.edit.unit:
+                            data["unit"] = row.edit.unit
                     rows.append(data)
                 if any("ref_id" in r for r in rows):
                     pages.append(

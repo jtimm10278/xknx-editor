@@ -3324,3 +3324,27 @@ msgstr "Veri"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Yalnızca bireysel adresin indirilmesi simüle edilemez."
+
+msgid "Locked Device"
+msgstr "Kilitli Cihaz"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "{address} kilitli bir cihazdır (Ayarlar > Bağlantı): kilidini açmadığınız sürece onu değiştirebilecek hiçbir şey gönderilmez; açarsanız yalnızca bu indirme için."
+
+msgid "Unlock this device for this download"
+msgstr "Bu cihazın kilidini bu indirme için aç"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "{address} kilitli bir cihazdır (Ayarlar > Bağlantı) ve kilidi bu indirme için açılmadı."
+
+msgid "Change settings"
+msgstr "Ayarları değiştir"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "Değişiklikler projede tutulur (Geri al onları geri alır); bir sonraki indirme onları cihaza yazar."
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "{minimum} ile {maximum} arasında bir tam sayı {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "Değiştirilmedi: {reason}"

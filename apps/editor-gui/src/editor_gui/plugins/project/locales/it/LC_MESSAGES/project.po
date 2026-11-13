@@ -3376,3 +3376,27 @@ msgstr "Dati"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Un download del solo indirizzo fisico non può essere simulato."
+
+msgid "Locked Device"
+msgstr "Dispositivo bloccato"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "{address} è un dispositivo bloccato (Impostazioni > Connessione): non viene inviato nulla che possa modificarlo a meno che tu non lo sblocchi, e allora solo per questo download."
+
+msgid "Unlock this device for this download"
+msgstr "Sblocca questo dispositivo per questo download"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "{address} è un dispositivo bloccato (Impostazioni > Connessione) e non è stato sbloccato per questo download."
+
+msgid "Change settings"
+msgstr "Modifica impostazioni"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "Le modifiche restano nel progetto (Annulla le ritira); il prossimo download le scrive nel dispositivo."
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "Un numero intero da {minimum} a {maximum} {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "Non modificato: {reason}"

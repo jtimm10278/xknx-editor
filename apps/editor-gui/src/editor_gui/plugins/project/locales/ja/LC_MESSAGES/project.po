@@ -3324,3 +3324,27 @@ msgstr "データ"
 
 msgid "An individual address download cannot be simulated."
 msgstr "個別アドレスのみのダウンロードはシミュレートできません。"
+
+msgid "Locked Device"
+msgstr "ロックされたデバイス"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "{address} はロックされたデバイスです（設定 > 接続）。ロックを解除しない限り、変更し得るものは送信されません。解除した場合もこのダウンロードに限られます。"
+
+msgid "Unlock this device for this download"
+msgstr "このダウンロードのためにこのデバイスのロックを解除"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "{address} はロックされたデバイスです（設定 > 接続）。このダウンロードのためにロックが解除されていません。"
+
+msgid "Change settings"
+msgstr "設定を変更"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "変更はプロジェクトに保存されます（元に戻すで取り消せます）。次のダウンロードでデバイスに書き込まれます。"
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "{minimum} から {maximum} までの整数 {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "変更されませんでした: {reason}"

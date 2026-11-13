@@ -55,6 +55,7 @@ class ParameterType:
     signed: bool = False
     enumerations: tuple[Enumeration, ...] = ()
     maximum: int | None = None  # maxInclusive of a number type
+    minimum: int | None = None  # minInclusive of a number type
 
     @property
     def full_scale(self) -> int | None:
@@ -284,6 +285,7 @@ def _parse_type(e: ET.Element) -> ParameterType:
         signed=body.get("Type") == "signed",
         enumerations=tuple(enums),
         maximum=_int(body.get("maxInclusive")),
+        minimum=_int(body.get("minInclusive")),
     )
 
 

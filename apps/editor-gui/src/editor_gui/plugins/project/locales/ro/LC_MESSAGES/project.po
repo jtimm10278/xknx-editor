@@ -3455,3 +3455,27 @@ msgstr "Date"
 
 msgid "An individual address download cannot be simulated."
 msgstr "O descărcare doar a adresei individuale nu poate fi simulată."
+
+msgid "Locked Device"
+msgstr "Dispozitiv blocat"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "{address} este un dispozitiv blocat (Setări > Conexiune): nu se trimite nimic ce l-ar putea modifica decât dacă îl deblocați, și atunci doar pentru această descărcare."
+
+msgid "Unlock this device for this download"
+msgstr "Deblochează acest dispozitiv pentru această descărcare"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "{address} este un dispozitiv blocat (Setări > Conexiune) și nu a fost deblocat pentru această descărcare."
+
+msgid "Change settings"
+msgstr "Modifică setările"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "Modificările se păstrează în proiect (Anulare le retrage); următoarea descărcare le scrie în dispozitiv."
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "Un număr întreg de la {minimum} la {maximum} {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "Nemodificat: {reason}"

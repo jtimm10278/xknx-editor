@@ -22,6 +22,7 @@ _EXPECTED = {
     "monitor_read_value": (True, False, True),
     "catalog_online_items": (True, False, True),
     "project_set_parameter": (False, False, False),
+    "project_generic_plugin_set_parameter": (False, False, False),
     "project_link_com_object": (False, False, False),
     "catalog_import_product": (False, False, False),
     "connection_connect": (False, False, True),

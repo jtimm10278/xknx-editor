@@ -3428,3 +3428,27 @@ msgstr "Dane"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Nie można symulować pobierania samego adresu fizycznego."
+
+msgid "Locked Device"
+msgstr "Zablokowane urządzenie"
+
+msgid "{address} is a locked device (Settings > Connection): nothing that could change it is sent unless you unlock it, and then only for this download."
+msgstr "{address} to zablokowane urządzenie (Ustawienia > Połączenie): nic, co mogłoby je zmienić, nie zostanie wysłane, dopóki go nie odblokujesz, a wtedy tylko dla tego pobierania."
+
+msgid "Unlock this device for this download"
+msgstr "Odblokuj to urządzenie dla tego pobierania"
+
+msgid "{address} is a locked device (Settings > Connection) and was not unlocked for this download."
+msgstr "{address} to zablokowane urządzenie (Ustawienia > Połączenie) i nie zostało odblokowane dla tego pobierania."
+
+msgid "Change settings"
+msgstr "Zmień ustawienia"
+
+msgid "Changes are kept in the project (Undo takes them back); the next download writes them to the device."
+msgstr "Zmiany są zapisywane w projekcie (Cofnij je wycofuje); następne pobieranie zapisze je w urządzeniu."
+
+msgid "A whole number from {minimum} to {maximum} {unit}"
+msgstr "Liczba całkowita od {minimum} do {maximum} {unit}"
+
+msgid "Not changed: {reason}"
+msgstr "Nie zmieniono: {reason}"
