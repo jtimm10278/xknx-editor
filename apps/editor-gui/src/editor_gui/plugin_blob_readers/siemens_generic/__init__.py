@@ -15,7 +15,15 @@ from dataclasses import dataclass
 
 from .blob import PluginSettings, parse_settings
 from .description import Description, parse_description, parse_translations
-from .edit import Choice, EditError, EditSpec, check_value, edit_spec, set_value
+from .edit import (
+    Choice,
+    EditError,
+    EditSpec,
+    check_value,
+    edit_spec,
+    record_download,
+    set_value,
+)
 from .view import (
     ComparePage,
     CompareRow,
@@ -53,6 +61,7 @@ __all__ = [
     "parse_translations",
     "pick_language",
     "read_view",
+    "record_download",
     "set_value",
 ]
 

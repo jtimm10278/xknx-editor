@@ -16,6 +16,7 @@ from editor_gui.plugin_blob_readers.siemens_generic import (
     edit_spec,
     parse_description,
     parse_settings,
+    record_download,
     set_value,
 )
 from editor_gui.plugins.project.plugin import ProjectPlugin
@@ -146,7 +147,9 @@ def _plugin(blob: bytes) -> tuple[Any, list[tuple[str, bytes]]]:
                 (name, data)
             )
         ),
-        log=SimpleNamespace(info=lambda *_a, **_k: None),
+        log=SimpleNamespace(
+            info=lambda *_a, **_k: None, warning=lambda *_a, **_k: None
+        ),
     )
     return plugin, stored
 
@@ -172,3 +175,61 @@ def test_the_project_plugin_stores_the_changed_settings() -> None:
         device, "r_count_b", "dm_A"
     )
     assert len(stored) == 1
+
+
+def test_a_download_is_recorded_in_the_stored_image() -> None:
+    sources = _sources()
+    base = sources.description.memory_base
+    assert base is not None
+    changed = set_value(settings_blob(), "r_delay", "450", _WHEN)
+    settings = parse_settings(changed)
+    assert settings is not None
+    view = build_view(sources.description, settings)
+    rows = {r.ref_id: r for p in view.pages for r in p.rows if not r.separator}
+    assert rows["r_delay"].memory.value == "mismatch"
+    # The download wrote 450 (little endian) at base + 2 and read it back unchanged.
+    recorded = record_download(
+        changed, base, [(base + 2, (450).to_bytes(2, "little"))], _WHEN
+    )
+    after = parse_settings(recorded)
+    assert after is not None and settings.memory_image is not None
+    assert after.memory_image is not None
+    assert after.memory_image[2:4] == (450).to_bytes(2, "little")
+    assert after.memory_image[:2] == settings.memory_image[:2]
+    assert after.memory_image[4:] == settings.memory_image[4:]
+    assert after.last_download == "2026-01-02T03:04:05.678"
+    assert after.values == settings.values
+    view = build_view(sources.description, after)
+    rows = {r.ref_id: r for p in view.pages for r in p.rows if not r.separator}
+    assert rows["r_delay"].memory.value == "match"
+    # Only the image and the times differ in the document.
+    before_text, after_text = changed.decode("utf-16-le"), recorded.decode("utf-16-le")
+    assert (
+        before_text.split("<DownloadedSettings")[0]
+        == after_text.split("<DownloadedSettings")[0]
+    )
+
+
+def test_a_download_without_a_stored_image_is_not_recorded() -> None:
+    with pytest.raises(EditError, match="no stored image"):
+        record_download(settings_blob(image=None), 0x4000, [(0x4000, b"\x01")])
+    with pytest.raises(EditError, match="outside"):
+        record_download(settings_blob(), 0x4000, [(0x3FFF, b"\x01")])
+
+
+def test_the_project_plugin_records_a_verified_download() -> None:
+    blob = settings_blob()
+    plugin, stored = _plugin(blob)
+    device = SimpleNamespace(
+        node_id=4,
+        app=None,
+        individual_address="1.2.3",
+        binary_data=[SimpleNamespace(name="BLOB_STRING", data=blob)],
+    )
+    plugin._api.main_thread = None
+    plugin._api.project.find_device_by_node_id = lambda _nid: device
+    plugin.generic_plugin_downloaded(device, ((0x4002, b"\x01\x00"),))
+    assert [name for name, _ in stored] == ["BLOB_STRING"]
+    recorded = parse_settings(stored[0][1])
+    assert recorded is not None and recorded.memory_image is not None
+    assert recorded.memory_image[2:4] == b"\x01\x00"

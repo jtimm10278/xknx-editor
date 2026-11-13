@@ -68,6 +68,62 @@ plugin_load_controls: (
 # Whether the editor builds the steps of a device's manufacturer download plug-in itself (see
 # ``plugin_load_controls``); set by the project plugin. None: for no device.
 plugin_steps_available: Callable[[Device], bool] | None = None
+# Told, on the bus thread, the parameter memory the plug-in steps wrote once a download read it
+# back unchanged from the device: (device, ((address, data), ...)). Set by the project plugin,
+# which then records it as the plug-in's last download.
+plugin_downloaded: Callable[[Device, tuple[tuple[int, bytes], ...]], None] | None = None
+# The scopes whose load procedure runs a plug-in's steps (the full load).
+_PLUGIN_SCOPES = frozenset({"FULL", "APPLICATION"})
+# Octets per memory read of the read-back (the plug-in writes 10 per frame).
+_READ_BACK_FRAME = 10
+
+
+class PluginReadBackError(DeviceProgrammingError):
+    """The device holds other parameter memory than the plug-in steps wrote."""
+
+
+def plugin_parameter_runs(
+    controls: Mapping[int, tuple[object, ...]] | None,
+) -> tuple[tuple[int, bytes], ...]:
+    """The parameter memory a plug-in's steps write as given (inline WriteMem data)."""
+    from xknxeditor.namespaces.intermediate.ld_ctrl_write_mem_t import LdCtrlWriteMem
+
+    runs: list[tuple[int, bytes]] = []
+    for merge_id in sorted(controls or {}):
+        for control in (controls or {})[merge_id]:
+            if isinstance(control, LdCtrlWriteMem) and control.inline_data is not None:
+                runs.append((int(control.address), bytes(control.inline_data)))
+    return tuple(runs)
+
+
+async def read_back_runs(
+    xknx: XKNX, address: str, runs: Sequence[tuple[int, bytes]]
+) -> list[int]:
+    """Read ``runs`` back from the device at ``address`` (reads only); the addresses whose
+    octets differ from what was written."""
+    from xknx.telegram import IndividualAddress
+    from xknx.telegram.apci import MemoryRead
+
+    differ: list[int] = []
+    connection = await xknx.management.connect(IndividualAddress(address))
+    try:
+        for start, data in runs:
+            for offset in range(0, len(data), _READ_BACK_FRAME):
+                chunk = data[offset : offset + _READ_BACK_FRAME]
+                at = start + offset
+                telegram = await connection.request(
+                    MemoryRead(address=at, count=len(chunk))
+                )
+                held = bytes(getattr(telegram.payload, "data", b"") or b"")
+                differ.extend(
+                    at + i
+                    for i, octet in enumerate(chunk)
+                    if i >= len(held) or held[i] != octet
+                )
+    finally:
+        with contextlib.suppress(Exception):
+            await connection.disconnect()
+    return differ
 
 
 def needs_manufacturer_plugin(device: Device) -> bool:
@@ -735,14 +791,17 @@ async def download_device(
     interface_max_apdu_length = await _route_limited(
         xknx, route_couplers, interface_max_apdu_length
     )
-    return await download(
+    image = (
+        prepared.image
+        if prepared is not None
+        else _image_for(device, group_communication, factory_image)
+    )
+    result = await download(
         xknx,
         _address(device),
         _application(device),
         master=master,
-        image=prepared.image
-        if prepared is not None
-        else _image_for(device, group_communication, factory_image),
+        image=image,
         prepared=prepared,
         scope=scope,
         commission=True,
@@ -763,3 +822,19 @@ async def download_device(
         waiting=waiting,
         memory_progress=memory_progress,
     )
+    runs = plugin_parameter_runs(image.plugin_load_controls)
+    if (
+        runs
+        and scope.name in _PLUGIN_SCOPES
+        and security is None
+        and not result.restart_wait_timed_out
+    ):
+        differ = await read_back_runs(xknx, _address(device), runs)
+        if differ:
+            raise PluginReadBackError(
+                f"the device holds other parameter memory than the plug-in steps wrote, "
+                f"at {len(differ)} octet(s) from {differ[0]:#06x}"
+            )
+        if plugin_downloaded is not None:
+            plugin_downloaded(device, runs)
+    return result

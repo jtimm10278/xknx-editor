@@ -10,8 +10,11 @@ in the encoding it had.
 
 from __future__ import annotations
 
+import base64
+import binascii
 import datetime
 import re
+from collections.abc import Sequence
 from dataclasses import dataclass
 from xml.sax.saxutils import escape, quoteattr
 
@@ -198,4 +201,61 @@ def set_value(
         )
     part = opening + part[head.end() :]
     text = text[: current.start()] + part + text[current.end() :]
+    return bom + text.encode(codec)
+
+
+def record_download(
+    blob: bytes,
+    base: int,
+    runs: Sequence[tuple[int, bytes]],
+    downloaded: datetime.datetime | None = None,
+) -> bytes:
+    """``blob`` with the memory a download wrote (``runs`` of (address, data), read back from
+    the device) put into the stored image of the last download, and its ``LastDownload`` and
+    ``LastModified`` set to ``downloaded`` (now, local time, when None). Only those octets and
+    the two times change; the image keeps its length and its mask, the rest of the document
+    stays as it was. ``base`` is the description's memory base (the image's first address).
+    Raises :class:`EditError` when the document holds no stored image to update."""
+    codec, bom = _encoding(blob)
+    if decode_text(blob) is None:
+        raise EditError("not a settings document")
+    text = blob[len(bom) :].decode(codec)
+    section = re.search(
+        r"<DownloadedSettings\b[^>]*>.*?</DownloadedSettings>", text, re.S
+    )
+    if section is None:
+        raise EditError("no stored image of a last download")
+    part = section.group(0)
+    data = re.search(r'(<MemoryImage\b[^>]*?\bData=")([^"]*)(")', part)
+    if data is None:
+        raise EditError("no stored image of a last download")
+    try:
+        image = bytearray(base64.b64decode(data.group(2), validate=False))
+    except (binascii.Error, ValueError) as exc:
+        raise EditError("the stored image cannot be read") from exc
+    for address, octets in runs:
+        start = address - base
+        if start < 0 or start + len(octets) > len(image):
+            raise EditError(f"{address:#06x} is outside the stored image")
+        image[start : start + len(octets)] = octets
+    part = (
+        part[: data.start(2)]
+        + base64.b64encode(bytes(image)).decode("ascii")
+        + part[data.end(2) :]
+    )
+    stamp = (downloaded or datetime.datetime.now()).strftime("%Y-%m-%dT%H:%M:%S.%f")[
+        :-3
+    ]
+    head = re.match(r"<DownloadedSettings\b[^>]*>", part)
+    assert head is not None
+    opening = head.group(0)
+    for name in ("LastDownload", "LastModified"):
+        opening = re.sub(
+            rf'\b{name}="[^"]*"',
+            lambda _m, name=name: f'{name}="{stamp}"',
+            opening,
+            count=1,
+        )
+    part = opening + part[head.end() :]
+    text = text[: section.start()] + part + text[section.end() :]
     return bom + text.encode(codec)

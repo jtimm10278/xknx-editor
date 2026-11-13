@@ -1422,6 +1422,66 @@ class ProjectPlugin:
             return plugin_merge_controls(image, sources.description.alloc_length)
         return None
 
+    def generic_plugin_downloaded(
+        self, device: "Device", runs: "tuple[tuple[int, bytes], ...]"
+    ) -> None:
+        """A download wrote the plug-in's parameter memory ``runs`` and read them back from
+        ``device`` unchanged: record them as the plug-in's last download (its stored image), so
+        the Generic Plug-in tab compares the settings with what the device now holds. Called on
+        the bus thread; the change is made on the main thread."""
+        if self._api.main_thread is not None:
+            self._api.main_thread.submit(
+                lambda: self._record_generic_download(device.node_id, runs)
+            )
+        else:
+            self._record_generic_download(device.node_id, runs)
+
+    def _record_generic_download(
+        self, node_id: int, runs: "tuple[tuple[int, bytes], ...]"
+    ) -> None:
+        from editor_gui.plugin_blob_readers.siemens_generic import (
+            EditError,
+            parse_settings,
+            record_download,
+        )
+
+        device = self._api.project.find_device_by_node_id(node_id)
+        if device is None:
+            return
+        sources = self._generic_plugin_sources(device, _generic_baggage_ids(device))
+        base = sources.description.memory_base if sources is not None else None
+        if base is None:
+            return
+        for entry in cast("list[Any]", getattr(device, "binary_data", None) or []):
+            data = getattr(entry, "data", None)
+            name = str(getattr(entry, "name", "") or "")
+            if (
+                not data
+                or not name
+                or parse_settings(bytes(cast("bytes", data))) is None
+            ):
+                continue
+            try:
+                updated = record_download(bytes(cast("bytes", data)), base, runs)
+            except EditError as exc:
+                self._api.log.warning(
+                    "generic plug-in download not recorded",
+                    plugin="project",
+                    device=device.individual_address,
+                    error=str(exc),
+                )
+                return
+            self._api.project.persist_device_blob(
+                device, name, updated, label="Generic Plug-in download"
+            )
+            self._api.log.info(
+                "generic plug-in download recorded",
+                plugin="project",
+                device=device.individual_address,
+                octets=sum(len(d) for _a, d in runs),
+            )
+            return
+
     def generic_plugin_steps_available(self, device: "Device") -> bool:
         """Whether the editor can build the Siemens Generic Plug-in's download steps for
         ``device`` (see :meth:`generic_plugin_load_controls`); cached per device until its
@@ -3786,6 +3846,7 @@ class ProjectPlugin:
 
         programming.plugin_load_controls = self.generic_plugin_load_controls
         programming.plugin_steps_available = self.generic_plugin_steps_available
+        programming.plugin_downloaded = self.generic_plugin_downloaded
 
     def on_unload(self) -> None:
         import editor_gui.programming as programming
@@ -3794,6 +3855,8 @@ class ProjectPlugin:
             programming.plugin_load_controls = None
         if programming.plugin_steps_available == self.generic_plugin_steps_available:
             programming.plugin_steps_available = None
+        if programming.plugin_downloaded == self.generic_plugin_downloaded:
+            programming.plugin_downloaded = None
 
 
 def _address_key(address: str) -> tuple[int, ...]:

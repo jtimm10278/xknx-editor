@@ -161,3 +161,93 @@ def test_no_steps_for_settings_of_another_application() -> None:
         application_matches=False
     )
     assert plugin.generic_plugin_load_controls(SimpleNamespace(app=None)) is None
+
+
+def test_parameter_runs_are_the_inline_writes() -> None:
+    image = MemoryImage(0x8C00, bytes(range(12)), (True,) * 12, ())
+    controls = plugin_merge_controls(image, 0x7F00)
+    assert programming.plugin_parameter_runs(controls) == (
+        (0x8C00, bytes(range(10))),
+        (0x8C0A, b"\x0a\x0b"),
+    )
+    assert programming.plugin_parameter_runs(None) == ()
+
+
+class _Connection:
+    def __init__(self, memory: dict[int, int]) -> None:
+        self.memory = memory
+        self.reads: list[tuple[int, int]] = []
+        self.closed = False
+
+    async def request(self, payload: Any) -> Any:
+        self.reads.append((payload.address, payload.count))
+        data = bytes(
+            self.memory.get(payload.address + i, 0) for i in range(payload.count)
+        )
+        return SimpleNamespace(payload=SimpleNamespace(data=data))
+
+    async def disconnect(self) -> None:
+        self.closed = True
+
+
+def _xknx(connection: _Connection) -> Any:
+    async def connect(_address: Any) -> _Connection:
+        return connection
+
+    return SimpleNamespace(management=SimpleNamespace(connect=connect))
+
+
+def test_read_back_reports_octets_that_differ() -> None:
+    import asyncio
+
+    runs = ((0x100, bytes(range(12))),)
+    good = _Connection({0x100 + i: i for i in range(12)})
+    assert asyncio.run(programming.read_back_runs(_xknx(good), "1.2.3", runs)) == []
+    assert good.reads == [(0x100, 10), (0x10A, 2)] and good.closed
+    bad = _Connection({0x100 + i: i for i in range(12)} | {0x105: 0xFF})
+    assert asyncio.run(programming.read_back_runs(_xknx(bad), "1.2.3", runs)) == [0x105]
+
+
+def _run_download(
+    monkeypatch: pytest.MonkeyPatch, differ: list[int], scope_name: str = "FULL"
+) -> list[Any]:
+    import asyncio
+
+    from xknxeditor.download.download import DownloadResult
+    from xknxeditor.download.scope import DownloadScope
+
+    controls = plugin_merge_controls(
+        MemoryImage(0x8C00, b"\x01\x02", (True, True), ()), 0x7F00
+    )
+    image = DownloadImage((), (), plugin_load_controls=controls)
+    told: list[Any] = []
+
+    async def fake_download(*_a: Any, **_k: Any) -> DownloadResult:
+        return DownloadResult()
+
+    async def fake_read_back(*_a: Any) -> list[int]:
+        told.append("read")
+        return differ
+
+    monkeypatch.setattr(programming, "download", fake_download)
+    monkeypatch.setattr(programming, "read_back_runs", fake_read_back)
+    monkeypatch.setattr(programming, "_image_for", lambda *_a: image)
+    monkeypatch.setattr(programming, "_address", lambda _d: "1.2.3")
+    monkeypatch.setattr(programming, "_application", lambda _d: object())
+    monkeypatch.setattr(
+        programming, "plugin_downloaded", lambda device, runs: told.append(runs)
+    )
+    asyncio.run(
+        programming.download_device(
+            cast("Any", None), cast("Any", object()), DownloadScope[scope_name]
+        )
+    )
+    return told
+
+
+def test_a_verified_plugin_download_is_told(monkeypatch: pytest.MonkeyPatch) -> None:
+    assert _run_download(monkeypatch, []) == ["read", ((0x8C00, b"\x01\x02"),)]
+    # A partial download runs no plug-in steps: nothing read back, nothing told.
+    assert _run_download(monkeypatch, [], "GROUP_COMMUNICATION") == []
+    with pytest.raises(programming.PluginReadBackError, match="0x8c01"):
+        _run_download(monkeypatch, [0x8C01])
