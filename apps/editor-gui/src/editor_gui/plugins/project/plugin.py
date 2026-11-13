@@ -2039,18 +2039,30 @@ class ProjectPlugin:
         )
         return changed, errors
 
+    def project_display_name(self) -> str:
+        """The open project's name, else its file's name ("" without a project)."""
+        info = self._api.project.get_project_metadata()
+        if info is not None and info.name:
+            return info.name
+        path = self._api.project.working_path
+        return path.stem if path is not None else ""
+
     def start_project_diff(
-        self, other_path: str, password: str | None = None
+        self, other_path: str, password: str | None = None, *, file_first: bool = False
     ) -> DiffJob:
         """Start comparing the open project with the project at ``other_path`` on a worker
         thread (see ``tools_diff_projects``). Called on the UI thread; the job tells how far it
-        is, can be canceled and ends with the outcome."""
+        is, can be canceled and ends with the outcome. ``file_first`` compares the other way
+        round: the file is the base and the open project the other side (for a change list
+        from the file to the open project)."""
         job = DiffJob()
         current = (self._api.project.working_path, self._api.project.project_password)
 
         def run() -> None:
             try:
-                outcome = self.tools_diff_projects(other_path, password, job, current)
+                outcome = self.tools_diff_projects(
+                    other_path, password, job, current, file_first=file_first
+                )
             except BaseException as e:
                 outcome = DiffOutcome(None, f"{type(e).__name__}: {e}")
             job.future.set_result(outcome)
@@ -2064,6 +2076,8 @@ class ProjectPlugin:
         password: str | None = None,
         job: DiffJob | None = None,
         current: tuple[Path | None, str | None] | None = None,
+        *,
+        file_first: bool = False,
     ) -> DiffOutcome:
         """Compare the open project against the project at ``other_path`` (.xknx or .knxproj),
         opened with ``password`` when it is protected; ``job`` follows its progress and can
@@ -2083,7 +2097,9 @@ class ProjectPlugin:
                 self._api.project.project_password,
             )
         try:
-            result = self._compare_with_file(other_path, password, job, current)
+            result = self._compare_with_file(
+                other_path, password, job, current, file_first=file_first
+            )
         except DiffCanceled:
             return DiffOutcome(None, canceled=True)
         except (
@@ -2108,10 +2124,13 @@ class ProjectPlugin:
         password: str | None,
         job: DiffJob | None,
         current: tuple[Path | None, str | None],
+        *,
+        file_first: bool = False,
     ) -> DiffResult:
         """Open a project file and compare the open project (its file ``current[0]``, opened
         with ``current[1]``) with it (a .knxproj is converted first, the project of a backup .zip
-        read out). ``password`` opens a password-protected project or archive."""
+        read out). ``password`` opens a password-protected project or archive. ``file_first``
+        makes the file the base and the open project the other side."""
         from editor_gui.plugins.backups.store import extract_project
         from xknxeditor.proj import ProjectService as CoreProjectService
         from xknxeditor.proj import import_knxproj
@@ -2143,12 +2162,14 @@ class ProjectPlugin:
                 mine = CoreProjectService()
                 mine_pid = mine.open(working, own_password)
                 try:
+                    sides = (
+                        (svc, pid, mine, mine_pid)
+                        if file_first
+                        else (mine, mine_pid, svc, pid)
+                    )
                     return self._api.project.compare_projects(
-                        mine,
-                        mine_pid,
-                        svc,
-                        pid,
-                        src.stem,
+                        *sides,
+                        "current" if file_first else src.stem,
                         resolve_app=self._resolve_on_ui,
                         progress=job.progress if job is not None else None,
                         canceled=(lambda: job.cancel_requested)

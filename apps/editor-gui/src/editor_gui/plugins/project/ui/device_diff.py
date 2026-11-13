@@ -35,6 +35,8 @@ AddressResolver = Callable[[int], str]
 class ParamCell:
     label: str
     value: str
+    # The value as the parameter page shows it (an option's text); "" when that is the value.
+    text: str = ""
 
 
 @dataclass(frozen=True)
@@ -62,6 +64,9 @@ class DiffRow:
     kind: str  # "added" | "removed" | "changed" | "same"
     a: str  # value on device A ("" when absent)
     b: str  # value on device B ("" when absent)
+    # The values as the parameter page shows them (an option's text), "" where that is a/b.
+    a_text: str = ""
+    b_text: str = ""
 
 
 @dataclass(frozen=True)
@@ -84,7 +89,11 @@ def diff_devices(a: DeviceSnapshot, b: DeviceSnapshot) -> DeviceDiffResult:
     return DeviceDiffResult(
         header=_rows(a.header, b.header, lambda key, _v: key, lambda v: v),
         parameters=_rows(
-            a.parameters, b.parameters, lambda _k, v: v.label, lambda v: v.value
+            a.parameters,
+            b.parameters,
+            lambda _k, v: v.label,
+            lambda v: v.value,
+            lambda v: v.text,
         ),
         com_objects=_rows(a.com_objects, b.com_objects, lambda _k, v: v.name, _co_text),
     )
@@ -95,8 +104,10 @@ def _rows[T](
     b: dict[str, T],
     label_for: Callable[[str, T], str],
     text_for: Callable[[T], str],
+    shown_for: Callable[[T], str] | None = None,
 ) -> list[DiffRow]:
-    """Diff two keyed dicts into rows, in sorted key order (present-only = added/removed)."""
+    """Diff two keyed dicts into rows, in sorted key order (present-only = added/removed);
+    ``shown_for`` gives a value's text as the page shows it, when that differs from it."""
     rows: list[DiffRow] = []
     for key in sorted(a.keys() | b.keys()):
         va, vb = a.get(key), b.get(key)
@@ -113,7 +124,9 @@ def _rows[T](
             kind = "same"
         else:
             kind = "changed"
-        rows.append(DiffRow(key, label, kind, at, bt))
+        shown_a = shown_for(va) if shown_for is not None and va is not None else ""
+        shown_b = shown_for(vb) if shown_for is not None and vb is not None else ""
+        rows.append(DiffRow(key, label, kind, at, bt, shown_a, shown_b))
     return rows
 
 
@@ -149,7 +162,9 @@ def snapshot_device(
     app_prefix = f"{prog.id}_" if prog is not None and getattr(prog, "id", "") else ""
     parameters = {
         _strip_prefix(p.ref_id, app_prefix): ParamCell(
-            label=" > ".join([*path, p.label]) if path else p.label, value=p.value
+            label=" > ".join([*path, p.label]) if path else p.label,
+            value=p.value,
+            text=parameter_text(p),
         )
         for p, path in _walk_parameters(device.get_ui(), [])
     }
@@ -168,6 +183,21 @@ def snapshot_device(
         for co in device.get_visible_com_objects()
     }
     return DeviceSnapshot(header=header, parameters=parameters, com_objects=com_objects)
+
+
+def parameter_text(parameter: UiParameter) -> str:
+    """The text of an enumerated parameter's chosen option, as the parameter page and ETS show
+    it; "" for any other parameter or a value no option has."""
+    from xknxeditor.prod.parser_v2.ui.parameter import EnumWidget
+
+    widget = parameter.widget
+    if not isinstance(widget, EnumWidget):
+        return ""
+    try:
+        value = int(parameter.value)
+    except (TypeError, ValueError):
+        return ""
+    return next((c.label for c in widget.choices if c.value == value), "")
 
 
 def _app_label(device: Device) -> str:

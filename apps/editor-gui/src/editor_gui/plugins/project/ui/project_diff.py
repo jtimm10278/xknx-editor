@@ -66,6 +66,13 @@ class DetailRow:
     kind: str  # "added" | "removed" | "changed"
     current: str
     other: str
+    # A parameter's values as its page shows them (an option's text), "" where that is the
+    # value itself.
+    current_text: str = ""
+    other_text: str = ""
+    # The parameter's ref id without the application prefix (the group object's number, zero
+    # padded), "" when not known.
+    key: str = ""
 
 
 @dataclass(frozen=True)

@@ -230,6 +230,62 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
             "group_addresses": _entries(outcome.result.group_addresses),
         }
 
+    @tool("read")
+    def project_change_list_for_ets(
+        path: str,
+        password: str | None = None,
+        before_name: str | None = None,
+        after_name: str | None = None,
+        timeout: float = 300.0,
+    ) -> dict[str, Any]:
+        """A change list for ETS: what to do in the project at ``path`` (an .xknx, .knxproj or
+        backup .zip on the editor's machine, opened read-only, ``password`` for a protected
+        one: e.g. the ETS project backup the open project started from) so that it matches the
+        open project. It is the project comparison with the file as "before" and the open
+        project as "after"; nothing is changed.
+
+        Returns {change_list, markdown}, or {error, needs_password} when the file cannot be
+        opened. ``change_list`` (format "xknx-editor-change-list/1"): before, after (``before_name`` /
+        ``after_name``, default the file's name and the open project's name), made (ISO time),
+        summary {devices, group_addresses}, devices [{address, change (added/removed/changed),
+        detail (e.g. "address '1.0.250' -> '1.1.20'"), parameters [{label (the ETS page path
+        and name), change, before, after (the option texts ETS shows, else the values),
+        before_value, after_value (the stored values)}], group_objects [{object, change,
+        before, after, links_before, links_after, link (group addresses to link), unlink
+        (to unlink)}]}], group_addresses [{address, change, detail}]. ``markdown`` is the
+        same for a person working in ETS. ``timeout`` in seconds, after which it is stopped."""
+        from datetime import datetime
+
+        from editor_gui.plugins.project.change_list import (
+            change_list,
+            change_list_markdown,
+        )
+
+        require_project(ctx)
+        plugin = _plugin()
+        job = ctx.run_locked(
+            lambda: plugin.start_project_diff(path, password, file_first=True)
+        )
+        try:
+            outcome = job.future.result(timeout=timeout)
+        except TimeoutError as exc:
+            job.cancel()
+            raise ToolError(
+                f"the comparison did not finish within {timeout} s and was stopped"
+            ) from exc
+        if outcome.canceled:
+            raise ToolError("the comparison was stopped")
+        if outcome.result is None:
+            return {"error": outcome.error, "needs_password": outcome.needs_password}
+        after = after_name or ctx.run_locked(plugin.project_display_name)
+        data = change_list(
+            outcome.result,
+            before_name or Path(path).stem,
+            after,
+            datetime.now().astimezone().isoformat(timespec="seconds"),
+        )
+        return {"change_list": data, "markdown": change_list_markdown(data)}
+
     @tool("write")
     def project_create_group_addresses_for_com_objects(
         com_object_ref_ids: list[str] | None = None,

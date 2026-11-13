@@ -4774,7 +4774,7 @@ class ProjectService:
             return []
         result = diff_devices(a, b)
         return [
-            DetailRow(section, r.label, r.kind, r.a, r.b)
+            DetailRow(section, r.label, r.kind, r.a, r.b, r.a_text, r.b_text, r.key)
             for section, section_rows in (
                 ("parameter", result.parameters),
                 ("group_object", result.com_objects),

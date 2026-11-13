@@ -247,6 +247,89 @@ async def test_compare_projects_lists_what_changed_in_a_device(tmp_path: Path) -
     assert any(enum["label"] in label for label in labels)
 
 
+async def test_change_list_for_ets(tmp_path: Path) -> None:
+    mcp, project = _server(tmp_path)
+    async with Client(mcp) as client:
+        await _data(client, "project_new", path=str(tmp_path / "old.xknx"))
+        node_id = await _device(client, "1.1.40")
+        params = (await _data(client, "project_list_parameters", node_id=node_id))[
+            "items"
+        ]
+        enum = next(
+            p
+            for p in params
+            if p["widget"].get("type") == "enum"
+            and p["widget"].get("choice_count", 0) > 1
+            and p.get("access") == "READ_WRITE"
+        )
+        full = await _data(
+            client,
+            "project_get_parameter",
+            node_id=node_id,
+            parameter_ref_id=enum["ref_id"],
+        )
+        choices = {str(c["value"]): c["label"] for c in full["widget"]["choices"]}
+        value = next(v for v in choices if v != str(enum["value"]))
+        await _data(client, "project_create_group_address", address="1/0/1")
+        assert project.save_as(tmp_path / "new.xknx") is not None
+        await _data(
+            client,
+            "project_set_parameter",
+            node_id=node_id,
+            parameter_ref_id=enum["ref_id"],
+            value=value,
+        )
+        co = next(
+            c["ref_id"]
+            for c in (await _data(client, "project_list_com_objects", node_id=node_id))[
+                "items"
+            ]
+            if c["linkable"]
+        )
+        await _data(
+            client,
+            "project_link_com_object",
+            node_id=node_id,
+            com_object_ref_id=co,
+            group_address="1/0/1",
+        )
+        await _data(
+            client, "project_set_individual_address", node_id=node_id, address="1.1.41"
+        )
+        result = await _data(
+            client,
+            "project_change_list_for_ets",
+            path=str(tmp_path / "old.xknx"),
+            before_name="Site backup 7",
+        )
+        missing = await _data(
+            client, "project_change_list_for_ets", path=str(tmp_path / "none.xknx")
+        )
+    assert missing["error"]
+    data = result["change_list"]
+    assert data["format"] == "xknx-editor-change-list/1"
+    assert data["before"] == "Site backup 7"
+    assert data["after"]
+    assert data["made"]
+    # Before -> after: the file is the ETS side, the open project the edited one.
+    (device,) = data["devices"]
+    assert (device["address"], device["change"]) == ("1.1.40", "changed")
+    assert "address '1.1.40' -> '1.1.41'" in device["detail"]
+    (param,) = [
+        p
+        for p in device["parameters"]
+        if p["change"] == "changed" and enum["label"] in p["label"]
+    ]
+    assert (param["before_value"], param["after_value"]) == (str(enum["value"]), value)
+    assert param["after"] == choices[value]
+    linked = [o for o in device["group_objects"] if o["link"] == ["1/0/1"]]
+    assert len(linked) == 1
+    assert linked[0]["unlink"] == []
+    markdown = result["markdown"]
+    assert markdown.startswith("# Change list for ETS: Site backup 7 -> ")
+    assert "link 1/0/1" in markdown
+
+
 async def test_compare_projects(tmp_path: Path) -> None:
     mcp, _project = _server(tmp_path)
     async with Client(mcp) as client:

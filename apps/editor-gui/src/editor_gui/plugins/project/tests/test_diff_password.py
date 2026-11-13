@@ -47,8 +47,12 @@ def _diff(path: Path, password: str | None) -> DiffOutcome:
         svc = ProjectService()
         svc.close(svc.create(opened, "P-0001", name="Open"))
 
-    def compare(other: str, pw: str | None, job: Any, current: Any) -> DiffResult:
-        return ProjectPlugin._compare_with_file(plugin, other, pw, job, current)  # pyright: ignore[reportPrivateUsage]
+    def compare(
+        other: str, pw: str | None, job: Any, current: Any, **options: Any
+    ) -> DiffResult:
+        return ProjectPlugin._compare_with_file(
+            plugin, other, pw, job, current, **options
+        )  # pyright: ignore[reportPrivateUsage]
 
     def compare_projects(
         mine: ProjectService,
