@@ -311,3 +311,9 @@ msgstr "Nu trimite nimic pe magistrală, nici măcar citiri: editorul doar ascul
 
 msgid "Listen only"
 msgstr "Doar ascultare"
+
+msgid "Protected Group Addresses"
+msgstr "Adrese de Grup Protejate"
+
+msgid "Nothing is ever sent to these group addresses, not even reads, e.g. the ones of gates or an alarm system: addresses like 1/2/3, or groups ending with a slash like 7/0/, separated by spaces. MCP clients can add to the list but not take anything out."
+msgstr "Nu se trimite niciodată nimic la aceste adrese de grup, nici măcar citiri, de ex. cele ale porților sau ale unui sistem de alarmă: adrese precum 1/2/3 sau grupuri terminate cu bară precum 7/0/, separate prin spații. Clienții MCP pot adăuga în listă, dar nu pot elimina nimic."

@@ -497,6 +497,12 @@ class MonitorStrings:
         )
 
     @property
+    def SEND_PROTECTED(self) -> str:
+        return _(
+            "Not sent: a protected group address is among them (Settings > Connection)"
+        )
+
+    @property
     def SEND_REFUSED(self) -> str:
         return _(
             "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"

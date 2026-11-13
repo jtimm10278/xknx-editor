@@ -476,3 +476,6 @@ msgstr "峰值 {peak}/分钟 于 {when}"
 
 msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
 msgstr "未发送：已开启“阻止写入总线”或“仅监听”（设置 > 连接）"
+
+msgid "Not sent: a protected group address is among them (Settings > Connection)"
+msgstr "未发送：其中包含受保护的组地址（设置 > 连接）"

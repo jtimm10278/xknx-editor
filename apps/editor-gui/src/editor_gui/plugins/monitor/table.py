@@ -787,7 +787,9 @@ class TelegramView:
                 )
             )
         if plan.refused:
-            messages.append(S.SEND_REFUSED)
+            messages.append(
+                S.SEND_PROTECTED if "protected" in plan.refused else S.SEND_REFUSED
+            )
         elif not plan.items:
             messages.append(S.REPLAY_NOTHING)
         self._message = (". ".join(messages), True) if messages else None

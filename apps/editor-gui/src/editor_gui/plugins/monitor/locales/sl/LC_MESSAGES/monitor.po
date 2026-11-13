@@ -503,3 +503,6 @@ msgstr "najv. {peak}/min ob {when}"
 
 msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
 msgstr "Ni poslano: vklopljeno je Blokiraj pisanje na vodilo ali Samo Poslušanje (Nastavitve > Povezava)"
+
+msgid "Not sent: a protected group address is among them (Settings > Connection)"
+msgstr "Ni poslano: med njimi je zaščiten skupinski naslov (Nastavitve > Povezava)"

@@ -496,3 +496,32 @@ def test_replay_obeys_block_bus_writes_and_listen_only() -> None:
     service, connection = _connected()
     plan = service.start_replay([record])
     assert plan.items and not plan.refused
+
+
+def test_protected_group_addresses_are_refused_by_the_monitor_too() -> None:
+    from editor_gui.plugins.connection.write_guard import set_protected
+
+    connection = FakeConnection()
+    service = MonitorService(connection)  # type: ignore[arg-type]
+    sent: list[str] = []
+    service.send_elsewhere = lambda address, _apci: sent.append(address) or True
+    set_protected(["7/0/"])
+    try:
+        assert "protected group 7/0/" in service.sending_refused(
+            GroupValueRead(), "7/0/1"
+        )
+        assert not service.send_read("7/0/1")
+        assert not service.send_write("7/0/1", "DPST-1-1", "0")
+        assert service.send_read("1/2/3")
+        assert sent == ["1/2/3"]
+        replay, _ = _connected()
+        record = MonitorRecord(
+            kind=RecordKind.TELEGRAM,
+            ticks=0,
+            raw=_raw("7/0/1", GroupValueWrite(DPTBinary(0))),
+        )
+        plan = replay.start_replay([record])
+        assert "protected" in plan.refused
+        assert not plan.items
+    finally:
+        set_protected([])

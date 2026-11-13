@@ -48,6 +48,11 @@ from editor_gui.plugins.connection.usb import (
     supported_emi_type_names,
     usb_device_name,
 )
+from editor_gui.plugins.connection.write_guard import (
+    parse_protected,
+    protected_patterns,
+    set_protected,
+)
 from editor_gui.plugins.connection.xknx_usb import USBDeviceInfo, USBInterfaceInfo
 from editor_gui.programming import (
     DEFAULT_INDIVIDUAL_ADDRESS,
@@ -599,6 +604,7 @@ class ConnectionPlugin:
         self._block_bus_writes_setting = bool(data.get("block_bus_writes", False))
         self._apply_block_bus_writes()
         self._api.connection.listen_only = bool(data.get("listen_only", False))
+        set_protected(parse_protected(str(data.get("protected_group_addresses", ""))))
 
     def _save_current_settings(self) -> None:
         save_settings(
@@ -617,7 +623,10 @@ class ConnectionPlugin:
                 "serial_number_downloads": self._api.connection.use_serial_number,
                 "connect_at_startup": self._connect_at_startup,
                 "block_bus_writes": self._block_bus_writes_setting,
-                "listen_only": bool(getattr(self._api.connection, "listen_only", False)),
+                "listen_only": bool(
+                    getattr(self._api.connection, "listen_only", False)
+                ),
+                "protected_group_addresses": " ".join(protected_patterns()),
             },
         )
 
@@ -2422,6 +2431,18 @@ class ConnectionPlugin:
                 mcp_may_set=bool,
             ),
             Setting(
+                "protected_group_addresses",
+                lambda: S.SETTING_PROTECTED_GAS,
+                "text",
+                get=lambda: " ".join(protected_patterns()),
+                set=self._set_protected,
+                hint=lambda: S.SETTING_PROTECTED_GAS_HINT,
+                # An MCP client may add to the list, never take anything out of it.
+                mcp_may_set=lambda value: (
+                    set(parse_protected(str(value))) >= set(protected_patterns())
+                ),
+            ),
+            Setting(
                 "use_serial_number",
                 lambda: S.SETTING_USE_SERIAL_NUMBER,
                 "bool",
@@ -2510,6 +2531,13 @@ class ConnectionPlugin:
         setting says (the setting itself is kept as it is)."""
         self._block_bus_writes_forced = True
         self._apply_block_bus_writes()
+
+    def _set_protected(self, value: object) -> None:
+        patterns = parse_protected(str(value))
+        if patterns != protected_patterns():
+            self._log.info("protected group addresses", patterns=" ".join(patterns))
+        set_protected(patterns)
+        self._save_current_settings()
 
     def _set_listen_only(self, value: object) -> None:
         listen = bool(value)

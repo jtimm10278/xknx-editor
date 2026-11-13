@@ -28,11 +28,13 @@ from xknx.telegram.apci import GroupValueRead, GroupValueResponse, GroupValueWri
 from editor_gui.dpt import transcoder_for
 from editor_gui.plugins.connection.busmonitor import TP1Acknowledgement
 from editor_gui.plugins.connection.service import BusmonitorState
+from editor_gui.plugins.connection.write_guard import protected_reason
 from editor_gui.plugins.monitor.frames import (
     L_DATA_CON,
     L_DATA_IND,
     L_DATA_REQ,
     FrameInfo,
+    decode_cemi,
     individual_address_text,
 )
 from editor_gui.plugins.monitor.records import (
@@ -579,13 +581,17 @@ class MonitorService:
         """Send a GroupValueRead. Returns whether it was sent."""
         return self._send(address, GroupValueRead())
 
-    def sending_refused(self, payload: GroupValueWrite | GroupValueRead | None) -> str:
+    def sending_refused(
+        self, payload: GroupValueWrite | GroupValueRead | None, address: str = ""
+    ) -> str:
         """Why the Monitor may not send ``payload`` now ("" when it may): Listen Only refuses
         everything, Block Bus Writes every write (``None``: a replay, which writes). Checked
         before either way of sending, so it also holds for the way through another program's
         connection, which this app's interface guard does not see."""
         if self._connection.listen_only:
             return "Listen Only is on"
+        if address and (reason := protected_reason(address)):
+            return reason
         if self._connection.block_bus_writes and not isinstance(
             payload, GroupValueRead
         ):
@@ -593,7 +599,7 @@ class MonitorService:
         return ""
 
     def _send(self, address: str, payload: GroupValueWrite | GroupValueRead) -> bool:
-        if why := self.sending_refused(payload):
+        if why := self.sending_refused(payload, address):
             self._warn("not sent", address=address, reason=why)
             return False
         # Without a connection of its own: through another program's (Home Assistant's), which
@@ -625,7 +631,15 @@ class MonitorService:
         """Send the group telegrams of ``records`` again with their timing, on a worker thread.
         Data Secure telegrams are skipped."""
         plan = build_plan(records)
-        if why := self.sending_refused(None):
+        protected = next(
+            (
+                reason
+                for item in plan.items
+                if (reason := protected_reason(_destination(item.raw)))
+            ),
+            "",
+        )
+        if why := self.sending_refused(None) or protected:
             self._warn("replay not started", reason=why)
             return replace(plan, items=[], refused=why)
         if plan.skipped_secure:
@@ -653,6 +667,14 @@ class MonitorService:
         replayer = self._replayer
         if replayer is not None:
             replayer.cancel()
+
+
+def _destination(raw: bytes) -> str:
+    """The printed group address an L_Data frame goes to, "" for anything else."""
+    frame = decode_cemi(raw)
+    if frame is None or frame.destination is None or not frame.group_value:
+        return ""
+    return str(XGroupAddress(frame.destination))
 
 
 def is_group_monitor_frame(code: int, frame: FrameInfo | None) -> bool:

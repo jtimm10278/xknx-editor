@@ -495,3 +495,6 @@ msgstr "max {peak}/min o {when}"
 
 msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
 msgstr "Neodoslané: je zapnuté Blokovať zápisy na zbernicu alebo Iba Počúvať (Nastavenia > Pripojenie)"
+
+msgid "Not sent: a protected group address is among them (Settings > Connection)"
+msgstr "Neodoslané: je medzi nimi chránená skupinová adresa (Nastavenia > Pripojenie)"

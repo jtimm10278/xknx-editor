@@ -484,3 +484,6 @@ msgstr "μέγ. {peak}/min στις {when}"
 
 msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
 msgstr "Δεν στάλθηκε: είναι ενεργό το Αποκλεισμός Εγγραφών στο Bus ή το Μόνο Ακρόαση (Ρυθμίσεις > Σύνδεση)"
+
+msgid "Not sent: a protected group address is among them (Settings > Connection)"
+msgstr "Δεν στάλθηκε: ανάμεσά τους υπάρχει προστατευμένη διεύθυνση ομάδας (Ρυθμίσεις > Σύνδεση)"

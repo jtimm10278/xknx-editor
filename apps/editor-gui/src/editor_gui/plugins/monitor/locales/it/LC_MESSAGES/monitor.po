@@ -484,3 +484,6 @@ msgstr "max {peak}/min alle {when}"
 
 msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
 msgstr "Non inviato: è attivo Blocca Scritture sul Bus o Solo Ascolto (Impostazioni > Connessione)"
+
+msgid "Not sent: a protected group address is among them (Settings > Connection)"
+msgstr "Non inviato: tra questi c'è un indirizzo di gruppo protetto (Impostazioni > Connessione)"

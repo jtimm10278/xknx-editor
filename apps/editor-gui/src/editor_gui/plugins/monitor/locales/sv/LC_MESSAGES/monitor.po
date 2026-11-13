@@ -484,3 +484,6 @@ msgstr "max {peak}/min kl. {when}"
 
 msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
 msgstr "Inte skickat: Blockera skrivning till bussen eller Endast Lyssna är på (Inställningar > Anslutning)"
+
+msgid "Not sent: a protected group address is among them (Settings > Connection)"
+msgstr "Inte skickat: en skyddad gruppadress finns bland dem (Inställningar > Anslutning)"

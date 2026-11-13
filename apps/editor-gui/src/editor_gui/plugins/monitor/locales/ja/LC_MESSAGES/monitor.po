@@ -476,3 +476,6 @@ msgstr "最大 {peak}/分 @ {when}"
 
 msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
 msgstr "送信されませんでした: 「バスへの書き込みをブロック」または「受信のみ」がオンです（設定 > 接続）"
+
+msgid "Not sent: a protected group address is among them (Settings > Connection)"
+msgstr "送信されませんでした: 保護されたグループアドレスが含まれています（設定 > 接続）"

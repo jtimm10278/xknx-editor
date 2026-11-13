@@ -476,3 +476,6 @@ msgstr "maks {peak}/dk {when}"
 
 msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
 msgstr "Gönderilmedi: Hatta Yazmayı Engelle veya Yalnızca Dinle açık (Ayarlar > Bağlantı)"
+
+msgid "Not sent: a protected group address is among them (Settings > Connection)"
+msgstr "Gönderilmedi: aralarında korumalı bir grup adresi var (Ayarlar > Bağlantı)"

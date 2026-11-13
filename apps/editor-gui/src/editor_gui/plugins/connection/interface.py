@@ -33,8 +33,10 @@ from editor_gui.plugins.connection.diagnostic_transport import DiagnosticTCPTunn
 from editor_gui.plugins.connection.write_guard import (
     BusWritesBlocked,
     ListenOnlyRefused,
+    ProtectedRefused,
     is_bus_write,
     listen_only_allows,
+    protected_allows,
 )
 
 # Seconds to wait for a tunnelling feature response.
@@ -57,6 +59,8 @@ def _refuse_write(writes_blocked: Callable[[], bool] | None, cemi: CEMIFrame) ->
     :class:`BusWritesBlocked` for a write while Block Bus Writes is on."""
     if not listen_only_allows(cemi):
         raise ListenOnlyRefused(cemi)
+    if reason := protected_allows(cemi):
+        raise ProtectedRefused(cemi, reason)
     if writes_blocked is not None and writes_blocked() and is_bus_write(cemi):
         raise BusWritesBlocked(cemi)
 

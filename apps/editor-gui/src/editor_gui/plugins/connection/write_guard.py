@@ -14,9 +14,11 @@ so reads of secured devices are blocked as well while the setting is on.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
+
 from xknx.cemi.cemi_frame import CEMIFrame, CEMILData, CEMIMPropReadRequest
 from xknx.exceptions import XKNXException
-from xknx.telegram import apci, tpci
+from xknx.telegram import GroupAddress, apci, tpci
 
 # Services that only ask a device, the interface or the bus for information.
 _READS: tuple[type[apci.APCI], ...] = (
@@ -107,6 +109,58 @@ def listen_only_active() -> bool:
 def listen_only_allows(cemi: CEMIFrame) -> bool:
     """Whether Listen Only lets ``cemi`` through (always, while it is off)."""
     return not _listen_only.active or isinstance(cemi.data, CEMIMPropReadRequest)
+
+
+class ProtectedRefused(BusWritesBlocked):
+    """A frame to a protected group address: the editor never sends to these."""
+
+    def __init__(self, cemi: CEMIFrame, reason: str) -> None:
+        XKNXException.__init__(self, f"not sent: {reason} - {describe(cemi)}")
+
+
+class _Protected:
+    exact: frozenset[str] = frozenset()
+    prefixes: tuple[str, ...] = ()
+
+
+_protected = _Protected()
+
+
+def parse_protected(text: str | Iterable[str]) -> list[str]:
+    """Group addresses and prefixes from a setting: separated by commas, spaces or new lines; a
+    prefix ends with ``/`` (e.g. ``7/0/``, ``7/``)."""
+    items = text.replace(",", " ").split() if isinstance(text, str) else list(text)
+    return sorted({item.strip() for item in items if item.strip()})
+
+
+def set_protected(patterns: Iterable[str]) -> None:
+    """Protected group addresses: no frame is sent to them, reads included, whatever else is
+    allowed (exact addresses, or prefixes ending with ``/``)."""
+    items = parse_protected(patterns)
+    _protected.exact = frozenset(p for p in items if not p.endswith("/"))
+    _protected.prefixes = tuple(p for p in items if p.endswith("/"))
+
+
+def protected_patterns() -> list[str]:
+    return sorted([*_protected.exact, *_protected.prefixes])
+
+
+def protected_reason(group_address: str) -> str:
+    """Why ``group_address`` (printed, e.g. ``1/2/3``) may not be sent to, "" when it may."""
+    if group_address in _protected.exact:
+        return f"{group_address} is a protected group address"
+    for prefix in _protected.prefixes:
+        if group_address.startswith(prefix):
+            return f"{group_address} is in the protected group {prefix}"
+    return ""
+
+
+def protected_allows(cemi: CEMIFrame) -> str:
+    """ "" when ``cemi`` may go out, else why not (a frame to a protected group address)."""
+    data = cemi.data
+    if not isinstance(data, CEMILData) or not isinstance(data.dst_addr, GroupAddress):
+        return ""
+    return protected_reason(str(data.dst_addr))
 
 
 def describe(cemi: CEMIFrame) -> str:

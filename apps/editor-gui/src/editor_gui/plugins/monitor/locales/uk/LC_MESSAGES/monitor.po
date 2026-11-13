@@ -492,3 +492,6 @@ msgstr "макс {peak}/хв о {when}"
 
 msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
 msgstr "Не надіслано: увімкнено «Блокувати запис на шину» або «Лише Прослуховування» (Налаштування > Підключення)"
+
+msgid "Not sent: a protected group address is among them (Settings > Connection)"
+msgstr "Не надіслано: серед них є захищена групова адреса (Налаштування > Підключення)"

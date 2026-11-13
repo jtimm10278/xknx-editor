@@ -484,3 +484,6 @@ msgstr "maks {peak}/min klo {when}"
 
 msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
 msgstr "Ei lähetetty: Estä kirjoitukset väylälle tai Vain kuuntelu on käytössä (Asetukset > Yhteys)"
+
+msgid "Not sent: a protected group address is among them (Settings > Connection)"
+msgstr "Ei lähetetty: joukossa on suojattu ryhmäosoite (Asetukset > Yhteys)"
