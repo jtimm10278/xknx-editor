@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import time
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
@@ -15,6 +16,17 @@ from editor_gui.plugins.mcp.context import McpContext, make_tool
 
 if TYPE_CHECKING:
     from fastmcp import FastMCP
+
+
+# Seconds a planned group test may be run.
+_TEST_PLAN_SECONDS = 300.0
+
+
+def _coerce_value(text: str) -> Any:
+    """The value as the Monitor's command bar reads it."""
+    from editor_gui.plugins.monitor.service import _coerce  # pyright: ignore[reportPrivateUsage]
+
+    return _coerce(text)
 
 
 def register(mcp: FastMCP, ctx: McpContext) -> None:
@@ -104,6 +116,126 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
             raise ToolError(
                 f"unknown monitor {name!r}; one of group, bus, activity"
             ) from None
+
+    test_plans: dict[str, dict[str, Any]] = {}
+
+    def _test_log(entry: dict[str, Any]) -> None:
+        """Every group test attempt (sent or refused) goes to group_tests.jsonl in the config
+        folder."""
+        import json
+
+        from editor_gui import settings as app_settings
+
+        path = app_settings.config_dir() / "group_tests.jsonl"
+        with contextlib.suppress(OSError):
+            path.parent.mkdir(parents=True, exist_ok=True)
+            with path.open("a", encoding="utf-8") as out:
+                out.write(json.dumps(entry) + "\n")
+
+    def _project_dpt(address: str) -> tuple[str | None, str]:
+        return ctx.run_locked(
+            lambda: next(
+                (
+                    (g.datapoint_type, g.name)
+                    for g in ctx.api.project.group_addresses
+                    if g.address == address
+                ),
+                (None, ""),
+            )
+        )
+
+    @tool("read")
+    def monitor_test_plan(
+        address: str, value: str | None = None, dpt: str | None = None
+    ) -> dict[str, Any]:
+        """The confirm step of a group test: what monitor_test_run will send, before anything is
+        sent. With ``value`` a GroupValueWrite of it to ``address`` (encoded with ``dpt``, or the
+        address's project DPT), without one a GroupValueRead. Refused at once (no token) for a
+        protected group address (Settings > Connection), and for a write while Block Bus Writes
+        or Listen Only is on. Returns {token, service, address, name, dpt, value, payload,
+        valid_seconds}: the token runs it once with monitor_test_run within valid_seconds."""
+        import secrets
+
+        from editor_gui.dpt import transcoder_for
+
+        service_name = "GroupValueWrite" if value is not None else "GroupValueRead"
+        refused = monitor.sending_refused(
+            GroupValueRead() if value is None else None, address
+        )
+        project_dpt, name = _project_dpt(address)
+        resolved = dpt or project_dpt
+        payload = ""
+        if value is not None:
+            transcoder = transcoder_for(resolved)
+            if transcoder is None:
+                raise ToolError(f"no DPT for {address}: pass dpt")
+            try:
+                payload = repr(transcoder.to_knx(_coerce_value(value)))
+            except Exception as error:
+                raise ToolError(
+                    f"cannot encode {value!r} as {resolved}: {error}"
+                ) from error
+        entry = {
+            "time": datetime.now().astimezone().isoformat(timespec="seconds"),
+            "step": "plan",
+            "service": service_name,
+            "address": address,
+            "value": value,
+            "dpt": resolved,
+        }
+        if refused:
+            _test_log({**entry, "result": f"REFUSED: {refused}"})
+            raise ToolError(f"refused: {refused}")
+        token = secrets.token_hex(8)
+        test_plans[token] = {**entry, "made": time.monotonic()}
+        _test_log({**entry, "result": "planned", "token": token})
+        return {
+            "token": token,
+            "service": service_name,
+            "address": address,
+            "name": name,
+            "dpt": resolved,
+            "value": value,
+            "payload": payload,
+            "valid_seconds": _TEST_PLAN_SECONDS,
+        }
+
+    @tool("destructive", open_world=True)
+    def monitor_test_run(token: str) -> dict[str, Any]:
+        """Send the group test planned with monitor_test_plan, once: exactly that write or
+        read. The protected group addresses, Block Bus Writes and Listen Only are checked again
+        before it is sent. Every attempt is logged (group_tests.jsonl in the config folder).
+        Returns {status: "sent", service, address}; a write can actuate hardware."""
+        plan = test_plans.pop(token, None)
+        if plan is None:
+            raise ToolError("unknown or already used token: plan the test first")
+        if time.monotonic() - plan["made"] > _TEST_PLAN_SECONDS:
+            raise ToolError("the plan expired: plan the test again")
+        _require_connection()
+        entry = {k: v for k, v in plan.items() if k != "made"}
+        entry["step"] = "run"
+        entry["time"] = datetime.now().astimezone().isoformat(timespec="seconds")
+        entry["token"] = token
+        is_read = plan["value"] is None
+        refused = monitor.sending_refused(
+            GroupValueRead() if is_read else None, plan["address"]
+        )
+        if refused:
+            _test_log({**entry, "result": f"REFUSED: {refused}"})
+            raise ToolError(f"refused: {refused}")
+        sent = (
+            monitor.send_read(plan["address"])
+            if is_read
+            else monitor.send_write(plan["address"], plan["dpt"], plan["value"])
+        )
+        _test_log({**entry, "result": "sent" if sent else "not sent"})
+        if not sent:
+            raise ToolError("not sent (see the log)")
+        return {
+            "status": "sent",
+            "service": plan["service"],
+            "address": plan["address"],
+        }
 
     @tool("read")
     def monitor_max_records() -> dict[str, int]:
