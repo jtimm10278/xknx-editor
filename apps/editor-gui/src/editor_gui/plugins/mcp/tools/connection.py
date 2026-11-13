@@ -926,6 +926,50 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
             "address": device.individual_address,
         }
 
+    @tool("read")
+    def connection_device_tool_plan(
+        tool_name: str,
+        address: str = "",
+        line: str = "",
+        first: int = 0,
+        last: int = 255,
+    ) -> dict[str, Any]:
+        """Plan a read-only device tool and see the exact frames it will send, before anything
+        is sent (the confirm step): ``tool_name`` "is_there" (a device descriptor read at
+        ``address``, e.g. "1.1.5"), "programming_mode" (one A_IndividualAddress_Read broadcast:
+        devices in programming mode answer) or "line_scan" (the descriptor read at every address
+        ``line``.``first`` to ``line``.``last``, e.g. line "1.1", 0..255). Sends nothing. Returns
+        {tool, token, frames: [{service, target, purpose}], frame_count, addresses,
+        valid_seconds}; run it with connection_device_tool_run(token)."""
+        if tool_name == "is_there" and not address:
+            raise ToolError("is_there needs the device's address")
+        try:
+            return service.device_tool_plan(
+                tool_name, address=address, line=line, first=first, last=last
+            )
+        except ValueError as error:
+            raise ToolError(str(error)) from error
+
+    @tool("read", open_world=True)
+    def connection_device_tool_run(
+        token: str, timeout: float = 900.0
+    ) -> dict[str, Any]:
+        """Run a plan from connection_device_tool_plan once: exactly its frames, then the
+        answers. Needs a connection; refused while Listen Only is on (Block Bus Writes lets these
+        reads through). A token runs one plan once, within its valid_seconds. Returns for
+        is_there {tool, address, answered, descriptor (hex mask, or null)}, for programming_mode
+        {tool, in_programming_mode: [addresses]}, for line_scan {tool, answered: [{address,
+        answered, descriptor}], scanned}."""
+        try:
+            future = service.device_tool_run(token)
+        except ValueError as error:
+            raise ToolError(str(error)) from error
+        if future is None:
+            raise ToolError(
+                "not run: no connection, Listen Only is on, or another bus operation runs"
+            )
+        return _await(future, timeout, "the device tool")
+
     @tool("read", open_world=True)
     def connection_read_programming_mode_devices(
         timeout: float = 5.0,

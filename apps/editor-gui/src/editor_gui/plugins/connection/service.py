@@ -235,6 +235,8 @@ class ConnectionService:
         # Block Bus Writes (Settings > Connection, or --no-bus-writes): reads only, every frame
         # that would change something on the bus is refused (write_guard.py).
         self.block_bus_writes = False
+        # Plans of the read-only device tools waiting for their run (device_tools.py).
+        self._device_plans: Any = None
         # The task behind each future of run_async while it runs (cancel_operation).
         self._operation_tasks: dict[Future[Any], list[asyncio.Task[Any]]] = {}
         # Global KNX master data (mask-version default procedures), injected at
@@ -732,6 +734,40 @@ class ConnectionService:
         self, address: str, payload: GroupValueRead | GroupValueWrite
     ) -> Future[Any] | None:
         return self.send_group_telegram(address, payload)
+
+    def device_tool_plan(self, tool: str, **target: Any) -> dict[str, Any]:
+        """The exact frames a read-only device tool (``device_tools.TOOLS``) will send, and the
+        token to run it with; nothing is sent. ``ValueError`` for an unknown tool or target."""
+        from editor_gui.plugins.connection.device_tools import PlanBook, make_plan
+
+        if self._device_plans is None:
+            self._device_plans = PlanBook()
+        return self._device_plans.add(make_plan(tool, **target)).as_dict()
+
+    @_connects("device_tool")
+    def device_tool_run(self, token: str) -> Future[Any] | None:
+        """Run the plan of ``token`` (from :meth:`device_tool_plan`) once: exactly its frames.
+        ``None`` (logged) while Listen Only is on or without a connection; ``ValueError`` for an
+        unknown, used or expired token."""
+        from editor_gui.plugins.connection.device_tools import PlanBook, run_plan
+
+        if self._device_plans is None:
+            self._device_plans = PlanBook()
+        plan = self._device_plans.take(token)
+        if self.sends_refused(plan.tool) or self.not_connected(plan.tool):
+            return None
+        if not self.begin_operation(plan.tool, ",".join(plan.addresses) or "broadcast"):
+            self._log.warning("A bus operation is already running")
+            return None
+        self._log.info(
+            "Device tool", tool=plan.tool, frames=len(plan.frames), token=plan.token
+        )
+        future = self.run_async(run_plan(self._connected_xknx, plan))
+        if future is None:
+            self._clear_busy()
+            return None
+        future.add_done_callback(lambda _f: self._clear_busy())
+        return future
 
     @_connects("read_programming_mode_devices")
     def read_programming_mode_devices(self, timeout: float = 3.0) -> Future[Any] | None:
