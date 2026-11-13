@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from xknx.telegram.apci import MemoryWrite
+from xknx.telegram.apci import MemoryWrite, PropertyValueWrite
 
 from xknxeditor.download.image import DownloadImage, MemorySegment
 from xknxeditor.download.procedure import (
@@ -22,7 +22,7 @@ from xknxeditor.namespaces.intermediate.ld_ctrl_set_control_variable_t import (
 from xknxeditor.namespaces.intermediate.ld_ctrl_write_mem_t import LdCtrlWriteMem
 
 from .conftest import FakeDevice
-from .test_procedure import _application
+from .test_procedure import _application, _device
 
 
 def _write(
@@ -129,3 +129,36 @@ async def test_preflight_plans_the_step_and_the_final_value() -> None:
     planned = [s.planned for s in report.segments if s.address == 0x116]
     assert planned == [b"\x01", b"\x04"]
     assert not any(isinstance(p, MemoryWrite) for p in device.sent)
+
+
+def _sent_order(device: FakeDevice) -> list[str]:
+    """``M`` per memory write, ``V`` per write of the verify-mode control (PID 14)."""
+    order: list[str] = []
+    for p in device.sent:
+        if isinstance(p, MemoryWrite):
+            order.append("M")
+        elif isinstance(p, PropertyValueWrite) and (p.object_index, p.property_id) == (
+            0,
+            14,
+        ):
+            order.append("V")
+    return order
+
+
+async def test_unverified_inline_writes_go_before_the_device_verifies() -> None:
+    """A System B device verifies memory writes itself once PID 14 bit 2 is set; an inline
+    write the procedure does not verify (a plug-in's parameter pass) is sent before that,
+    the first verified write switches it on (as ETS does)."""
+    device = _device()
+    image = DownloadImage((MemorySegment(0x200, b"AB"),), ())
+    controls = [
+        LdCtrlWriteMem(address=0x100, size=2, verify=False, inline_data=b"\x01\x02"),  # type: ignore[call-arg]
+        _write(0x200, 2),
+    ]
+    runner = LoadProcedureRunner(
+        _application(*controls), image, DeviceProgrammer(device)
+    )
+    await runner.run()
+    assert _sent_order(device) == ["M", "V", "M"]
+    assert _writes_at(device, 0x100) == [b"\x01\x02"]
+    assert _writes_at(device, 0x200) == [b"AB"]

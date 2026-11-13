@@ -59,6 +59,14 @@ def _application(device: Device) -> Application:
     return device.app
 
 
+# The load controls a manufacturer's download plug-in runs for a device, by merge id (see
+# ``DownloadImage.plugin_load_controls``); set by the project plugin, which reads the plug-in's
+# description and settings. None: no device has any.
+plugin_load_controls: (
+    Callable[[Device], Mapping[int, tuple[object, ...]] | None] | None
+) = None
+
+
 def _image_for(
     device: Device,
     group_communication: GroupCommunication | None = None,
@@ -88,12 +96,14 @@ def _image_for(
         raise DeviceProgrammingError(
             f"the product's factory image is invalid: {exc}"
         ) from exc
-    return build_image(
+    image = build_image(
         application,
         ui=ui,
         group_communication=group_communication,
         factory_image=factory,
     )
+    controls = plugin_load_controls(device) if plugin_load_controls else None
+    return replace(image, plugin_load_controls=controls) if controls else image
 
 
 def _address(device: Device) -> str:

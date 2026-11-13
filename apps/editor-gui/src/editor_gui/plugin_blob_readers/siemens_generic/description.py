@@ -138,6 +138,8 @@ class Description:
     refs_by_parameter: dict[str, list[str]] = field(
         default_factory=dict[str, "list[str]"]
     )
+    # The size the application's code segment is allocated with (its CodeSegment AllocLength).
+    alloc_length: int | None = None
 
     @property
     def memory_base(self) -> int | None:
@@ -206,6 +208,14 @@ def parse_description(data: bytes) -> Description | None:
         dynamic=dynamic,
         texts=texts,
         refs_by_parameter=by_parameter,
+        alloc_length=next(
+            (
+                n
+                for e in root.iter("CodeSegment")
+                if (n := _int(e.get("AllocLength"))) is not None
+            ),
+            None,
+        ),
     )
 
 

@@ -4,7 +4,7 @@ import secrets
 import tempfile
 import threading
 import zipfile
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
 
@@ -1377,6 +1377,65 @@ class ProjectPlugin:
                     break
         self._generic_views[(device.node_id, show_unfitted)] = (key, view)
         return view
+
+    def generic_plugin_load_controls(
+        self, device: "Device"
+    ) -> "Mapping[int, tuple[object, ...]] | None":
+        """The load controls the Siemens Generic Plug-in would run in ``device``'s download (its
+        parameter passes, see ``siemens_generic.plugin_download``), from the plain-XML
+        description and the settings the plug-in stored; None when the device has no such
+        plug-in settings, or they cannot be turned into its parameter memory."""
+        from editor_gui.plugin_blob_readers.siemens_generic import parse_settings
+        from editor_gui.plugin_blob_readers.siemens_generic.encoder import memory_image
+        from editor_gui.plugin_blob_readers.siemens_generic.plugin_download import (
+            plugin_merge_controls,
+        )
+
+        if self.generic_plugin_view(device) is None:
+            return None
+        sources = self._generic_plugin_sources(
+            device,
+            [
+                str(b.ref_id)
+                for b in cast(
+                    "list[Any]",
+                    getattr(
+                        getattr(
+                            getattr(device.app.program, "static", None),
+                            "extension",
+                            None,
+                        ),
+                        "baggage",
+                        None,
+                    )
+                    or [],
+                )
+                if is_xml_baggage(str(getattr(b, "ref_id", "") or ""))
+            ]
+            if device.app is not None
+            else [],
+        )
+        if sources is None or sources.description.alloc_length is None:
+            return None
+        info = self._api.project.get_device_info(device.node_id)
+        order = str(getattr(info, "order_number", "") or "") if info else ""
+        globals_ = {"DeviceOrderNumber": order} if order else {}
+        for entry in cast("list[Any]", getattr(device, "binary_data", None) or []):
+            data = getattr(entry, "data", None)
+            settings = parse_settings(bytes(cast("bytes", data))) if data else None
+            if settings is None:
+                continue
+            image = memory_image(sources.description, settings, globals_)
+            if image is None or image.problems:
+                self._api.log.warning(
+                    "generic plug-in parameters not encoded",
+                    plugin="project",
+                    device=device.individual_address,
+                    problems="; ".join(image.problems[:3]) if image else "no memory",
+                )
+                return None
+            return plugin_merge_controls(image, sources.description.alloc_length)
+        return None
 
     def generic_plugin_compare_candidates(self, device: "Device") -> list["Device"]:
         """The other devices of the project with the same application as ``device`` whose
@@ -3662,10 +3721,15 @@ class ProjectPlugin:
         self._preflight_result.render()
 
     def on_load(self) -> None:
-        pass
+        import editor_gui.programming as programming
+
+        programming.plugin_load_controls = self.generic_plugin_load_controls
 
     def on_unload(self) -> None:
-        pass
+        import editor_gui.programming as programming
+
+        if programming.plugin_load_controls == self.generic_plugin_load_controls:
+            programming.plugin_load_controls = None
 
 
 def _address_key(address: str) -> tuple[int, ...]:

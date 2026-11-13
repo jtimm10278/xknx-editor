@@ -1710,14 +1710,19 @@ class LoadProcedureRunner:
         Supplied and captured image bytes overlay inline defaults within Size. A write in
         the user memory (``AddressSpace="User"``) takes the A_UserMemory services.
         """
-        programmer = await self._memory_programmer()
+        verify = self._direct_memory_verify(control)
+        # An inline write that is not verified (e.g. a plug-in's parameter pass) goes out
+        # before the device's own write verification is switched on, as ETS sends it.
+        unverified_inline = control.inline_data is not None and not verify
+        programmer = (
+            await self._bus() if unverified_inline else await self._memory_programmer()
+        )
         runs = self._memory_write_runs(control)
         if runs is None:
             raise ImageError(
                 f"no image data for address range {control.address:#06x}.."
                 f"{control.address + control.size:#06x}"
             )
-        verify = self._direct_memory_verify(control)
         logger.debug(
             "write_mem image-backed: space=%s addr=%#06x size=%d runs=%d verify=%s",
             control.address_space.value,
