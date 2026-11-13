@@ -23,6 +23,7 @@ from editor_gui.plugins.mcp.tools import (
     dali,
     details,
     home_assistant,
+    house_check,
     keyring,
     keys,
     monitor,
@@ -206,6 +207,7 @@ def build_server(ctx: McpContext, auth: Any = None) -> FastMCP:
         settings,
         recover,
         home_assistant,
+        house_check,
     ):
         module.register(mcp, ctx)
     if _SKILLS_DIR.is_dir():
