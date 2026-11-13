@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from fastmcp.exceptions import ToolError
 from xknx.cemi.cemi_frame import CEMIFrame, CEMILData
 from xknx.cemi.const import CEMIMessageCode
 from xknx.telegram import GroupAddress, Telegram, TelegramDirection
@@ -127,6 +128,127 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
             spaces=list(project.get_space_tree()),
             ga_style=style,
         )
+
+    def _monitor_kind(name: str) -> MonitorKind:
+        try:
+            return MonitorKind(name)
+        except ValueError:
+            raise ToolError(
+                f"unknown monitor {name!r}; one of group, bus, activity"
+            ) from None
+
+    @tool("write")
+    def monitor_import(path: str, monitor_name: str = "group") -> dict[str, Any]:
+        """Import a recording into a monitor (``monitor_name``: group, bus or activity), as its
+        Import button does: the monitor's log is replaced and recording stops. ``path`` is a file
+        on the editor's machine: a CommunicationLog .xml, a telegram CSV (.csv, or .csv.gz:
+        columns time, source, ga, type, raw and optionally dpt, e.g. a bus recorder's day file)
+        or a KNXnet/IP capture as JSON lines (.jsonl: t, raw). Nothing is sent. Returns
+        {imported, skipped, path}: telegrams taken, and rows/lines that could not be read."""
+        from pathlib import Path
+
+        from editor_gui.plugins.monitor.csvio import import_log
+        from editor_gui.plugins.monitor.xmlio import import_xml
+
+        kind = _monitor_kind(monitor_name)
+        try:
+            data = Path(path).read_bytes()
+            result = (
+                import_xml(data)
+                if path.lower().endswith(".xml")
+                else import_log(Path(path).name, data)
+            )
+        except (OSError, ValueError) as error:
+            raise ToolError(f"cannot import {path}: {error}") from error
+        ctx.run_locked(lambda: monitor.load(kind, result.records))
+        return {
+            "imported": len(result.records),
+            "skipped": result.skipped,
+            "path": path,
+        }
+
+    @tool("write")
+    def monitor_export(path: str, monitor_name: str = "group") -> dict[str, Any]:
+        """Write a monitor's whole log (``monitor_name``: group, bus or activity) to ``path`` on
+        the editor's machine: a telegram CSV when it ends with .csv (time, source,
+        source_name, ga, ga_name, type, raw, value, dpt; names and values from the open
+        project), else CommunicationLog XML. Returns {telegrams, path}."""
+        from pathlib import Path
+
+        from editor_gui.plugins.monitor.csvio import export_csv
+        from editor_gui.plugins.monitor.formatting import COLUMN_INDEX, record_cells
+        from editor_gui.plugins.monitor.xmlio import export_xml
+
+        kind = _monitor_kind(monitor_name)
+        records = monitor.channel(kind).log.snapshot()
+        if path.lower().endswith(".csv"):
+            index = ctx.run_locked(_project_index)
+
+            def labels(record: MonitorRecord) -> tuple[str, str, str, str]:
+                cells = record_cells(record, index, ("mcp", id(index)))
+                return (
+                    cells[COLUMN_INDEX["source_name"]],
+                    cells[COLUMN_INDEX["destination_name"]],
+                    cells[COLUMN_INDEX["info"]],
+                    cells[COLUMN_INDEX["dpt"]],
+                )
+
+            data = export_csv(records, labels)
+        else:
+            data = export_xml(records)
+        try:
+            Path(path).write_bytes(data)
+        except OSError as error:
+            raise ToolError(f"cannot write {path}: {error}") from error
+        return {
+            "telegrams": sum(1 for record in records if record.is_telegram),
+            "path": path,
+        }
+
+    @tool("read")
+    def monitor_find(
+        filter_text: str, monitor_name: str = "group", limit: int = 200
+    ) -> dict[str, Any]:
+        """Search a monitor's log (``monitor_name``: group, bus or activity) as its filter box
+        does: plain text anywhere in the row, or field terms ga: and src: (an address, or a
+        prefix ending in / . or *), to: (destination name), dev: (source device name), room:
+        (building part), fn: (building function), svc: (service) and dpt: (all have to match;
+        double quotes keep spaces together). ``limit`` caps the rows returned, newest last
+        (<=0 means all). Returns {items, count, matched}: each item {timestamp, source,
+        source_name, destination, destination_name, room, service, value, dpt}; matched counts
+        every matching row."""
+        from editor_gui.plugins.monitor.filter_terms import compile_filter
+        from editor_gui.plugins.monitor.formatting import COLUMN_INDEX, record_cells
+
+        kind = _monitor_kind(monitor_name)
+        index = ctx.run_locked(_project_index)
+        match = compile_filter(filter_text)
+        key = ("mcp", id(index))
+        rows: list[dict[str, Any]] = []
+        for record in monitor.channel(kind).log.snapshot():
+            cells = record_cells(record, index, key)
+            if not match(cells, record.haystack):
+                continue
+            rows.append(
+                {
+                    "timestamp": ticks_to_datetime(record.ticks).isoformat(),
+                    **{
+                        name: cells[COLUMN_INDEX[column]]
+                        for name, column in (
+                            ("source", "source_address"),
+                            ("source_name", "source_name"),
+                            ("destination", "destination_address"),
+                            ("destination_name", "destination_name"),
+                            ("room", "building_part"),
+                            ("service", "service"),
+                            ("value", "info"),
+                            ("dpt", "dpt"),
+                        )
+                    },
+                }
+            )
+        shown = rows[-limit:] if limit > 0 else rows
+        return {"items": shown, "count": len(shown), "matched": len(rows)}
 
     @tool("read")
     def network_state() -> dict[str, Any]:

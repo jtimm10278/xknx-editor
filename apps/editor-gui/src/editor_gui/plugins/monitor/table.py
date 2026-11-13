@@ -17,6 +17,7 @@ from imgui_bundle import imgui
 from editor_gui import file_dialogs
 from editor_gui.os_open import open_path
 from editor_gui.plugins.connection.service import BusmonitorState
+from editor_gui.plugins.monitor.csvio import export_csv, import_log
 from editor_gui.plugins.monitor.filter_terms import compile_filter
 from editor_gui.plugins.monitor.formatting import (
     COLUMN_INDEX,
@@ -58,6 +59,10 @@ ICON_COPY = ""
 
 # Seconds of a frame spent filtering a large log before showing what is done.
 _FILTER_BUDGET = 0.008
+# Files Import reads besides CommunicationLog XML: telegram CSV (also gzip-compressed) and
+# KNXnet/IP captures as JSON lines (see csvio).
+_LOG_SUFFIXES = (".csv", ".csv.gz", ".gz", ".jsonl", ".ndjson")
+_IMPORT_PATTERNS = "*.xml *.csv *.gz *.jsonl"
 # Narrowest the filter box gets beside the Compact/Extend toggle, at 100 % scaling; else the
 # toggle goes below it.
 _NARROW_FILTER = 160.0
@@ -711,7 +716,9 @@ class TelegramView:
 
     def _open_import(self) -> None:
         self._open_dialog = file_dialogs.open_file(
-            S.TOOL_IMPORT, "", [S.FILE_FILTER, "*.xml", S.FILE_ALL, "*"]
+            S.TOOL_IMPORT,
+            "",
+            [S.FILE_FILTER, _IMPORT_PATTERNS, S.FILE_ALL, "*"],
         )
 
     def _open_scope(self, action: str) -> None:
@@ -733,7 +740,7 @@ class TelegramView:
         self._save_dialog = file_dialogs.save_file(
             S.TOOL_EXPORT,
             f"{_FILE_NAMES[self.kind]}-{stamp}.xml",
-            [S.FILE_FILTER, "*.xml", S.FILE_ALL, "*"],
+            [S.FILE_FILTER, "*.xml *.csv", S.FILE_ALL, "*"],
         )
 
     def _print(self, records: list[MonitorRecord], index: ProjectIndex) -> None:
@@ -884,11 +891,15 @@ class TelegramView:
                 self._read_import(paths[0])
 
     def _write_export(self, path: str) -> None:
-        if not path.lower().endswith(".xml"):
+        as_csv = path.lower().endswith(".csv")
+        if not as_csv and not path.lower().endswith(".xml"):
             path += ".xml"
         records = self._pending_export
         try:
-            Path(path).write_bytes(export_xml(records))
+            data = (
+                export_csv(records, self._csv_labels) if as_csv else export_xml(records)
+            )
+            Path(path).write_bytes(data)
         except OSError as err:
             self._message = (S.EXPORT_FAILED.format(error=err), True)
             return
@@ -898,9 +909,24 @@ class TelegramView:
         self._message = (S.EXPORTED(count).format(count=count, path=path), False)
         self._pending_export = []
 
+    def _csv_labels(self, record: MonitorRecord) -> tuple[str, str, str, str]:
+        """Source name, group address name, decoded value and DPT, as the table shows them."""
+        index = self._last_index
+        cells = record_cells(record, index, (index.revision, get_locale()))
+        return tuple(  # type: ignore[return-value]
+            cells[COLUMN_INDEX[key]]
+            for key in ("source_name", "destination_name", "info", "dpt")
+        )
+
     def _read_import(self, path: str) -> None:
         try:
-            result = import_xml(Path(path).read_bytes())
+            data = Path(path).read_bytes()
+            lower = path.lower()
+            result = (
+                import_log(Path(path).name, data)
+                if lower.endswith(_LOG_SUFFIXES)
+                else import_xml(data)
+            )
         except (OSError, ValueError) as err:
             self._message = (S.IMPORT_FAILED.format(error=err), True)
             return
