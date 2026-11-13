@@ -35,6 +35,7 @@ from collections.abc import Awaitable, Callable, Generator, Mapping, Sequence
 from dataclasses import dataclass, replace
 from typing import TYPE_CHECKING, cast
 
+from xknx.exceptions import ManagementConnectionError
 from xknx.profile.const import ResourceGenericPropertyId, ResourceObjectType
 
 from xknxeditor.namespaces.intermediate.hawk_configuration_data_t_features_feature_name import (
@@ -110,6 +111,7 @@ from .errors import (
     CompareMismatch,
     DownloadError,
     ImageError,
+    ManagementAckTimeout,
     PropertyAccessRejected,
     UnsupportedProcedureError,
     VerificationError,
@@ -169,6 +171,20 @@ logger = logging.getLogger(__name__)
 
 # Default cooldown (seconds) to wait after a Restart before reconnecting.
 DEFAULT_RESTART_COOLDOWN = 3.0
+
+
+def _no_ack(error: BaseException) -> bool:
+    """Whether ``error`` (or one it was raised from) is the transport's exhausted ACK wait."""
+    seen: BaseException | None = error
+    while seen is not None:
+        if isinstance(seen, ManagementAckTimeout):
+            return True
+        seen = seen.__cause__
+    return False
+
+
+# Pause (seconds) before reconnecting to a device that acknowledged no LoadCompleted (ETS: 2.5).
+LOAD_COMPLETED_RECONNECT_S = 2.5
 
 # Cooldown (seconds) after a Master Reset the device did not confirm: a device has to report its
 # Process Time only when it needs longer than this (KNX 3/5/2 section 3.7.1.2.2).
@@ -1140,6 +1156,35 @@ class LoadProcedureRunner:
                     level,
                 )
 
+    async def _load_completed(self, index: int) -> None:
+        """Send LoadCompleted; a device that acknowledges nothing because it restarts to commit
+        the load (e.g. Siemens System B with a Generic Plug-in application, after its first
+        LoadCompleted) gets ETS's recovery once: reconnect after a pause, switch the verify
+        mode on again if it was on, and send it again."""
+        try:
+            await self._emit_load_event(
+                index, load_state.load_complete(), load_state.LoadState.LOADED
+            )
+            return
+        except ManagementConnectionError as error:
+            if not _no_ack(error) or self._manager is None or self._programmer is None:
+                raise
+            logger.warning(
+                "download: no answer to LoadCompleted of object %d; reconnecting once",
+                index,
+            )
+        verify = self._programmer.memory_auto_verify
+        with contextlib.suppress(ManagementConnectionError, DownloadError):
+            await self._close()
+        self._programmer = None
+        await asyncio.sleep(LOAD_COMPLETED_RECONNECT_S)
+        programmer = await self._bus()
+        if verify:
+            await programmer.enable_memory_auto_verify()
+        await self._emit_load_event(
+            index, load_state.load_complete(), load_state.LoadState.LOADED
+        )
+
     async def _close(self) -> None:
         """Close the current connection when the runner manages the lifecycle."""
         if self._manager is not None and self._programmer is not None:
@@ -1494,9 +1539,7 @@ class LoadProcedureRunner:
             return
         if isinstance(control, LdCtrlLoadCompleted):
             index = await self._resolve_index(control)
-            await self._emit_load_event(
-                index, load_state.load_complete(), load_state.LoadState.LOADED
-            )
+            await self._load_completed(index)
             return
         if isinstance(control, LdCtrlWriteMem):
             await self._write_mem(control)
