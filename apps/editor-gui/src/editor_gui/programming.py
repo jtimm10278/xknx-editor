@@ -28,6 +28,7 @@ if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable, Mapping, Sequence
     from collections.abc import Set as AbstractSet
     from concurrent.futures import Future
+    from pathlib import Path
 
     from xknx import XKNX
     from xknx.telegram import IndividualAddress
@@ -662,6 +663,7 @@ async def dry_run_device(
     second_application: Application | None = None,
     access_key: int = 0xFFFFFFFF,
     stored: FactoryImage | None = None,
+    table_references: Mapping[int, int] | None = None,
 ) -> DryRunResult:
     """What programming ``device`` would send, without a bus: the image is built as for
     :func:`download_device` and the download runs against a recorder (see
@@ -678,6 +680,7 @@ async def dry_run_device(
         stored_image=stored,
         application2=second_application,
         access_key=access_key,
+        table_references=table_references,
     )
 
 
@@ -726,6 +729,83 @@ def start_dry_run(
     return future
 
 
+# Scopes with nothing worth keeping before them: an unload writes no configuration, an address
+# download only the address.
+_NO_SNAPSHOT_SCOPES = frozenset(
+    {
+        DownloadScope.UNLOAD,
+        DownloadScope.UNLOAD_ALL,
+        DownloadScope.INDIVIDUAL_ADDRESS,
+        DownloadScope.OVERWRITE_INDIVIDUAL_ADDRESS,
+    }
+)
+
+
+async def snapshot_before_download(
+    xknx: XKNX,
+    device: Device,
+    scope: DownloadScope,
+    group_communication: GroupCommunication | None,
+    master: MasterData | None,
+    factory_image: FactoryData | None,
+    second_application: Application | None,
+    access_key: int,
+    security: DeviceSecurity | None,
+    folder: Path,
+    *,
+    override: bool = False,
+) -> Path | None:
+    """Read and keep what the download of ``device`` is about to overwrite: the memory ranges
+    and properties a dry run of the same download writes (reads only), saved under ``folder``.
+    Returns the snapshot's path (None when the download writes nothing to keep, or when the
+    snapshot failed and ``override`` lets the download go on). Raises
+    :class:`~xknxeditor.download.snapshot.SnapshotError` when it fails without ``override``."""
+    from xknx.telegram import IndividualAddress
+
+    from xknxeditor.download.session import management_session
+    from xknxeditor.download.snapshot import (
+        SnapshotError,
+        plan_from_dry_run,
+        read_table_references,
+        save_snapshot,
+        take_snapshot,
+    )
+
+    address = _address(device)
+    target = IndividualAddress(address)
+    try:
+        references = await read_table_references(
+            management_session(xknx, target, security)
+        )
+        dry = await dry_run_device(
+            device,
+            scope,
+            group_communication,
+            master,
+            factory_image,
+            second_application,
+            access_key,
+            table_references=references,
+        )
+        plan = plan_from_dry_run(dry, placed=references)
+        if plan.empty:
+            return None
+        snap = await take_snapshot(
+            management_session(xknx, target, security),
+            plan,
+            address=address,
+            scope=scope.name,
+        )
+        return save_snapshot(snap, folder)
+    except Exception as exc:
+        if override:
+            return None
+        raise SnapshotError(
+            f"no snapshot of {address} before the download ({exc}); "
+            "the download was not started"
+        ) from exc
+
+
 async def download_device(
     xknx: XKNX,
     device: Device,
@@ -751,6 +831,8 @@ async def download_device(
     route_couplers: Sequence[IndividualAddress] = (),
     memory_progress: Callable[[int, int], None] | None = None,
     unlock: bool = False,
+    snapshot_folder: Path | None = None,
+    snapshot_override: bool = False,
 ) -> DownloadResult:
     """Program ``device``: build its image and run the load procedure on the bus.
 
@@ -782,6 +864,12 @@ async def download_device(
     :func:`xknxeditor.download.download`). ``route_couplers`` are the couplers between the
     interface and the device; the frames stay within what they pass. ``unlock`` lets the
     download through to a locked device (Settings > Connection), for this download only.
+
+    ``snapshot_folder`` (set by the connection service while snapshots are on) makes the
+    download first read what it is about to overwrite (the memory and properties its dry run
+    writes) and keep it there (see :mod:`xknxeditor.download.snapshot`); when that fails the
+    download is refused with :class:`~xknxeditor.download.snapshot.SnapshotError`, unless
+    ``snapshot_override`` (the user chose to go on without one).
     """
     from editor_gui.plugins.connection.write_guard import unlocked
 
@@ -810,6 +898,8 @@ async def download_device(
             waiting,
             route_couplers,
             memory_progress,
+            snapshot_folder,
+            snapshot_override,
         )
 
 
@@ -837,6 +927,8 @@ async def _download_device(
     waiting: Callable[[], None] | None,
     route_couplers: Sequence[IndividualAddress],
     memory_progress: Callable[[int, int], None] | None,
+    snapshot_folder: Path | None = None,
+    snapshot_override: bool = False,
 ) -> DownloadResult:
     from editor_gui.plugin_providers import prepared_for, programming_error
 
@@ -848,6 +940,25 @@ async def _download_device(
     interface_max_apdu_length = await _route_limited(
         xknx, route_couplers, interface_max_apdu_length
     )
+    # A download a plugin provider prepares is not dry-run here, so it gets no snapshot.
+    if (
+        snapshot_folder is not None
+        and scope not in _NO_SNAPSHOT_SCOPES
+        and prepared is None
+    ):
+        await snapshot_before_download(
+            xknx,
+            device,
+            scope,
+            group_communication,
+            master,
+            factory_image,
+            second_application,
+            access_key,
+            security,
+            snapshot_folder,
+            override=snapshot_override,
+        )
     image = (
         prepared.image
         if prepared is not None

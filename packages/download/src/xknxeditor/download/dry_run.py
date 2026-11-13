@@ -267,8 +267,13 @@ class SimulatedDevice:
         descriptor: int,
         object_types: Mapping[int, int] | None = None,
         stored: FactoryImage | None = None,
+        table_references: Mapping[int, int] | None = None,
     ) -> None:
         self.descriptor = descriptor
+        # Where the real device keeps each object's segment (its table reference, read before
+        # the dry run); an allocation for such an object is placed there, so the addresses the
+        # dry run writes are the ones the real download will write.
+        self.table_references = dict(table_references or {})
         self.object_types = dict(object_types or {})
         # Every device has its device object at index 0; a search by type starts there.
         self.object_types.setdefault(0, 0)
@@ -543,6 +548,8 @@ class SimulatedDevice:
         previous = self.allocations.get(index)
         if previous is not None and previous[1] >= size:
             start = previous[0]  # the segment stays where it is
+        elif index in self.table_references:
+            start = self.table_references[index]
         else:
             start = self._next_allocation
             self._next_allocation = (start + size + 0xF) & ~0xF
@@ -982,6 +989,7 @@ async def dry_run_download(
     max_apdu_length: int | None = None,
     device_descriptor: int | None = None,
     accept_table_removals: bool = False,
+    table_references: Mapping[int, int] | None = None,
 ) -> DryRunResult:
     """Run the download of ``application`` for ``individual_address`` against a recorder and
     return every frame it would send, the memory it would write and how that compares with
@@ -991,7 +999,9 @@ async def dry_run_download(
     simulated device's memory and properties, so reads during the download answer as the
     device last programmed would. Unload scopes and KNX Data Secure are refused
     (:class:`DryRunRefused`). ``device_descriptor`` simulates a device reporting
-    another mask than the application's (e.g. a BCU1 program on a ``0x0021`` device)."""
+    another mask than the application's (e.g. a BCU1 program on a ``0x0021`` device).
+    ``table_references`` (object index -> address, read from the real device) places the
+    segments the download allocates where the device keeps them."""
     from .download import download
     from .programmer import FREE_ACCESS_KEY
     from .scope import mask_object_types
@@ -1012,6 +1022,7 @@ async def dry_run_download(
             else device_descriptor,
             object_types,
             stored_image,
+            table_references,
         ),
         regions,
     )

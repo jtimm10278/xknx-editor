@@ -618,6 +618,7 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
         current_address: str | None = None,
         use_serial_number: bool = False,
         unlock_locked: bool = False,
+        snapshot_override: bool = False,
     ) -> dict[str, Any]:
         """Download the device onto the bus (``timeout`` seconds). Identify it by ``node_id`` OR
         ``device_address`` (its individual address in the PROJECT, like "1.0.30"); pass exactly
@@ -665,6 +666,11 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
         (connection setting ``locked_devices``) is refused unless ``unlock_locked=true``, set only
         after the user explicitly confirmed unlocking it for this download; it is unlocked for
         this download only.
+
+        SNAPSHOT: while snapshots are on (snapshot_settings, default on) the download first reads
+        and keeps what it is about to overwrite (see snapshot_list / snapshot_restore) and is
+        refused when that read fails; ``snapshot_override=true`` goes on without one, set only
+        after the user explicitly confirmed downloading without a snapshot.
 
         The programming runs in the editor's operations queue, labelled MCP: the user sees it there
         and in its history, it waits behind operations already queued, and the user can cancel it
@@ -741,6 +747,7 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
                 timeout,
                 without_plugin=without_plugin,
                 unlock_locked=unlock_locked,
+                snapshot_override=snapshot_override,
                 current_address=current_address,
                 serial_number=serial,
             )
@@ -771,6 +778,7 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
                     group_communication,
                     without_plugin=without_plugin,
                     unlock_locked=unlock_locked,
+                    snapshot_override=snapshot_override,
                     current_address=current_address,
                     serial_number=serial,
                     ip_config=ip_config,

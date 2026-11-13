@@ -2916,6 +2916,7 @@ class ProjectPlugin:
         current_address: str | None = None,
         serial_number: bytes | None = None,
         test: bool = False,
+        snapshot_override: bool = False,
     ) -> QueueItem | None:
         """Queue a programming started outside the editor's UI (``origin``, e.g. an MCP client),
         shown in Operations like one started here; ``test`` only tests it (the item's ``result``
@@ -2935,6 +2936,7 @@ class ProjectPlugin:
             medium_config=parts.medium_config,
             without_plugin=without_plugin,
             unlock_locked=unlock_locked,
+            snapshot_override=snapshot_override,
             current_address=current_address,
             serial_number=serial_number,
             test=test,
@@ -2961,6 +2963,7 @@ class ProjectPlugin:
                     medium_config=item.medium_config,
                     without_plugin=item.without_plugin,
                     unlock_locked=item.unlock_locked,
+                    snapshot_override=item.snapshot_override,
                     current_address=item.current_address,
                     serial_number=item.serial_number,
                 )
@@ -3432,6 +3435,7 @@ class ProjectPlugin:
                 self._group_communication_for(device),
                 without_plugin=item.without_plugin,
                 unlock_locked=item.unlock_locked,
+                snapshot_override=item.snapshot_override,
                 current_address=item.current_address,
                 waiting=functools.partial(setattr, item, "waiting_for_button", True),
                 serial_number=item.serial_number,

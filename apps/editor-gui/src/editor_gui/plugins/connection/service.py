@@ -11,6 +11,7 @@ from collections.abc import Awaitable, Callable, Collection, Coroutine
 from concurrent.futures import Future
 from dataclasses import dataclass
 from enum import Enum
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Protocol, cast
 
 from xknx.cemi.cemi_frame import CEMIFrame, CEMILData
@@ -1152,6 +1153,7 @@ class ConnectionService:
         routing_blocking: bool | None = None,
         in_programming_mode: bool = False,
         unlock_locked: bool = False,
+        snapshot_override: bool = False,
     ) -> Future[Any] | None:
         """Download the device's configured application/parameters onto the bus.
 
@@ -1168,6 +1170,9 @@ class ConnectionService:
         into programming mode first (``waiting`` is called while none is).
         A locked device (Settings > Connection) is only programmed with ``unlock_locked`` (the
         user confirmed it), and only unlocked for this download.
+        While snapshots are on (default; :mod:`editor_gui.snapshots`) the download first reads
+        and keeps what it is about to overwrite, and is refused when that fails, unless
+        ``snapshot_override`` (the user chose to go on without a snapshot).
         """
         if self.writes_refused("program_device") or self.not_connected(
             "program_device"
@@ -1217,6 +1222,7 @@ class ConnectionService:
             )
         from editor_gui.memory_cap_cache import learned_memory_cap
         from editor_gui.programming import download_device
+        from editor_gui.snapshots import snapshot_folder, snapshots_enabled
         from xknxeditor.download.scope import DownloadScope
 
         scope = scope or DownloadScope.FULL
@@ -1266,6 +1272,8 @@ class ConnectionService:
                 waiting=waiting,
                 route_couplers=self._route_couplers(device),
                 unlock=unlock_locked,
+                snapshot_folder=snapshot_folder() if snapshots_enabled() else None,
+                snapshot_override=snapshot_override,
             )
         )
         if future is not None:
@@ -1277,6 +1285,57 @@ class ConnectionService:
                 future.add_done_callback(self._reopen_after_interface_download)
         else:
             self._clear_busy()
+        return future
+
+    def restore_snapshot(
+        self, path: str | Path, *, unlock_locked: bool = False
+    ) -> Future[Any] | None:
+        """Write a snapshot taken before a download back to its device and read it again.
+        Resolves to the list of what still differs (empty = restored). Same guards as a
+        download: writes refused, not connected, a bus operation running, a locked device
+        (only with ``unlock_locked``)."""
+        from xknx.telegram import IndividualAddress
+
+        from editor_gui.plugins.connection.write_guard import unlocked
+        from xknxeditor.download.session import management_session
+        from xknxeditor.download.snapshot import load_snapshot, restore_snapshot
+
+        if self.writes_refused("restore_snapshot") or self.not_connected(
+            "restore_snapshot"
+        ):
+            return None
+        snap = load_snapshot(Path(path))
+        if is_locked(snap.address) and not unlock_locked:
+            self._log.error(
+                "Device is locked (Settings > Connection); unlock it for this restore",
+                address=snap.address,
+            )
+            return None
+        if not self.begin_operation("restore", snap.address):
+            self._log.warning(
+                "A bus operation is already running", address=snap.address
+            )
+            return None
+        xknx = self._connected_xknx
+        self._log.warning(
+            "Restoring a snapshot",
+            address=snap.address,
+            taken=snap.taken,
+            octets=snap.octets,
+        )
+
+        async def work() -> list[str]:
+            with unlocked(snap.address) if unlock_locked else contextlib.nullcontext():
+                return await restore_snapshot(
+                    management_session(xknx, IndividualAddress(snap.address), None),
+                    snap,
+                )
+
+        future = self.run_async(work())
+        if future is None:
+            self._clear_busy()
+            return None
+        future.add_done_callback(lambda _f: self._clear_busy())
         return future
 
     def _remember_memory_cap(

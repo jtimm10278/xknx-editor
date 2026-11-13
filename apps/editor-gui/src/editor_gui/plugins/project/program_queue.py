@@ -121,6 +121,8 @@ class QueueItem:
     without_plugin: bool = False
     # Confirmed to unlock a locked device (Settings > Connection) for this download.
     unlock_locked: bool = False
+    # Confirmed to download without the snapshot taken before every download, should it fail.
+    snapshot_override: bool = False
     # The device's current address, for an individual address overwrite.
     current_address: str | None = None
     # Address the device by its serial number instead of programming mode.
@@ -222,6 +224,7 @@ class ProgramQueue:
                 queued.scope = item.scope
                 queued.without_plugin = item.without_plugin
                 queued.unlock_locked = item.unlock_locked
+                queued.snapshot_override = item.snapshot_override
                 queued.current_address = item.current_address
                 queued.serial_number = item.serial_number
                 self.tick()
