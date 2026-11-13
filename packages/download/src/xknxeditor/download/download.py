@@ -425,6 +425,40 @@ async def _device_mask_retarget(
     return retarget_image(image, application, master, descriptor)
 
 
+async def _refuse_table_removals(
+    xknx: XKNX,
+    address: IndividualAddress,
+    security: DeviceSecurity | None,
+    image: DownloadImage,
+    application: Application,
+) -> None:
+    """Refuse a download that would drop group addresses or links the device holds."""
+    from .programmer import DeviceProgrammer
+    from .table_check import (
+        TableRemovalError,
+        checked_mask,
+        device_table_extras,
+        holds_tables,
+    )
+
+    if not checked_mask(application.program.mask_version) or not holds_tables(image):
+        return
+    manager = _connection_manager(xknx, address, security)
+    try:
+        programmer = DeviceProgrammer(await manager.open())
+        found = await device_table_extras(programmer.read_memory, image)
+    except (ManagementConnectionError, DownloadError) as exc:
+        logger.debug("download: device tables not readable: %s", exc)
+        return
+    finally:
+        await manager.close()
+    if found:
+        raise TableRemovalError(
+            f"the device holds {found.describe()}, which the project does not have: the "
+            "download would remove them (accept the removals to go ahead)"
+        )
+
+
 async def _device_association_format(
     xknx: XKNX,
     address: IndividualAddress,
@@ -723,8 +757,13 @@ async def download(
     in_programming_mode: bool = False,
     waiting: Callable[[], None] | None = None,
     memory_progress: Callable[[int, int], None] | None = None,
+    accept_table_removals: bool = False,
 ) -> DownloadResult:
     """Download ``application`` into the device at ``individual_address``.
+
+    Before tables are written, a BCU1/BCU2 device's own group addresses and links are read;
+    any the project lacks would be dropped, so the download refuses
+    (:class:`.table_check.TableRemovalError`, listing them) unless ``accept_table_removals``.
 
     Assembles the download image (applying ``parameter_values`` on top of the
     application defaults), resolves the Load Procedure (merging the application's
@@ -927,6 +966,8 @@ async def download(
             routing_blocking if security is not None else None,
             application2,
         )
+    if prepared is None and scope in _TABLE_SCOPES and not accept_table_removals:
+        await _refuse_table_removals(xknx, address, security, image, application)
     adapted = (
         image
         if prepared is not None

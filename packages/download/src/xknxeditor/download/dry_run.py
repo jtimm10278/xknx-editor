@@ -981,6 +981,7 @@ async def dry_run_download(
     access_key: int | None = None,
     max_apdu_length: int | None = None,
     device_descriptor: int | None = None,
+    accept_table_removals: bool = False,
 ) -> DryRunResult:
     """Run the download of ``application`` for ``individual_address`` against a recorder and
     return every frame it would send, the memory it would write and how that compares with
@@ -1056,6 +1057,7 @@ async def dry_run_download(
                 max_apdu_length=max_apdu_length,
                 application2=application2,
                 access_key=FREE_ACCESS_KEY if access_key is None else access_key,
+                accept_table_removals=accept_table_removals,
             )
         finally:
             recording_sessions.reset(token)
