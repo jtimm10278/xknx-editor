@@ -481,3 +481,6 @@ msgstr[1] "{count} telegrame"
 
 msgid "max {peak}/min at {when}"
 msgstr "maks {peak}/min në {when}"
+
+msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
+msgstr "Nuk u dërgua: është aktiv Blloko shkrimet në bus ose Vetëm Dëgjim (Cilësimet > Lidhja)"

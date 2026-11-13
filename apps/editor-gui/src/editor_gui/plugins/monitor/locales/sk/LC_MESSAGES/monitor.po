@@ -492,3 +492,6 @@ msgstr[2] "{count} telegramov"
 
 msgid "max {peak}/min at {when}"
 msgstr "max {peak}/min o {when}"
+
+msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
+msgstr "Neodoslané: je zapnuté Blokovať zápisy na zbernicu alebo Iba Počúvať (Nastavenia > Pripojenie)"

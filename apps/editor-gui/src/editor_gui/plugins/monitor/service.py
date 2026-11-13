@@ -14,7 +14,7 @@ import threading
 import time
 from collections import deque
 from collections.abc import Callable, Iterable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime
 from enum import Enum
 from functools import cached_property
@@ -569,17 +569,33 @@ class MonitorService:
         except Exception as e:  # xknx raises ConversionError/ValueError on bad input
             self._warn("cannot encode value", address=address, value=text, error=str(e))
             return False
-        self._send(address, GroupValueWrite(knx_value))
-        return True
+        return self._send(address, GroupValueWrite(knx_value))
 
-    def send_payload(self, address: str, payload: DPTBinary | DPTArray) -> None:
-        """Send an already encoded value as a GroupValueWrite."""
-        self._send(address, GroupValueWrite(payload))
+    def send_payload(self, address: str, payload: DPTBinary | DPTArray) -> bool:
+        """Send an already encoded value as a GroupValueWrite. Returns whether it was sent."""
+        return self._send(address, GroupValueWrite(payload))
 
-    def send_read(self, address: str) -> None:
-        self._send(address, GroupValueRead())
+    def send_read(self, address: str) -> bool:
+        """Send a GroupValueRead. Returns whether it was sent."""
+        return self._send(address, GroupValueRead())
 
-    def _send(self, address: str, payload: GroupValueWrite | GroupValueRead) -> None:
+    def sending_refused(self, payload: GroupValueWrite | GroupValueRead | None) -> str:
+        """Why the Monitor may not send ``payload`` now ("" when it may): Listen Only refuses
+        everything, Block Bus Writes every write (``None``: a replay, which writes). Checked
+        before either way of sending, so it also holds for the way through another program's
+        connection, which this app's interface guard does not see."""
+        if self._connection.listen_only:
+            return "Listen Only is on"
+        if self._connection.block_bus_writes and not isinstance(
+            payload, GroupValueRead
+        ):
+            return "Block Bus Writes is on"
+        return ""
+
+    def _send(self, address: str, payload: GroupValueWrite | GroupValueRead) -> bool:
+        if why := self.sending_refused(payload):
+            self._warn("not sent", address=address, reason=why)
+            return False
         # Without a connection of its own: through another program's (Home Assistant's), which
         # shows the telegram as its own (see on_foreign_cemi).
         if (
@@ -587,8 +603,9 @@ class MonitorService:
             and self.send_elsewhere is not None
             and self.send_elsewhere(address, payload)
         ):
-            return
+            return True
         self._connection.send_group_telegram(address, payload)
+        return True
 
     def _warn(self, event: str, **kwargs: Any) -> None:
         if self._log is not None:
@@ -608,6 +625,9 @@ class MonitorService:
         """Send the group telegrams of ``records`` again with their timing, on a worker thread.
         Data Secure telegrams are skipped."""
         plan = build_plan(records)
+        if why := self.sending_refused(None):
+            self._warn("replay not started", reason=why)
+            return replace(plan, items=[], refused=why)
         if plan.skipped_secure:
             self._warn(
                 "Data Secure telegrams are not replayed", count=plan.skipped_secure

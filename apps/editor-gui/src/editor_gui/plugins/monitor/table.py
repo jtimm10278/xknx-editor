@@ -777,7 +777,9 @@ class TelegramView:
                     count=plan.skipped_secure
                 )
             )
-        if not plan.items:
+        if plan.refused:
+            messages.append(S.SEND_REFUSED)
+        elif not plan.items:
             messages.append(S.REPLAY_NOTHING)
         self._message = (". ".join(messages), True) if messages else None
         if plan.skipped_secure and self._notify is not None:

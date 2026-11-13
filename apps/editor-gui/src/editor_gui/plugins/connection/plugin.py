@@ -598,6 +598,7 @@ class ConnectionPlugin:
         self._connect_at_startup = bool(data.get("connect_at_startup", True))
         self._block_bus_writes_setting = bool(data.get("block_bus_writes", False))
         self._apply_block_bus_writes()
+        self._api.connection.listen_only = bool(data.get("listen_only", False))
 
     def _save_current_settings(self) -> None:
         save_settings(
@@ -616,6 +617,7 @@ class ConnectionPlugin:
                 "serial_number_downloads": self._api.connection.use_serial_number,
                 "connect_at_startup": self._connect_at_startup,
                 "block_bus_writes": self._block_bus_writes_setting,
+                "listen_only": bool(getattr(self._api.connection, "listen_only", False)),
             },
         )
 
@@ -1944,12 +1946,20 @@ class ConnectionPlugin:
             imgui.dummy(px_vec2(12, 0))
             imgui.same_line()
             imgui.text_disabled(S.STATUS_DISCONNECTED)
-        if self._api.connection.block_bus_writes:
+        if self._api.connection.listen_only or self._api.connection.block_bus_writes:
             # Clickable (touch has no hover): opens the setting.
+            listen = self._api.connection.listen_only
             imgui.same_line()
-            imgui.text_colored(status_color("warning"), S.STATUS_WRITES_BLOCKED)
+            imgui.text_colored(
+                status_color("warning"),
+                S.STATUS_LISTEN_ONLY if listen else S.STATUS_WRITES_BLOCKED,
+            )
             if imgui.is_item_hovered():
-                imgui.set_tooltip(S.STATUS_WRITES_BLOCKED_HINT)
+                imgui.set_tooltip(
+                    S.SETTING_LISTEN_ONLY_HINT
+                    if listen
+                    else S.STATUS_WRITES_BLOCKED_HINT
+                )
             if imgui.is_item_clicked() and self.open_settings is not None:
                 self.open_settings(SETTINGS_PAGE)
 
@@ -2402,6 +2412,16 @@ class ConnectionPlugin:
                 mcp_may_set=bool,
             ),
             Setting(
+                "listen_only",
+                lambda: S.SETTING_LISTEN_ONLY,
+                "bool",
+                get=lambda: self._api.connection.listen_only,
+                set=self._set_listen_only,
+                hint=lambda: S.SETTING_LISTEN_ONLY_HINT,
+                # An MCP client may turn it on, never off.
+                mcp_may_set=bool,
+            ),
+            Setting(
                 "use_serial_number",
                 lambda: S.SETTING_USE_SERIAL_NUMBER,
                 "bool",
@@ -2490,6 +2510,13 @@ class ConnectionPlugin:
         setting says (the setting itself is kept as it is)."""
         self._block_bus_writes_forced = True
         self._apply_block_bus_writes()
+
+    def _set_listen_only(self, value: object) -> None:
+        listen = bool(value)
+        if listen != self._api.connection.listen_only:
+            self._log.info("listen only on" if listen else "listen only off")
+        self._api.connection.listen_only = listen
+        self._save_current_settings()
 
     def _set_block_bus_writes(self, value: object) -> None:
         self._block_bus_writes_setting = bool(value)

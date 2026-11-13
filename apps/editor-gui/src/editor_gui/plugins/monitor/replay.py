@@ -27,6 +27,8 @@ class ReplayPlan:
     items: list[ReplayItem]
     # Data Secure telegrams, which are not sent.
     skipped_secure: int
+    # Why nothing is sent (Block Bus Writes or Listen Only), "" when it may be.
+    refused: str = ""
 
 
 def build_plan(records: Iterable[MonitorRecord]) -> ReplayPlan:

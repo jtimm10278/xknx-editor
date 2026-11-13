@@ -481,3 +481,6 @@ msgstr[1] "{count} sähkettä"
 
 msgid "max {peak}/min at {when}"
 msgstr "maks {peak}/min klo {when}"
+
+msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
+msgstr "Ei lähetetty: Estä kirjoitukset väylälle tai Vain kuuntelu on käytössä (Asetukset > Yhteys)"

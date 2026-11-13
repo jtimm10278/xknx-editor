@@ -481,3 +481,6 @@ msgstr[1] "{count} telegrammer"
 
 msgid "max {peak}/min at {when}"
 msgstr "maks {peak}/min kl. {when}"
+
+msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
+msgstr "Ikke sendt: Blokker skriving til bussen eller Bare Lytt er på (Innstillinger > Tilkobling)"

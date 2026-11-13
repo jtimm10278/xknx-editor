@@ -473,3 +473,6 @@ msgstr[0] "{count} telegram"
 
 msgid "max {peak}/min at {when}"
 msgstr "maks {peak}/dk {when}"
+
+msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
+msgstr "Gönderilmedi: Hatta Yazmayı Engelle veya Yalnızca Dinle açık (Ayarlar > Bağlantı)"

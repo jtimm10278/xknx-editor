@@ -489,3 +489,6 @@ msgstr[2] "{count} телеграм"
 
 msgid "max {peak}/min at {when}"
 msgstr "макс {peak}/хв о {when}"
+
+msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
+msgstr "Не надіслано: увімкнено «Блокувати запис на шину» або «Лише Прослуховування» (Налаштування > Підключення)"

@@ -302,3 +302,11 @@ msgstr "Comprobando la dirección individual en el bus…"
 
 msgid "This interface forgets its individual address when unplugged, so it is set again on every connect."
 msgstr "Esta interfaz olvida su dirección individual al desconectarla, por lo que se vuelve a establecer en cada conexión."
+msgid "Listen Only"
+msgstr "Solo Escuchar"
+
+msgid "Sends nothing to the bus, not even reads: the editor only listens. With Routing as the connection type it uses no tunnel of the interface either. This holds for MCP clients too, which can turn it on but not off."
+msgstr "No envía nada al bus, ni siquiera lecturas: el editor solo escucha. Con Routing como tipo de conexión tampoco usa ningún túnel de la interfaz. Esto vale también para los clientes MCP, que pueden activarlo pero no desactivarlo."
+
+msgid "Listen only"
+msgstr "Solo escuchando"

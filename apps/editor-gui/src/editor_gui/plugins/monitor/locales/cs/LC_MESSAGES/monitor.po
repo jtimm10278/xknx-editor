@@ -489,3 +489,6 @@ msgstr[2] "{count} telegramů"
 
 msgid "max {peak}/min at {when}"
 msgstr "max {peak}/min v {when}"
+
+msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
+msgstr "Neodesláno: je zapnuto Blokovat zápisy na sběrnici nebo Pouze naslouchat (Nastavení > Připojení)"

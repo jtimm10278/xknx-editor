@@ -84,6 +84,8 @@ class FakeConnection:
         self.busmonitor_link = self.link_info
         self.sent: list[bytes] = []
         self.busmonitor_requests: list[str] = []
+        self.listen_only = False
+        self.block_bus_writes = False
 
     def send_cemi(self, raw: bytes) -> None:
         self.sent.append(raw)
@@ -439,3 +441,58 @@ def test_without_a_connection_group_telegrams_go_over_another_programs() -> None
     service.send_read("1/2/5")
     assert connection.sent == [b"x"]
     assert len(sent) == 2
+
+
+def test_listen_only_refuses_every_send_also_through_another_program() -> None:
+    connection = FakeConnection()
+    service = MonitorService(connection)  # type: ignore[arg-type]
+    sent: list[str] = []
+
+    def elsewhere(address: str, apci: object) -> bool:
+        sent.append(address)
+        return True
+
+    service.send_elsewhere = elsewhere
+    service.elsewhere_available = lambda: True
+    connection.listen_only = True
+    assert service.sending_refused(GroupValueRead()) == "Listen Only is on"
+    assert not service.send_read("1/2/3")
+    assert not service.send_write("1/2/4", "DPST-1-1", "1")
+    assert not service.send_payload("1/2/4", DPTBinary(1))
+    assert sent == []
+    connection.listen_only = False
+    assert service.send_read("1/2/3")
+    assert sent == ["1/2/3"]
+
+
+def test_block_bus_writes_refuses_writes_but_lets_reads_through() -> None:
+    connection = FakeConnection()
+    service = MonitorService(connection)  # type: ignore[arg-type]
+    sent: list[str] = []
+    service.send_elsewhere = lambda address, _apci: sent.append(address) or True
+    connection.block_bus_writes = True
+    assert service.sending_refused(GroupValueWrite(DPTBinary(1))) == (
+        "Block Bus Writes is on"
+    )
+    assert not service.send_write("1/2/4", "DPST-1-1", "1")
+    assert service.send_read("1/2/3")
+    assert sent == ["1/2/3"]
+
+
+def test_replay_obeys_block_bus_writes_and_listen_only() -> None:
+    record = MonitorRecord(
+        kind=RecordKind.TELEGRAM,
+        ticks=0,
+        raw=_raw("1/2/3", GroupValueWrite(DPTBinary(1))),
+    )
+    for flag in ("block_bus_writes", "listen_only"):
+        service, connection = _connected()
+        setattr(connection, flag, True)
+        plan = service.start_replay([record])
+        assert plan.refused
+        assert not plan.items
+        assert not service.replaying
+        assert connection.sent == []
+    service, connection = _connected()
+    plan = service.start_replay([record])
+    assert plan.items and not plan.refused

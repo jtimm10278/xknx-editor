@@ -497,6 +497,12 @@ class MonitorStrings:
         )
 
     @property
+    def SEND_REFUSED(self) -> str:
+        return _(
+            "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
+        )
+
+    @property
     def REPLAY_NOTHING(self) -> str:
         return _("There are no group telegrams to replay")
 

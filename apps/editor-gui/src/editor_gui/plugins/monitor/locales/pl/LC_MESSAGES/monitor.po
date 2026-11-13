@@ -489,3 +489,6 @@ msgstr[2] "{count} telegramów"
 
 msgid "max {peak}/min at {when}"
 msgstr "maks {peak}/min o {when}"
+
+msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
+msgstr "Nie wysłano: włączono Blokuj zapisy na magistralę lub Tylko Nasłuch (Ustawienia > Połączenie)"

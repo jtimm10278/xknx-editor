@@ -302,3 +302,11 @@ msgstr "A verificar o endereço individual no barramento…"
 
 msgid "This interface forgets its individual address when unplugged, so it is set again on every connect."
 msgstr "Esta interface esquece o seu endereço individual quando é desligada, por isso é definido de novo em cada ligação."
+msgid "Listen Only"
+msgstr "Apenas Escutar"
+
+msgid "Sends nothing to the bus, not even reads: the editor only listens. With Routing as the connection type it uses no tunnel of the interface either. This holds for MCP clients too, which can turn it on but not off."
+msgstr "Não envia nada para o barramento, nem sequer leituras: o editor apenas escuta. Com Routing como tipo de ligação também não ocupa nenhum túnel da interface. Isto aplica-se também aos clientes MCP, que podem ativá-lo mas não desativá-lo."
+
+msgid "Listen only"
+msgstr "Apenas a escutar"

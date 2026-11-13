@@ -481,3 +481,6 @@ msgstr[1] "{count} telegram"
 
 msgid "max {peak}/min at {when}"
 msgstr "max {peak}/min kl. {when}"
+
+msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
+msgstr "Inte skickat: Blockera skrivning till bussen eller Endast Lyssna är på (Inställningar > Anslutning)"

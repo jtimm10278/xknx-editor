@@ -476,3 +476,6 @@ msgstr[0] "{count} távirat"
 
 msgid "max {peak}/min at {when}"
 msgstr "max {peak}/min ekkor: {when}"
+
+msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
+msgstr "Nincs elküldve: a Busz írásának tiltása vagy a Csak figyelés be van kapcsolva (Beállítások > Kapcsolat)"

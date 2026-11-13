@@ -473,3 +473,6 @@ msgstr[0] "{count} 条电报"
 
 msgid "max {peak}/min at {when}"
 msgstr "峰值 {peak}/分钟 于 {when}"
+
+msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
+msgstr "未发送：已开启“阻止写入总线”或“仅监听”（设置 > 连接）"

@@ -30,7 +30,12 @@ from xknx.telegram.apci import ReturnCode
 
 from editor_gui.cemi_diagnostics import current_knxip_packet, handle_cemi_with_packet
 from editor_gui.plugins.connection.diagnostic_transport import DiagnosticTCPTunnel
-from editor_gui.plugins.connection.write_guard import BusWritesBlocked, is_bus_write
+from editor_gui.plugins.connection.write_guard import (
+    BusWritesBlocked,
+    ListenOnlyRefused,
+    is_bus_write,
+    listen_only_allows,
+)
 
 # Seconds to wait for a tunnelling feature response.
 _FEATURE_TIMEOUT = 2.0
@@ -48,7 +53,10 @@ if TYPE_CHECKING:
 
 
 def _refuse_write(writes_blocked: Callable[[], bool] | None, cemi: CEMIFrame) -> None:
-    """Raise :class:`BusWritesBlocked` for a write while Block Bus Writes is on."""
+    """Raise :class:`ListenOnlyRefused` for a frame Listen Only does not let through, and
+    :class:`BusWritesBlocked` for a write while Block Bus Writes is on."""
+    if not listen_only_allows(cemi):
+        raise ListenOnlyRefused(cemi)
     if writes_blocked is not None and writes_blocked() and is_bus_write(cemi):
         raise BusWritesBlocked(cemi)
 

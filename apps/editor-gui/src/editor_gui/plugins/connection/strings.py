@@ -64,6 +64,22 @@ class ConnectionStrings:
         )
 
     @property
+    def SETTING_LISTEN_ONLY(self) -> str:
+        return _("Listen Only")
+
+    @property
+    def SETTING_LISTEN_ONLY_HINT(self) -> str:
+        return _(
+            "Sends nothing to the bus, not even reads: the editor only listens. With Routing as "
+            "the connection type it uses no tunnel of the interface either. This holds for MCP "
+            "clients too, which can turn it on but not off."
+        )
+
+    @property
+    def STATUS_LISTEN_ONLY(self) -> str:
+        return _("Listen only")
+
+    @property
     def STATUS_WRITES_BLOCKED(self) -> str:
         return _("Bus writes blocked")
 

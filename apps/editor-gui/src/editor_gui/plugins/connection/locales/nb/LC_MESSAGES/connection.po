@@ -302,3 +302,11 @@ msgstr "Kontrollerer den individuelle adressen på bussen…"
 
 msgid "This interface forgets its individual address when unplugged, so it is set again on every connect."
 msgstr "Dette grensesnittet glemmer sin individuelle adresse når det kobles fra, så den settes på nytt ved hver tilkobling."
+msgid "Listen Only"
+msgstr "Bare Lytt"
+
+msgid "Sends nothing to the bus, not even reads: the editor only listens. With Routing as the connection type it uses no tunnel of the interface either. This holds for MCP clients too, which can turn it on but not off."
+msgstr "Sender ingenting til bussen, heller ikke lesinger: redigeringsprogrammet bare lytter. Med Routing som tilkoblingstype bruker det heller ingen tunnel i grensesnittet. Dette gjelder også MCP-klienter, som kan slå det på, men ikke av."
+
+msgid "Listen only"
+msgstr "Lytter bare"

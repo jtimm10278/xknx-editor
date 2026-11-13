@@ -484,3 +484,6 @@ msgstr[1] "{count} skeyti"
 
 msgid "max {peak}/min at {when}"
 msgstr "hám {peak}/mín kl. {when}"
+
+msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
+msgstr "Ekki sent: Loka á skrif á bus eða Aðeins hlusta er virkt (Stillingar > Tenging)"

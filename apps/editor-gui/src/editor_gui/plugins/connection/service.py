@@ -25,6 +25,11 @@ from xknx.management.procedures.network.nm_individual_address_serial_number_writ
 from xknx.telegram import GroupAddress, Telegram
 from xknx.telegram.apci import GroupValueRead, GroupValueWrite
 
+from editor_gui.plugins.connection.write_guard import (
+    listen_only_active,
+    set_listen_only,
+)
+
 if TYPE_CHECKING:
     from xknx import XKNX
     from xknx.secure.data_secure import DataSecure
@@ -369,18 +374,45 @@ class ConnectionService:
     def set_logger(self, log: Logger) -> None:
         self._log = log
 
+    @property
+    def listen_only(self) -> bool:
+        """Listen Only: the interfaces refuse every frame to the bus, reads included."""
+        return listen_only_active()
+
+    @listen_only.setter
+    def listen_only(self, value: bool) -> None:
+        set_listen_only(value)
+
     def writes_blocked(self) -> bool:
-        """Whether Block Bus Writes is on: the interfaces refuse every write while it is."""
-        return self.block_bus_writes
+        """Whether Block Bus Writes (or Listen Only) is on: the interfaces refuse every write
+        while it is."""
+        return self.block_bus_writes or self.listen_only
 
     def writes_refused(self, op: str) -> bool:
         """Guard for an operation that writes to the bus: logs and returns ``True`` (the caller
-        must abort) while Block Bus Writes is on, before anything is sent."""
+        must abort) while Block Bus Writes or Listen Only is on, before anything is sent."""
+        if self.listen_only:
+            self._log.error(
+                f"{op} refused: Listen Only is on (Settings > Connection), nothing is sent to "
+                "the bus"
+            )
+            return True
         if not self.block_bus_writes:
             return False
         self._log.error(
             f"{op} refused: Block Bus Writes is on (Settings > Connection), nothing is written "
             "to the bus"
+        )
+        return True
+
+    def sends_refused(self, op: str) -> bool:
+        """Guard for an operation that only reads from the bus: logs and returns ``True`` (the
+        caller must abort) while Listen Only is on, before anything is sent."""
+        if not self.listen_only:
+            return False
+        self._log.error(
+            f"{op} refused: Listen Only is on (Settings > Connection), nothing is sent to the "
+            "bus"
         )
         return True
 

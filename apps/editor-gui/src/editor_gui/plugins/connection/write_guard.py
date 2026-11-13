@@ -6,7 +6,8 @@ code path: downloads, individual address and serial number writes, restarts, pro
 writes, group writes and responses, KNX Secure key writes, DALI commands and MCP tools alike.
 
 What is let through is a fixed list of reads (and the transport layer's connect, disconnect and
-acknowledgements they need); everything else counts as a write. Frames the editor cannot look
+acknowledgements they need); everything else counts as a write. Listen Only goes further: it
+refuses every frame to the bus, reads included. Frames the editor cannot look
 into count as writes too: a KNX Data Secure frame is encrypted before it reaches the interface,
 so reads of secured devices are blocked as well while the setting is on.
 """
@@ -73,6 +74,39 @@ def is_bus_write(cemi: CEMIFrame) -> bool:
     if data.payload is None:
         return True
     return not isinstance(data.payload, _READS)
+
+
+class ListenOnlyRefused(BusWritesBlocked):
+    """A frame refused because Listen Only is on: the editor sends nothing to the bus."""
+
+    def __init__(self, cemi: CEMIFrame) -> None:
+        XKNXException.__init__(
+            self,
+            f"not sent: Listen Only is on (Settings > Connection) - {describe(cemi)}",
+        )
+
+
+class _ListenOnly:
+    active: bool = False
+
+
+_listen_only = _ListenOnly()
+
+
+def set_listen_only(active: bool) -> None:
+    """Listen Only: while it is on, every frame to the bus is refused, reads included (Block
+    Bus Writes still lets reads through). Only property reads of the interface itself, which
+    never reach the bus, pass."""
+    _listen_only.active = active
+
+
+def listen_only_active() -> bool:
+    return _listen_only.active
+
+
+def listen_only_allows(cemi: CEMIFrame) -> bool:
+    """Whether Listen Only lets ``cemi`` through (always, while it is off)."""
+    return not _listen_only.active or isinstance(cemi.data, CEMIMPropReadRequest)
 
 
 def describe(cemi: CEMIFrame) -> str:

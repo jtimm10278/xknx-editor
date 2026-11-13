@@ -481,3 +481,6 @@ msgstr[1] "{count} τηλεγραφήματα"
 
 msgid "max {peak}/min at {when}"
 msgstr "μέγ. {peak}/min στις {when}"
+
+msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
+msgstr "Δεν στάλθηκε: είναι ενεργό το Αποκλεισμός Εγγραφών στο Bus ή το Μόνο Ακρόαση (Ρυθμίσεις > Σύνδεση)"

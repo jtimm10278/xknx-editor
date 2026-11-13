@@ -9,6 +9,7 @@ from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
 from fastmcp.exceptions import ToolError
+from xknx.telegram.apci import GroupValueRead
 
 from editor_gui.plugins.mcp.context import McpContext, make_tool
 
@@ -70,6 +71,7 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
         traffic. Returns {address, service, timestamp, payload}; timestamp is ISO-formatted and payload
         is a raw payload string. This sends a bus read without editing the project."""
         _require_connection()
+        _refused(GroupValueRead())
         sent_at = datetime.now()
         monitor.send_read(address)
         deadline = time.monotonic() + timeout
@@ -86,6 +88,12 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
         raise ToolError(
             f"no response on {address!r} within {timeout}s (device may not answer reads)"
         )
+
+    def _refused(payload: Any) -> None:
+        """Raise when Listen Only (anything) or Block Bus Writes (``None``: a write) refuses
+        sending, before anything is queued."""
+        if why := monitor.sending_refused(payload):
+            raise ToolError(f"not sent: {why} (Settings > Connection)")
 
     def _kind(name: str) -> Any:
         from editor_gui.plugins.monitor.service import MonitorKind
@@ -145,6 +153,7 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
                     None,
                 )
             )
+        _refused(None)
         if not monitor.send_write(address, resolved, value):
             raise ToolError(f"could not encode value {value!r} for DPT {resolved!r}")
         # Fire-and-forget: the value was encoded and queued onto the bus loop; actual delivery is not
@@ -158,5 +167,6 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
         waits for a fresh value. When polling monitor_latest, check timestamp to avoid stale data.
         This sends a bus read without editing the project."""
         _require_connection()
+        _refused(GroupValueRead())
         monitor.send_read(address)
         return {"status": "queued", "address": address}

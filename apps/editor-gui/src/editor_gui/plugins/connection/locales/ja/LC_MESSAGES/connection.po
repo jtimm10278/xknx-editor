@@ -301,3 +301,11 @@ msgstr "バス上で個別アドレスを確認しています…"
 
 msgid "This interface forgets its individual address when unplugged, so it is set again on every connect."
 msgstr "このインターフェイスは取り外すと個別アドレスを忘れるため、接続するたびに再設定されます。"
+msgid "Listen Only"
+msgstr "受信のみ"
+
+msgid "Sends nothing to the bus, not even reads: the editor only listens. With Routing as the connection type it uses no tunnel of the interface either. This holds for MCP clients too, which can turn it on but not off."
+msgstr "バスに何も送信しません（読み取りも送信しません）。エディターは受信するだけです。接続の種類をルーティング (Routing) にすると、インターフェースのトンネルも使用しません。MCP クライアントにも適用され、オンにはできますがオフにはできません。"
+
+msgid "Listen only"
+msgstr "受信のみ"

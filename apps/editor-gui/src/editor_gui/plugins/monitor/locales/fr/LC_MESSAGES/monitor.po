@@ -481,3 +481,6 @@ msgstr[1] "{count} télégrammes"
 
 msgid "max {peak}/min at {when}"
 msgstr "max {peak}/min à {when}"
+
+msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
+msgstr "Non envoyé : Bloquer les écritures sur le bus ou Écoute seule est activé (Paramètres > Connexion)"

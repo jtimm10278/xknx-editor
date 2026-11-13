@@ -473,3 +473,6 @@ msgstr[0] "{count} 件のテレグラム"
 
 msgid "max {peak}/min at {when}"
 msgstr "最大 {peak}/分 @ {when}"
+
+msgid "Not sent: Block Bus Writes or Listen Only is on (Settings > Connection)"
+msgstr "送信されませんでした: 「バスへの書き込みをブロック」または「受信のみ」がオンです（設定 > 接続）"
