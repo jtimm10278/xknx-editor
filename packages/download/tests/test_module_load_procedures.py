@@ -302,3 +302,33 @@ def test_the_unload_procedure_runs_them_at_its_merge_point_too() -> None:
         "LdCtrlWriteProp",
         "LdCtrlRestart",
     ]
+
+
+def test_a_download_plugins_controls_take_the_place_of_the_fragments() -> None:
+    """ETS hands some merge points to a manufacturer's download plug-in (e.g. a Siemens Generic
+    Plug-in's parameter passes): its controls replace the application's fragment there, fill an
+    empty merge point, and never apply to an Unload."""
+    master = _master_with_default(
+        LdCtrlConnect(),
+        LdCtrlMerge(merge_id=1),
+        LdCtrlMerge(merge_id=6),
+        LdCtrlRestart(),
+    )
+    application = _styled_application(
+        LoadProcedureStyle.MERGED_PROCEDURE, _fragment(1, LdCtrlConnect())
+    )
+    plugin_write = LdCtrlWriteProp(obj_idx=6, prop_id=205, verify=True)
+    controls = resolve_download_controls(
+        cast(Any, application),
+        master,
+        module_controls={6: [_MODULE_WRITE]},
+        plugin_controls={1: [_MODULE_WRITE], 6: [plugin_write]},
+    )
+    assert [type(c).__name__ for c in controls] == [
+        "LdCtrlConnect",
+        "LdCtrlWriteProp",
+        "LdCtrlWriteProp",
+        "LdCtrlRestart",
+    ]
+    assert controls[2].obj_idx == 6  # type: ignore[attr-defined]
+    assert controls[1].applies_to is LdCtrlProcType.ALL  # type: ignore[attr-defined]

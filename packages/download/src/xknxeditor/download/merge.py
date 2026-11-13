@@ -128,6 +128,7 @@ def resolve_download_controls(
     parameter_values: Mapping[str, str] | None = None,
     application2: Application | None = None,
     module_controls: Mapping[int, Sequence[object]] | None = None,
+    plugin_controls: Mapping[int, Sequence[object]] | None = None,
 ) -> list[object]:
     """Return the flat, ordered list of Load Controls to run for a download.
 
@@ -146,6 +147,9 @@ def resolve_download_controls(
     ``module_controls`` holds the load controls of the device's module instances by the merge
     id of their module's load procedure (see ``DownloadImage.module_load_controls``): a merge
     point of that id in the application's procedure or fragments runs them.
+    ``plugin_controls`` holds the controls a manufacturer's download plug-in runs, by the merge
+    id ETS hands to it: they replace the application's fragments and module controls there
+    (a Load only).
     """
     if procedure_type is not ProcedureType.LOAD:
         has_application_program2, application2 = True, None
@@ -164,6 +168,7 @@ def resolve_download_controls(
             values=parameter_values or {},
             application2=application2,
             modules=module_controls or {},
+            plugin=plugin_controls if procedure_type is ProcedureType.LOAD else None,
         )
     except UnsupportedProcedureError:
         # A product the manufacturer's download plug-in downloads may ship no Load procedure
@@ -201,9 +206,11 @@ def _resolve_controls(
     values: Mapping[str, str],
     application2: Application | None = None,
     modules: Mapping[int, Sequence[object]] | None = None,
+    plugin: Mapping[int, Sequence[object]] | None = None,
 ) -> list[object]:
     style = application.load_procedure_style
     modules = modules or {}
+    plugin = plugin or {}
     load_procedures = application.load_procedures
 
     # An application ships only its Load procedure (ProductProcedure) or Load
@@ -219,7 +226,7 @@ def _resolve_controls(
     if load and style == LoadProcedureStyle.PRODUCT_PROCEDURE:
         controls = _program_controls(
             application,
-            _splice_modules(_flatten(load_procedures, values), modules),
+            _splice_modules(_flatten(load_procedures, values), {**modules, **plugin}),
             bim_m112,
             False,
             second,
@@ -321,6 +328,10 @@ def _resolve_controls(
                 for merge_id, more in modules.items()
             },
             **fragments,
+            **{
+                merge_id: [_explicit(c) for c in more]
+                for merge_id, more in plugin.items()
+            },
         },
     )
     if load:

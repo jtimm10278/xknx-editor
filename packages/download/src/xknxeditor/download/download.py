@@ -266,6 +266,7 @@ def _resolve_procedure(
             scope=scope,
             parameter_values=image.procedure_parameters,
             module_controls=image.module_load_controls,
+            plugin_controls=image.plugin_load_controls,
         )
     base = resolve_download_controls(
         application,
@@ -274,6 +275,7 @@ def _resolve_procedure(
         parameter_values=image.procedure_parameters,
         application2=application2,
         module_controls=image.module_load_controls,
+        plugin_controls=image.plugin_load_controls,
     )
     return materialize_group_communication_controls(
         image,
@@ -301,6 +303,7 @@ def _full_procedure(
             parameter_values=image.procedure_parameters,
             application2=application2,
             module_controls=image.module_load_controls,
+            plugin_controls=image.plugin_load_controls,
         )
     except DownloadError as exc:
         logger.debug("preflight: full procedure not resolved: %s", exc)

@@ -613,6 +613,7 @@ class LoadProcedureRunner:
                 scope=scope,
                 parameter_values=image.procedure_parameters,
                 module_controls=image.module_load_controls,
+                plugin_controls=image.plugin_load_controls,
             )
         )
         # Position of the control currently being executed, for diagnostics.

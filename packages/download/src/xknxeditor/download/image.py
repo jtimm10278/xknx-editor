@@ -483,6 +483,10 @@ class DownloadImage:
     # load procedure: an ``LdCtrlMerge`` of that id runs them, each instance's in the order of
     # the instances, with its arguments applied.
     module_load_controls: Mapping[int, tuple[object, ...]] = MappingProxyType({})
+    # The load controls a manufacturer's download plug-in runs, by the merge id ETS hands to the
+    # plug-in (e.g. a Siemens Generic Plug-in's parameter passes): they take the place of the
+    # application's own fragments and of module controls of that merge id.
+    plugin_load_controls: Mapping[int, tuple[object, ...]] = MappingProxyType({})
     # The group communication tables of a device that holds them as properties (System 300).
     property_tables: PropertyTables | None = None
     # The memory segments of the mask (start, length), from its master data: part of the
