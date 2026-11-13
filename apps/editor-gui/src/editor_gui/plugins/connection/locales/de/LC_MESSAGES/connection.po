@@ -316,3 +316,9 @@ msgstr "Geschützte Gruppenadressen"
 
 msgid "Nothing is ever sent to these group addresses, not even reads, e.g. the ones of gates or an alarm system: addresses like 1/2/3, or groups ending with a slash like 7/0/, separated by spaces. MCP clients can add to the list but not take anything out."
 msgstr "An diese Gruppenadressen wird nie etwas gesendet, auch keine Lesezugriffe, z. B. die von Toren oder einer Alarmanlage: Adressen wie 1/2/3 oder Gruppen mit einem Schrägstrich am Ende wie 7/0/, durch Leerzeichen getrennt. MCP-Clients können die Liste ergänzen, aber nichts daraus entfernen."
+
+msgid "Locked Devices"
+msgstr "Gesperrte Geräte"
+
+msgid "Nothing that could change these devices is sent, e.g. a download, while reads still are: individual addresses like 1.2.3, separated by spaces. A download unlocks one only for itself, when you confirm it in its dialog. MCP clients can lock devices but not unlock them."
+msgstr "An diese Geräte wird nichts gesendet, was sie ändern könnte, z. B. ein Download; Lesezugriffe weiterhin schon: physikalische Adressen wie 1.2.3, durch Leerzeichen getrennt. Ein Download entsperrt eines nur für sich selbst, wenn Sie es in seinem Dialog bestätigen. MCP-Clients können Geräte sperren, aber nicht entsperren."

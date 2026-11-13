@@ -33,9 +33,11 @@ from editor_gui.plugins.connection.diagnostic_transport import DiagnosticTCPTunn
 from editor_gui.plugins.connection.write_guard import (
     BusWritesBlocked,
     ListenOnlyRefused,
+    LockedRefused,
     ProtectedRefused,
     is_bus_write,
     listen_only_allows,
+    locked_allows,
     protected_allows,
 )
 
@@ -61,6 +63,8 @@ def _refuse_write(writes_blocked: Callable[[], bool] | None, cemi: CEMIFrame) ->
         raise ListenOnlyRefused(cemi)
     if reason := protected_allows(cemi):
         raise ProtectedRefused(cemi, reason)
+    if reason := locked_allows(cemi):
+        raise LockedRefused(cemi, reason)
     if writes_blocked is not None and writes_blocked() and is_bus_write(cemi):
         raise BusWritesBlocked(cemi)
 

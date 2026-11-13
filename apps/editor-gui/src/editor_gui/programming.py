@@ -750,6 +750,7 @@ async def download_device(
     waiting: Callable[[], None] | None = None,
     route_couplers: Sequence[IndividualAddress] = (),
     memory_progress: Callable[[int, int], None] | None = None,
+    unlock: bool = False,
 ) -> DownloadResult:
     """Program ``device``: build its image and run the load procedure on the bus.
 
@@ -779,8 +780,64 @@ async def download_device(
     access key; ``in_programming_mode`` and ``waiting`` belong to an unload of everything, for
     which the user puts the device into programming mode (see
     :func:`xknxeditor.download.download`). ``route_couplers`` are the couplers between the
-    interface and the device; the frames stay within what they pass.
+    interface and the device; the frames stay within what they pass. ``unlock`` lets the
+    download through to a locked device (Settings > Connection), for this download only.
     """
+    from editor_gui.plugins.connection.write_guard import unlocked
+
+    with unlocked(_address(device)) if unlock else contextlib.nullcontext():
+        return await _download_device(
+            xknx,
+            device,
+            scope,
+            group_communication,
+            master,
+            progress,
+            security,
+            serial_number,
+            confirm_full_download,
+            ip_config,
+            tool_key,
+            ip_secure,
+            disable_security,
+            routing_blocking,
+            memory_service_count,
+            interface_max_apdu_length,
+            factory_image,
+            second_application,
+            access_key,
+            in_programming_mode,
+            waiting,
+            route_couplers,
+            memory_progress,
+        )
+
+
+async def _download_device(
+    xknx: XKNX,
+    device: Device,
+    scope: DownloadScope,
+    group_communication: GroupCommunication | None,
+    master: MasterData | None,
+    progress: Callable[[int, int], None] | None,
+    security: DeviceSecurity | None,
+    serial_number: bytes | None,
+    confirm_full_download: Callable[[str], Awaitable[bool]] | None,
+    ip_config: IpDeviceConfig | None,
+    tool_key: bytes | None,
+    ip_secure: IpSecureConfig | None,
+    disable_security: bool,
+    routing_blocking: bool | None,
+    memory_service_count: int | None,
+    interface_max_apdu_length: int | None,
+    factory_image: FactoryData | None,
+    second_application: Application | None,
+    access_key: int,
+    in_programming_mode: bool,
+    waiting: Callable[[], None] | None,
+    route_couplers: Sequence[IndividualAddress],
+    memory_progress: Callable[[int, int], None] | None,
+) -> DownloadResult:
     from editor_gui.plugin_providers import prepared_for, programming_error
 
     if reason := programming_error(device):

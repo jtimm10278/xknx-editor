@@ -315,3 +315,9 @@ msgstr "受保护的组地址"
 
 msgid "Nothing is ever sent to these group addresses, not even reads, e.g. the ones of gates or an alarm system: addresses like 1/2/3, or groups ending with a slash like 7/0/, separated by spaces. MCP clients can add to the list but not take anything out."
 msgstr "绝不向这些组地址发送任何内容，连读取也不发送，例如大门或报警系统的地址：如 1/2/3 的地址，或像 7/0/ 这样以斜杠结尾的组，用空格分隔。MCP 客户端可以向列表添加，但不能从中删除。"
+
+msgid "Locked Devices"
+msgstr "锁定的设备"
+
+msgid "Nothing that could change these devices is sent, e.g. a download, while reads still are: individual addresses like 1.2.3, separated by spaces. A download unlocks one only for itself, when you confirm it in its dialog. MCP clients can lock devices but not unlock them."
+msgstr "不会发送任何可能更改这些设备的内容（例如下载），但读取仍会发送：填写 1.2.3 这样的物理地址，用空格分隔。只有在下载的对话框中确认后，下载才会仅为本次下载解锁该设备。MCP 客户端可以锁定设备，但不能解锁。"

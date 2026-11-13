@@ -316,3 +316,9 @@ msgstr "Varin hópvistföng"
 
 msgid "Nothing is ever sent to these group addresses, not even reads, e.g. the ones of gates or an alarm system: addresses like 1/2/3, or groups ending with a slash like 7/0/, separated by spaces. MCP clients can add to the list but not take anything out."
 msgstr "Aldrei er neitt sent á þessi hópvistföng, ekki einu sinni lestur, t.d. vistföng hliða eða þjófavarnakerfis: vistföng eins og 1/2/3 eða hópar sem enda á skástriki eins og 7/0/, aðskilin með bilum. MCP-biðlarar geta bætt á listann en ekki tekið neitt af honum."
+
+msgid "Locked Devices"
+msgstr "Læst tæki"
+
+msgid "Nothing that could change these devices is sent, e.g. a download, while reads still are: individual addresses like 1.2.3, separated by spaces. A download unlocks one only for itself, when you confirm it in its dialog. MCP clients can lock devices but not unlock them."
+msgstr "Ekkert sem gæti breytt þessum tækjum er sent, t.d. niðurhal, en lestur er enn sendur: einstaklingsvistföng eins og 1.2.3, aðskilin með bilum. Niðurhal opnar eitt aðeins fyrir sig, þegar þú staðfestir það í glugga þess. MCP-biðlarar geta læst tækjum en ekki opnað þau."

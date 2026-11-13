@@ -317,3 +317,9 @@ msgstr "Chránené skupinové adresy"
 
 msgid "Nothing is ever sent to these group addresses, not even reads, e.g. the ones of gates or an alarm system: addresses like 1/2/3, or groups ending with a slash like 7/0/, separated by spaces. MCP clients can add to the list but not take anything out."
 msgstr "Na tieto skupinové adresy sa nikdy nič neodošle, ani čítania, napr. adresy brán alebo zabezpečovacieho systému: adresy ako 1/2/3 alebo skupiny končiace lomkou ako 7/0/, oddelené medzerami. Klienti MCP môžu zoznam rozšíriť, ale nič z neho odobrať."
+
+msgid "Locked Devices"
+msgstr "Uzamknuté zariadenia"
+
+msgid "Nothing that could change these devices is sent, e.g. a download, while reads still are: individual addresses like 1.2.3, separated by spaces. A download unlocks one only for itself, when you confirm it in its dialog. MCP clients can lock devices but not unlock them."
+msgstr "Nič, čo by mohlo tieto zariadenia zmeniť, sa neodosiela, napr. nahrávanie, čítania však áno: fyzické adresy ako 1.2.3 oddelené medzerami. Nahrávanie odomkne jedno len pre seba, keď to potvrdíte v jeho dialógu. Klienti MCP môžu zariadenia uzamknúť, ale nie odomknúť."

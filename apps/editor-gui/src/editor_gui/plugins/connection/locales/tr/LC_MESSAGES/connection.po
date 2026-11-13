@@ -315,3 +315,9 @@ msgstr "Korumalı Grup Adresleri"
 
 msgid "Nothing is ever sent to these group addresses, not even reads, e.g. the ones of gates or an alarm system: addresses like 1/2/3, or groups ending with a slash like 7/0/, separated by spaces. MCP clients can add to the list but not take anything out."
 msgstr "Bu grup adreslerine hiçbir zaman hiçbir şey gönderilmez, okuma bile: örneğin kapıların veya bir alarm sisteminin adresleri. 1/2/3 gibi adresler veya 7/0/ gibi eğik çizgiyle biten gruplar, boşlukla ayrılmış olarak. MCP istemcileri listeye ekleyebilir ancak listeden bir şey çıkaramaz."
+
+msgid "Locked Devices"
+msgstr "Kilitli Cihazlar"
+
+msgid "Nothing that could change these devices is sent, e.g. a download, while reads still are: individual addresses like 1.2.3, separated by spaces. A download unlocks one only for itself, when you confirm it in its dialog. MCP clients can lock devices but not unlock them."
+msgstr "Bu cihazları değiştirebilecek hiçbir şey gönderilmez (ör. bir indirme), okumalar ise gönderilmeye devam eder: 1.2.3 gibi bireysel adresler, boşluklarla ayrılmış. Bir indirme, iletişim kutusunda onayladığınızda bir cihazın kilidini yalnızca kendisi için açar. MCP istemcileri cihazları kilitleyebilir ancak kilitlerini açamaz."

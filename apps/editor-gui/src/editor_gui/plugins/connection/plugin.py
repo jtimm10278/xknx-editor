@@ -49,8 +49,11 @@ from editor_gui.plugins.connection.usb import (
     usb_device_name,
 )
 from editor_gui.plugins.connection.write_guard import (
+    locked_devices,
+    parse_locked,
     parse_protected,
     protected_patterns,
+    set_locked,
     set_protected,
 )
 from editor_gui.plugins.connection.xknx_usb import USBDeviceInfo, USBInterfaceInfo
@@ -605,6 +608,11 @@ class ConnectionPlugin:
         self._apply_block_bus_writes()
         self._api.connection.listen_only = bool(data.get("listen_only", False))
         set_protected(parse_protected(str(data.get("protected_group_addresses", ""))))
+        try:
+            set_locked(parse_locked(str(data.get("locked_devices", ""))))
+        except ValueError:
+            self._log.error("locked devices setting cannot be read; none locked")
+            set_locked([])
 
     def _save_current_settings(self) -> None:
         save_settings(
@@ -627,6 +635,7 @@ class ConnectionPlugin:
                     getattr(self._api.connection, "listen_only", False)
                 ),
                 "protected_group_addresses": " ".join(protected_patterns()),
+                "locked_devices": " ".join(locked_devices()),
             },
         )
 
@@ -2443,6 +2452,16 @@ class ConnectionPlugin:
                 ),
             ),
             Setting(
+                "locked_devices",
+                lambda: S.SETTING_LOCKED_DEVICES,
+                "text",
+                get=lambda: " ".join(locked_devices()),
+                set=self._set_locked,
+                hint=lambda: S.SETTING_LOCKED_DEVICES_HINT,
+                # An MCP client may lock more devices, never unlock one.
+                mcp_may_set=_adds_locked,
+            ),
+            Setting(
                 "use_serial_number",
                 lambda: S.SETTING_USE_SERIAL_NUMBER,
                 "bool",
@@ -2537,6 +2556,19 @@ class ConnectionPlugin:
         if patterns != protected_patterns():
             self._log.info("protected group addresses", patterns=" ".join(patterns))
         set_protected(patterns)
+        self._save_current_settings()
+
+    def _set_locked(self, value: object) -> None:
+        try:
+            addresses = parse_locked(str(value))
+        except ValueError:
+            self._log.warning(
+                "locked devices: not individual addresses", value=str(value)
+            )
+            return
+        if addresses != locked_devices():
+            self._log.info("locked devices", addresses=" ".join(addresses))
+        set_locked(addresses)
         self._save_current_settings()
 
     def _set_listen_only(self, value: object) -> None:
@@ -2759,3 +2791,11 @@ def _parse_individual_address(text: str) -> IndividualAddress:
         return IndividualAddress(text.strip())
     except CouldNotParseAddress:
         raise ValueError(S.USB_ADDRESS_INVALID.format(address=text.strip())) from None
+
+
+def _adds_locked(value: object) -> bool:
+    """Whether ``value`` keeps every locked device (it may add more)."""
+    try:
+        return set(parse_locked(str(value))) >= set(locked_devices())
+    except ValueError:
+        return False

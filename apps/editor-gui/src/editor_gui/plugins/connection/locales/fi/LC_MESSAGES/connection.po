@@ -316,3 +316,9 @@ msgstr "Suojatut ryhmäosoitteet"
 
 msgid "Nothing is ever sent to these group addresses, not even reads, e.g. the ones of gates or an alarm system: addresses like 1/2/3, or groups ending with a slash like 7/0/, separated by spaces. MCP clients can add to the list but not take anything out."
 msgstr "Näihin ryhmäosoitteisiin ei koskaan lähetetä mitään, ei edes lukuja, esim. porttien tai hälytysjärjestelmän osoitteet: osoitteita kuten 1/2/3 tai kauttaviivaan päättyviä ryhmiä kuten 7/0/, välilyönnein erotettuina. MCP-asiakkaat voivat lisätä luetteloon mutta eivät poistaa siitä mitään."
+
+msgid "Locked Devices"
+msgstr "Lukitut laitteet"
+
+msgid "Nothing that could change these devices is sent, e.g. a download, while reads still are: individual addresses like 1.2.3, separated by spaces. A download unlocks one only for itself, when you confirm it in its dialog. MCP clients can lock devices but not unlock them."
+msgstr "Näille laitteille ei lähetetä mitään, mikä voisi muuttaa niitä, esim. latausta, mutta lukuja lähetetään edelleen: yksilöosoitteet kuten 1.2.3 välilyönnein erotettuina. Lataus avaa yhden lukituksen vain itselleen, kun vahvistat sen sen valintaikkunassa. MCP-asiakkaat voivat lukita laitteita mutta eivät avata niitä."

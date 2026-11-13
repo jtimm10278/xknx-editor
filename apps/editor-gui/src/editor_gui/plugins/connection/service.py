@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import datetime
 import functools
 import threading
@@ -26,8 +27,10 @@ from xknx.telegram import GroupAddress, Telegram
 from xknx.telegram.apci import GroupValueRead, GroupValueWrite
 
 from editor_gui.plugins.connection.write_guard import (
+    is_locked,
     listen_only_active,
     set_listen_only,
+    unlocked,
 )
 
 if TYPE_CHECKING:
@@ -1148,6 +1151,7 @@ class ConnectionService:
         disable_security: bool = False,
         routing_blocking: bool | None = None,
         in_programming_mode: bool = False,
+        unlock_locked: bool = False,
     ) -> Future[Any] | None:
         """Download the device's configured application/parameters onto the bus.
 
@@ -1162,6 +1166,8 @@ class ConnectionService:
         device securely; ``disable_security`` switches it to plain communication with the key it
         holds. For an unload of everything, ``in_programming_mode`` has the user put the device
         into programming mode first (``waiting`` is called while none is).
+        A locked device (Settings > Connection) is only programmed with ``unlock_locked`` (the
+        user confirmed it), and only unlocked for this download.
         """
         if self.writes_refused("program_device") or self.not_connected(
             "program_device"
@@ -1169,6 +1175,13 @@ class ConnectionService:
             return None
         if not device.individual_address:
             self._log.warning("Device has no individual address", device=device.name)
+            return None
+        if is_locked(device.individual_address) and not unlock_locked:
+            self._log.error(
+                "Device is locked (Settings > Connection); unlock it for this download",
+                device=device.name,
+                address=device.individual_address,
+            )
             return None
         if scope is not None and scope.individual_address_only:
             from xknxeditor.download.scope import DownloadScope
@@ -1180,6 +1193,7 @@ class ConnectionService:
                 overwrite,
                 waiting,
                 None if overwrite else serial_number,
+                unlock=unlock_locked,
             )
         from editor_gui.device_plugins import download_needs_plugin_confirmation
 
@@ -1251,6 +1265,7 @@ class ConnectionService:
                 in_programming_mode=in_programming_mode,
                 waiting=waiting,
                 route_couplers=self._route_couplers(device),
+                unlock=unlock_locked,
             )
         )
         if future is not None:
@@ -1302,6 +1317,8 @@ class ConnectionService:
         overwrite: bool,
         waiting: Callable[[], None] | None,
         serial_number: bytes | None,
+        *,
+        unlock: bool = False,
     ) -> Future[Any] | None:
         from xknxeditor.download.commissioning import download_individual_address
 
@@ -1328,15 +1345,18 @@ class ConnectionService:
             secure=(current_security or security) is not None,
         )
         future = self.run_async(
-            download_individual_address(
-                self._connected_xknx,
-                device.individual_address,
-                current_address=current_address,
-                security=security,
-                current_security=current_security,
-                master=self.master,
-                waiting=waiting,
-                serial_number=serial_number,
+            _unlocked_for(
+                [device.individual_address, current_address or ""] if unlock else [],
+                download_individual_address(
+                    self._connected_xknx,
+                    device.individual_address,
+                    current_address=current_address,
+                    security=security,
+                    current_security=current_security,
+                    master=self.master,
+                    waiting=waiting,
+                    serial_number=serial_number,
+                ),
             )
         )
         if future is not None:
@@ -1879,3 +1899,13 @@ def _second_application(device: Device) -> Application | None:
     thread)."""
     getter = device.second_application
     return getter() if getter is not None else None
+
+
+async def _unlocked_for[T](addresses: list[str], work: Awaitable[T]) -> T:
+    """Run ``work`` with the locked devices among ``addresses`` unlocked (a job the user
+    confirmed); with no addresses, as it is."""
+    with contextlib.ExitStack() as stack:
+        for address in addresses:
+            if address and is_locked(address):
+                stack.enter_context(unlocked(address))
+        return await work

@@ -89,6 +89,19 @@ class ConnectionStrings:
         )
 
     @property
+    def SETTING_LOCKED_DEVICES(self) -> str:
+        return _("Locked Devices")
+
+    @property
+    def SETTING_LOCKED_DEVICES_HINT(self) -> str:
+        return _(
+            "Nothing that could change these devices is sent, e.g. a download, while reads "
+            "still are: individual addresses like 1.2.3, separated by spaces. A download "
+            "unlocks one only for itself, when you confirm it in its dialog. MCP clients can "
+            "lock devices but not unlock them."
+        )
+
+    @property
     def STATUS_LISTEN_ONLY(self) -> str:
         return _("Listen only")
 

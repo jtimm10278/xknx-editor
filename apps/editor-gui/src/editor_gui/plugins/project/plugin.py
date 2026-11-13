@@ -33,6 +33,7 @@ from editor_gui.plugin_blob_readers.siemens_generic import (
 )
 from editor_gui.plugins.base import Logger, PanelDefinition, PluginAPI
 from editor_gui.plugins.connection.strings import S as CONNECTION_S
+from editor_gui.plugins.connection.write_guard import is_locked
 from editor_gui.plugins.project.button_runner import ButtonOutcome, ButtonRunner
 from editor_gui.plugins.project.compare_match import compare_mismatch, matching_devices
 from editor_gui.plugins.project.device_info_view import device_info_sections
@@ -2898,6 +2899,7 @@ class ProjectPlugin:
                 scope=scope,
                 medium_config=parts.medium_config,
                 without_plugin=request.without_plugin,
+                unlock_locked=request.unlock_locked,
                 current_address=request.current_address,
                 serial_number=serial,
             )
@@ -2910,6 +2912,7 @@ class ProjectPlugin:
         *,
         origin: str,
         without_plugin: bool = False,
+        unlock_locked: bool = False,
         current_address: str | None = None,
         serial_number: bytes | None = None,
         test: bool = False,
@@ -2931,6 +2934,7 @@ class ProjectPlugin:
             scope=parts.scope,
             medium_config=parts.medium_config,
             without_plugin=without_plugin,
+            unlock_locked=unlock_locked,
             current_address=current_address,
             serial_number=serial_number,
             test=test,
@@ -2956,6 +2960,7 @@ class ProjectPlugin:
                     scope=item.scope,
                     medium_config=item.medium_config,
                     without_plugin=item.without_plugin,
+                    unlock_locked=item.unlock_locked,
                     current_address=item.current_address,
                     serial_number=item.serial_number,
                 )
@@ -3426,6 +3431,7 @@ class ProjectPlugin:
                 parts.scope,
                 self._group_communication_for(device),
                 without_plugin=item.without_plugin,
+                unlock_locked=item.unlock_locked,
                 current_address=item.current_address,
                 waiting=functools.partial(setattr, item, "waiting_for_button", True),
                 serial_number=item.serial_number,
@@ -3458,6 +3464,10 @@ class ProjectPlugin:
                     S.PLUGIN_DOWNLOAD_OVERWRITES
                     if download_overwrites_plugin_config(device)
                     else S.PLUGIN_DOWNLOAD_REQUIRED
+                )
+            elif is_locked(device.individual_address or "") and not item.unlock_locked:
+                item.message = S.PROGRAM_LOCKED_REFUSED.format(
+                    address=device.individual_address
                 )
             elif self._api.connection.xknx is None:
                 item.message = S.SCRIPT_NOT_CONNECTED

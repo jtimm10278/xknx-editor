@@ -617,6 +617,7 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
         without_plugin: bool = False,
         current_address: str | None = None,
         use_serial_number: bool = False,
+        unlock_locked: bool = False,
     ) -> dict[str, Any]:
         """Download the device onto the bus (``timeout`` seconds). Identify it by ``node_id`` OR
         ``device_address`` (its individual address in the PROJECT, like "1.0.30"); pass exactly
@@ -660,7 +661,10 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
         instead of programming mode — for INDIVIDUAL_ADDRESS, or a FULL commissioning download of a
         device that does not answer at its address yet. A device whose hardware is
         NoDownloadWithoutPlugin is refused unless ``without_plugin=true``, set only after the user
-        explicitly confirmed programming it without the manufacturer's plugin.
+        explicitly confirmed programming it without the manufacturer's plugin. A locked device
+        (connection setting ``locked_devices``) is refused unless ``unlock_locked=true``, set only
+        after the user explicitly confirmed unlocking it for this download; it is unlocked for
+        this download only.
 
         The programming runs in the editor's operations queue, labelled MCP: the user sees it there
         and in its history, it waits behind operations already queued, and the user can cancel it
@@ -712,6 +716,14 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
                 f"device {nid} must be programmed with the manufacturer's plugin ({reason}); "
                 "pass without_plugin=true only if the user explicitly confirmed programming it anyway"
             )
+        from editor_gui.plugins.connection.write_guard import is_locked
+
+        if is_locked(device.individual_address or "") and not unlock_locked:
+            raise ToolError(
+                f"device {nid} ({device.individual_address}) is locked (connection setting "
+                "locked_devices); pass unlock_locked=true only if the user explicitly confirmed "
+                "unlocking it for this download"
+            )
         from editor_gui.plugins.connection.service import DeviceCertificateRequired
         from xknxeditor.proj import ProjectPasswordRequired
 
@@ -728,6 +740,7 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
                 requested,
                 timeout,
                 without_plugin=without_plugin,
+                unlock_locked=unlock_locked,
                 current_address=current_address,
                 serial_number=serial,
             )
@@ -757,6 +770,7 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
                     resolved,
                     group_communication,
                     without_plugin=without_plugin,
+                    unlock_locked=unlock_locked,
                     current_address=current_address,
                     serial_number=serial,
                     ip_config=ip_config,

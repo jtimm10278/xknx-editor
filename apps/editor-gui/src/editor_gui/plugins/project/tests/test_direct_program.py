@@ -89,3 +89,19 @@ def test_a_serial_number_of_another_device_still_asks():
         )
         is None
     )
+
+
+@pytest.mark.parametrize(
+    "scope", [DownloadScope.FULL, DownloadScope.INDIVIDUAL_ADDRESS]
+)
+def test_a_locked_device_asks_to_unlock(scope: DownloadScope):
+    assert (
+        direct_program_request(
+            scope,
+            plugin_required=False,
+            use_serial_number=False,
+            serial_owner=None,
+            locked=True,
+        )
+        is None
+    )

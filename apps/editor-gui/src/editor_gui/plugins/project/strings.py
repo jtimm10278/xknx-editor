@@ -2715,6 +2715,28 @@ class ProjectStrings:
         return _("Manufacturer's Plugin Not Available")
 
     @property
+    def PROGRAM_LOCKED_TITLE(self) -> str:
+        return _("Locked Device")
+
+    @property
+    def PROGRAM_LOCKED_TEXT(self) -> str:
+        return _(
+            "{address} is a locked device (Settings > Connection): nothing that could change it "
+            "is sent unless you unlock it, and then only for this download."
+        )
+
+    @property
+    def PROGRAM_UNLOCK(self) -> str:
+        return _("Unlock this device for this download")
+
+    @property
+    def PROGRAM_LOCKED_REFUSED(self) -> str:
+        return _(
+            "{address} is a locked device (Settings > Connection) and was not unlocked for this "
+            "download."
+        )
+
+    @property
     def PROGRAM_SERIAL_USED_TITLE(self) -> str:
         return _("Serial Number Already Used")
 

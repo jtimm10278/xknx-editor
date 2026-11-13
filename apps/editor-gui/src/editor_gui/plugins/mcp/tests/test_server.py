@@ -1900,6 +1900,22 @@ async def test_programming_runs_in_the_operations_queue(
         )
         assert partial["scope"] == "FULL"
         assert queued.pop().scope is DownloadScope.PARTIAL
+        # A locked device is programmed only when the user confirmed unlocking it.
+        from editor_gui.plugins.connection.write_guard import set_locked
+
+        set_locked(["1.1.5"])
+        try:
+            with pytest.raises(Exception, match="is locked"):
+                await client.call_tool(
+                    "connection_program_device", {"node_id": node_id}
+                )
+            unlocked = await _data(
+                client, "connection_program_device", node_id=node_id, unlock_locked=True
+            )
+        finally:
+            set_locked([])
+        assert unlocked["status"] == "programmed"
+        assert queued.pop().unlock_locked
         outcome.update(state=OperationState.CANCELED, message="Cancelled by user.")
         with pytest.raises(Exception, match="Cancelled by user"):
             await client.call_tool("connection_program_device", {"node_id": node_id})

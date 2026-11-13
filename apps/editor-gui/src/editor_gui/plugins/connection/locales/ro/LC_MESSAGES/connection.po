@@ -317,3 +317,9 @@ msgstr "Adrese de Grup Protejate"
 
 msgid "Nothing is ever sent to these group addresses, not even reads, e.g. the ones of gates or an alarm system: addresses like 1/2/3, or groups ending with a slash like 7/0/, separated by spaces. MCP clients can add to the list but not take anything out."
 msgstr "Nu se trimite niciodată nimic la aceste adrese de grup, nici măcar citiri, de ex. cele ale porților sau ale unui sistem de alarmă: adrese precum 1/2/3 sau grupuri terminate cu bară precum 7/0/, separate prin spații. Clienții MCP pot adăuga în listă, dar nu pot elimina nimic."
+
+msgid "Locked Devices"
+msgstr "Dispozitive blocate"
+
+msgid "Nothing that could change these devices is sent, e.g. a download, while reads still are: individual addresses like 1.2.3, separated by spaces. A download unlocks one only for itself, when you confirm it in its dialog. MCP clients can lock devices but not unlock them."
+msgstr "Nu se trimite nimic ce ar putea modifica aceste dispozitive, de ex. o descărcare, în timp ce citirile se trimit în continuare: adrese individuale precum 1.2.3, separate prin spații. O descărcare deblochează unul doar pentru ea însăși, când confirmați în dialogul ei. Clienții MCP pot bloca dispozitive, dar nu le pot debloca."

@@ -27,6 +27,7 @@ from editor_gui.device_plugins import (
 )
 from editor_gui.hardware_text import bus_current_text, rail_text
 from editor_gui.os_open import open_url
+from editor_gui.plugins.connection.write_guard import is_locked
 from editor_gui.plugins.project.strings import S
 from editor_gui.plugins.project.ui import name_focus
 from editor_gui.plugins.project.ui.status_field import status_combo
@@ -228,6 +229,8 @@ class ProgramRequest:
     without_plugin: bool = False
     current_address: str | None = None
     use_serial_number: bool = False
+    # Confirmed to unlock a locked device (Settings > Connection) for this download.
+    unlock_locked: bool = False
 
 
 def direct_program_request(
@@ -236,12 +239,16 @@ def direct_program_request(
     plugin_required: bool,
     use_serial_number: bool,
     serial_owner: str | None,
+    locked: bool = False,
 ) -> ProgramRequest | None:
     """The request a Program press starts right away, or ``None`` when its dialog has to ask
     first: an unload, which leaves the device without a working application, the current
     address to overwrite, the missing download plugin, or a serial number another device of
-    the project has already (``serial_owner``). ``use_serial_number`` is the connection's
-    setting, for a device whose serial number is known."""
+    the project has already (``serial_owner``), or a locked device to unlock (``locked``).
+    ``use_serial_number`` is the connection's setting, for a device whose serial number is
+    known."""
+    if locked:
+        return None
     if scope in (
         DownloadScope.UNLOAD,
         DownloadScope.UNLOAD_ALL,
@@ -468,6 +475,7 @@ class ConfigurePanel:
         # the per-frame render does not re-resolve the application.
         self._program_plugin_required: bool = False
         self._program_overwrites_plugin: bool = False
+        self._program_unlock: bool = False
         # Devices whose plugin-dialog warning the user chose to override and edit anyway.
         self._edit_plugin_params_override: set[int] = set()
         self._overwrite_current_address = ""
@@ -743,6 +751,7 @@ class ConfigurePanel:
                 imgui.open_popup(f"{title}{_PROGRAM_DIALOG_ID}")
                 self._confirm_program_open = False
                 self._program_without_plugin = False
+                self._program_unlock = False
                 self._overwrite_current_address = ""
                 self._program_use_serial = bool(
                     self._use_serial_number_default
@@ -2107,6 +2116,7 @@ class ConfigurePanel:
             plugin_required=download_needs_plugin_confirmation(device),
             use_serial_number=use_serial,
             serial_owner=owner,
+            locked=is_locked(device.individual_address or ""),
         )
 
     def _program_dialog(self, device: Device) -> tuple[str, str]:
@@ -2121,6 +2131,8 @@ class ConfigurePanel:
             return S.SCOPE_OVERWRITE_INDIVIDUAL_ADDRESS, S.BTN_OVERWRITE_ADDRESS
         if self._program_plugin_required and not scope.individual_address_only:
             return S.PROGRAM_PLUGIN_TITLE, S.BTN_PROGRAM_DEVICE
+        if is_locked(device.individual_address or ""):
+            return S.PROGRAM_LOCKED_TITLE, S.BTN_PROGRAM_DEVICE
         return S.PROGRAM_SERIAL_USED_TITLE, S.BTN_PROGRAM_DEVICE
 
     def _render_program_confirm(self, device: Device) -> None:
@@ -2201,9 +2213,20 @@ class ConfigurePanel:
                 S.PLUGIN_DOWNLOAD_CONFIRM, self._program_without_plugin
             )
             imgui.spacing()
+        locked = is_locked(device.individual_address or "")
+        if locked:
+            imgui.push_text_wrap_pos(px(420.0))
+            imgui.text_colored(
+                status_color("warning"), S.PROGRAM_LOCKED_TEXT.format(address=address)
+            )
+            imgui.pop_text_wrap_pos()
+            _, self._program_unlock = checkbox(S.PROGRAM_UNLOCK, self._program_unlock)
+            imgui.spacing()
         can_program = (
-            not plugin_required or self._program_without_plugin
-        ) and address_error is None
+            (not plugin_required or self._program_without_plugin)
+            and (not locked or self._program_unlock)
+            and address_error is None
+        )
         clicked = dialog_buttons(confirm, S.BTN_CANCEL, enabled=[can_program, True])
         if clicked == 0:
             if self._on_program_device is not None:
@@ -2214,6 +2237,7 @@ class ConfigurePanel:
                         without_plugin=plugin_required,
                         current_address=current_address,
                         use_serial_number=use_serial,
+                        unlock_locked=locked,
                     ),
                 )
             imgui.close_current_popup()

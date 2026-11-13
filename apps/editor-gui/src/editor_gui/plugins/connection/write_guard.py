@@ -14,11 +14,12 @@ so reads of secured devices are blocked as well while the setting is on.
 
 from __future__ import annotations
 
-from collections.abc import Iterable
+import contextlib
+from collections.abc import Generator, Iterable
 
 from xknx.cemi.cemi_frame import CEMIFrame, CEMILData, CEMIMPropReadRequest
 from xknx.exceptions import XKNXException
-from xknx.telegram import GroupAddress, apci, tpci
+from xknx.telegram import GroupAddress, IndividualAddress, apci, tpci
 
 # Services that only ask a device, the interface or the bus for information.
 _READS: tuple[type[apci.APCI], ...] = (
@@ -161,6 +162,77 @@ def protected_allows(cemi: CEMIFrame) -> str:
     if not isinstance(data, CEMILData) or not isinstance(data.dst_addr, GroupAddress):
         return ""
     return protected_reason(str(data.dst_addr))
+
+
+class LockedRefused(BusWritesBlocked):
+    """A frame that would change a locked device, which was not unlocked for the job."""
+
+    def __init__(self, cemi: CEMIFrame, reason: str) -> None:
+        XKNXException.__init__(self, f"not sent: {reason} - {describe(cemi)}")
+
+
+class _Locked:
+    devices: frozenset[str] = frozenset()
+    # Locked devices unlocked for the job running now (a download the user confirmed).
+    unlocked: frozenset[str] = frozenset()
+
+
+_locked = _Locked()
+
+
+def parse_locked(text: str | Iterable[str]) -> list[str]:
+    """Individual addresses from a setting (separated by commas, spaces or new lines), in
+    address order; ``ValueError`` for one that is not an individual address."""
+    items = text.replace(",", " ").split() if isinstance(text, str) else list(text)
+    try:
+        addresses = {IndividualAddress(item.strip()) for item in items if item.strip()}
+    except XKNXException as exc:
+        raise ValueError(str(exc)) from exc
+    return [str(a) for a in sorted(addresses, key=lambda a: a.raw)]
+
+
+def set_locked(addresses: Iterable[str]) -> None:
+    """Locked devices: nothing that could change them is sent (reads still are), unless a job
+    unlocks one with :func:`unlocked`."""
+    _locked.devices = frozenset(parse_locked(addresses))
+
+
+def locked_devices() -> list[str]:
+    return parse_locked(_locked.devices)
+
+
+def is_locked(address: str) -> bool:
+    """Whether the device at ``address`` (printed, e.g. ``1.1.5``) is locked."""
+    try:
+        return str(IndividualAddress(address)) in _locked.devices
+    except XKNXException:
+        return False
+
+
+@contextlib.contextmanager
+def unlocked(address: str) -> Generator[None]:
+    """Let writes to the locked device at ``address`` through while the block runs (one job)."""
+    key = str(IndividualAddress(address))
+    _locked.unlocked = _locked.unlocked | {key}
+    try:
+        yield
+    finally:
+        _locked.unlocked = _locked.unlocked - {key}
+
+
+def locked_allows(cemi: CEMIFrame) -> str:
+    """ "" when ``cemi`` may go out, else why not (a write to a locked device)."""
+    data = cemi.data
+    if not isinstance(data, CEMILData) or not isinstance(
+        data.dst_addr, IndividualAddress
+    ):
+        return ""
+    address = str(data.dst_addr)
+    if address not in _locked.devices or address in _locked.unlocked:
+        return ""
+    if not is_bus_write(cemi):
+        return ""
+    return f"{address} is a locked device (Settings > Connection)"
 
 
 def describe(cemi: CEMIFrame) -> str:

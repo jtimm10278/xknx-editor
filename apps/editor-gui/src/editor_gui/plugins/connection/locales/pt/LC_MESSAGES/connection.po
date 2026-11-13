@@ -316,3 +316,9 @@ msgstr "Endereços de Grupo Protegidos"
 
 msgid "Nothing is ever sent to these group addresses, not even reads, e.g. the ones of gates or an alarm system: addresses like 1/2/3, or groups ending with a slash like 7/0/, separated by spaces. MCP clients can add to the list but not take anything out."
 msgstr "Nunca é enviado nada para estes endereços de grupo, nem sequer leituras, p. ex. os de portões ou de um sistema de alarme: endereços como 1/2/3 ou grupos terminados em barra como 7/0/, separados por espaços. Os clientes MCP podem acrescentar à lista mas não retirar nada."
+
+msgid "Locked Devices"
+msgstr "Dispositivos bloqueados"
+
+msgid "Nothing that could change these devices is sent, e.g. a download, while reads still are: individual addresses like 1.2.3, separated by spaces. A download unlocks one only for itself, when you confirm it in its dialog. MCP clients can lock devices but not unlock them."
+msgstr "Não é enviado nada que possa alterar estes dispositivos, p. ex. uma transferência, embora as leituras continuem: endereços individuais como 1.2.3, separados por espaços. Uma transferência desbloqueia um apenas para si própria, quando o confirma na respetiva caixa de diálogo. Os clientes MCP podem bloquear dispositivos, mas não desbloqueá-los."

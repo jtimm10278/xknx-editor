@@ -119,6 +119,8 @@ class QueueItem:
     )
     # Confirmed to program a device whose hardware needs the manufacturer's plugin.
     without_plugin: bool = False
+    # Confirmed to unlock a locked device (Settings > Connection) for this download.
+    unlock_locked: bool = False
     # The device's current address, for an individual address overwrite.
     current_address: str | None = None
     # Address the device by its serial number instead of programming mode.
@@ -219,6 +221,7 @@ class ProgramQueue:
             ):
                 queued.scope = item.scope
                 queued.without_plugin = item.without_plugin
+                queued.unlock_locked = item.unlock_locked
                 queued.current_address = item.current_address
                 queued.serial_number = item.serial_number
                 self.tick()
