@@ -17,6 +17,7 @@ from imgui_bundle import imgui
 from editor_gui import file_dialogs
 from editor_gui.os_open import open_path
 from editor_gui.plugins.connection.service import BusmonitorState
+from editor_gui.plugins.monitor.filter_terms import compile_filter
 from editor_gui.plugins.monitor.formatting import (
     COLUMN_INDEX,
     COLUMNS,
@@ -232,10 +233,11 @@ class TelegramView:
             return
         deadline = time.perf_counter() + _FILTER_BUDGET
         source = self._source
+        match = compile_filter(needle)
         while self._pos < len(source):
             record = source[self._pos]
-            record_cells(record, index, key)
-            if needle in record.haystack:
+            cells = record_cells(record, index, key)
+            if match(cells, record.haystack):
                 self._view.append(record)
             self._pos += 1
             if self._pos % 256 == 0 and time.perf_counter() > deadline:
