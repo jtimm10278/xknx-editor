@@ -822,7 +822,8 @@ async def download_device(
         waiting=waiting,
         memory_progress=memory_progress,
     )
-    runs = plugin_parameter_runs(image.plugin_load_controls)
+    # A test double may hand back no image; then there is nothing to read back.
+    runs = plugin_parameter_runs(getattr(image, "plugin_load_controls", None))
     if (
         runs
         and scope.name in _PLUGIN_SCOPES
