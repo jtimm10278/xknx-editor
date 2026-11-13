@@ -187,3 +187,7 @@ class AddressInUseError(DownloadError):
 
 class SerialNumberNotFoundError(DownloadError):
     """No device answers to the serial number an address download is addressed to."""
+
+
+class DeviceNotAnsweringError(DownloadError):
+    """The device did not answer within the wait after its end-of-download restart."""

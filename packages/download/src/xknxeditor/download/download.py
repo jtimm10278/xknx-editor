@@ -20,6 +20,7 @@ from xknxeditor.namespaces.intermediate.ld_ctrl_master_reset_t import LdCtrlMast
 from xknxeditor.namespaces.intermediate.resource_addr_space_t import ResourceAddrSpace
 
 from .errors import (
+    DeviceNotAnsweringError,
     DownloadError,
     ImageError,
     MemoryReadNotAnswered,
@@ -58,6 +59,7 @@ from .programmer import (
     DeviceProgrammer,
 )
 from .resources import property_group_tables
+from .restart_wait import RESTART_WAIT_S, wait_until_answering
 from .scope import DownloadScope, mask_configuration, mask_object_types
 from .secure_config import (
     commissioning_controls,
@@ -126,6 +128,14 @@ class DownloadResult:
     # Whether an unload reset the device to its factory state with its individual address
     # (a secure device then uses its FDSK again).
     factory_reset: bool = False
+    # Seconds the device took to answer again after the restart that ended the download;
+    # None when there was no restart, no wait was asked for, or it did not answer in time.
+    answered_after_restart_s: float | None = None
+    # Whether the device did not answer within the wait after its restart.
+    restart_wait_timed_out: bool = False
+    # With ``verify``: what a second download would still change, read after the restart
+    # (no changes = the device holds what was downloaded).
+    verify_report: PreflightReport | None = None
 
 
 _IP_CONFIG_SCOPES = frozenset(
@@ -758,6 +768,8 @@ async def download(
     waiting: Callable[[], None] | None = None,
     memory_progress: Callable[[int, int], None] | None = None,
     accept_table_removals: bool = False,
+    restart_wait_s: float | None = RESTART_WAIT_S,
+    verify: bool = False,
 ) -> DownloadResult:
     """Download ``application`` into the device at ``individual_address``.
 
@@ -835,7 +847,14 @@ async def download(
     ``progress`` is called ``(done, total)`` in load controls after each control,
     ``memory_progress`` ``(done, total)`` in octets while a control writes memory (see
     :meth:`.procedure.LoadProcedureRunner.run`).
+
+    After a load that ended with a Restart, the download waits up to ``restart_wait_s``
+    seconds (``None``: not at all) until the device answers again, so the caller can read it
+    straight away; the result tells how long that took, or that it timed out. ``verify`` then
+    runs :func:`preflight` with the same arguments and puts its report in the result: no
+    changes means the device holds what was downloaded.
     """
+    requested_image, requested_scope = image, scope
     if tool_key is not None and security is None:
         raise DownloadError("writing the Tool Key needs a secured download")
     if ip_secure is not None and security is None:
@@ -1103,6 +1122,37 @@ async def download(
             in_programming_mode=in_programming_mode,
             restarted=runner.restarted,
         )
+    answered_s: float | None = None
+    timed_out = False
+    verify_report: PreflightReport | None = None
+    if runner.restarted and scope not in _UNLOAD_SCOPES and restart_wait_s is not None:
+        try:
+            answered_s = await wait_until_answering(
+                lambda: _connection_manager(xknx, address, security),
+                timeout=restart_wait_s,
+            )
+        except DeviceNotAnsweringError as exc:
+            timed_out = True
+            logger.warning("download: %s %s", address, exc)
+    if verify and not timed_out and scope not in _UNLOAD_SCOPES:
+        verify_report = await preflight(
+            xknx,
+            address,
+            application,
+            master=master,
+            device=device,
+            image=requested_image,
+            group_communication=group_communication,
+            scope=requested_scope,
+            parameter_values=parameter_values,
+            max_apdu_length=max_apdu_length,
+            expected_descriptor=expected_descriptor,
+            security=security,
+            ip_config=ip_config,
+            interface_max_apdu_length=interface_max_apdu_length,
+            application2=application2,
+            access_key=access_key,
+        )
     mac = runner.captured_property(IP_PARAMETER_OBJECT, PID_MAC_ADDRESS)
     return DownloadResult(
         mac_address=mac
@@ -1114,6 +1164,9 @@ async def download(
         secured=security is not None,
         memory_service_count=used_memory_cap,
         factory_reset=factory_reset,
+        answered_after_restart_s=answered_s,
+        restart_wait_timed_out=timed_out,
+        verify_report=verify_report,
     )
 
 
