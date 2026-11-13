@@ -9,6 +9,7 @@ request is fetched on the imgui thread first (``ctx.run_on_ui``).
 
 from __future__ import annotations
 
+import asyncio
 import contextlib
 import time
 from typing import TYPE_CHECKING, Any, Literal
@@ -607,6 +608,80 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
         """Disconnect from the bus. Returns the resulting connection state."""
         conn.disconnect()
         return {"status": "disconnecting", "state": conn.state.value}
+
+    @tool("read")
+    def connection_compare_plan(
+        node_id: int | None = None, device_address: str | None = None
+    ) -> dict[str, Any]:
+        """What a read-only compare of the device with the project would read, WITHOUT the bus
+        (a dry run of its full download): {node_id, address, memory_ranges [[start, length]],
+        octets, properties [[object index, property id]], reads (an upper bound at the smallest
+        APDU), skipped}. Segment addresses of a System B device are simulated here; the compare
+        itself reads them from the device. Identify the device by ``node_id`` OR
+        ``device_address``."""
+        from editor_gui.plugins.connection.service import (
+            _factory_image,  # pyright: ignore[reportPrivateUsage]
+            _second_application,  # pyright: ignore[reportPrivateUsage]
+        )
+        from editor_gui.programming import compare_plan_device
+
+        device = _device(node_id, device_address)
+        group_communication = ctx.run_locked(
+            lambda: ctx.api.project.group_communication_for(device)
+        )
+        factory, second = _factory_image(device), _second_application(device)
+        plan = asyncio.run(
+            compare_plan_device(
+                device, group_communication, service.master, factory, second, 0xFFFFFFFF
+            )
+        )
+        return {
+            "node_id": device.node_id,
+            "address": device.individual_address,
+            "memory_ranges": [[hex(a), n] for a, n in plan.memory],
+            "octets": plan.octets,
+            "properties": [[o, p] for o, p, _s, _c in plan.properties],
+            "reads": plan.reads,
+            "skipped": plan.skipped,
+        }
+
+    @tool("read", open_world=True)
+    def connection_compare_devices(
+        node_ids: list[int] | None = None,
+        device_addresses: list[str] | None = None,
+        pause: float = 2.0,
+        timeout: float = 1800.0,
+    ) -> dict[str, Any]:
+        """Does each device hold what the project would download? READS ONLY: for each device
+        (one after another, ``pause`` seconds between them) it reads the table references,
+        dry-runs the full download with the segments placed there, then reads exactly the
+        memory and properties that download would write and lists what differs. Every frame
+        goes through a read-only guard that refuses anything but reads. Pass the devices by
+        ``node_ids`` and/or ``device_addresses`` (a whole-house sweep: every device, with a
+        pause). Needs an open connection; nothing is written. Returns {items: [{name, address,
+        matches, octets_compared, properties_compared, differences [{what, where, region,
+        expected, held}], skipped, error}], count, matching}."""
+        _ensure_connected()
+        devices = [_device(n, None) for n in node_ids or []] + [
+            _device(None, a) for a in device_addresses or []
+        ]
+        if not devices:
+            raise ToolError("pass node_ids and/or device_addresses")
+        pairs = [
+            (d, ctx.run_locked(lambda d=d: ctx.api.project.group_communication_for(d)))
+            for d in devices
+        ]
+        future = ctx.run_locked(
+            lambda: service.compare_devices(pairs, pause=max(0.0, pause))
+        )
+        if future is None:
+            raise _not_started("compare")
+        items = _await(future, timeout, "compare")
+        return {
+            "items": items,
+            "count": len(items),
+            "matching": sum(1 for i in items if i.get("matches")),
+        }
 
     @tool("destructive", open_world=True)
     def connection_program_device(

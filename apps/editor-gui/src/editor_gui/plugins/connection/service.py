@@ -1287,6 +1287,77 @@ class ConnectionService:
             self._clear_busy()
         return future
 
+    def compare_devices(
+        self,
+        devices: list[tuple[Device, GroupCommunication | None]],
+        *,
+        pause: float = 2.0,
+    ) -> Future[Any] | None:
+        """Read-only compare of each device with the project, one after another with ``pause``
+        seconds between them (see :func:`editor_gui.programming.compare_with_project`). Reads
+        only, so it runs while bus writes are blocked; not while another bus operation runs.
+        Resolves to a list of result dicts (``CompareResult.as_dict``) in the given order."""
+        from editor_gui.programming import compare_with_project
+
+        if self.not_connected("compare_devices") or not devices:
+            return None
+        first = devices[0][0].individual_address or ""
+        if not self.begin_operation("compare", first):
+            self._log.warning("A bus operation is already running")
+            return None
+        xknx = self._connected_xknx
+
+        def security_of(device: Device) -> DeviceSecurity | str | None:
+            try:
+                return self._download_security(device, None)
+            except DeviceCertificateRequired:
+                return "a secure device without a known key"
+
+        plans = [
+            (
+                device,
+                group_communication,
+                _factory_image(device),
+                _second_application(device),
+                security_of(device),
+            )
+            for device, group_communication in devices
+        ]
+        master, key = self.master, self._access_key()
+        self._log.info(
+            "Comparing devices with the project (reads only)", count=len(plans)
+        )
+
+        async def work() -> list[dict[str, Any]]:
+            out: list[dict[str, Any]] = []
+            for index, (device, gc, factory, second, security) in enumerate(plans):
+                if index:
+                    await asyncio.sleep(pause)
+                if not device.individual_address or isinstance(security, str):
+                    out.append(
+                        {
+                            "address": device.individual_address or "",
+                            "name": device.name,
+                            "matches": False,
+                            "error": security
+                            if isinstance(security, str)
+                            else "no address",
+                        }
+                    )
+                    continue
+                result = await compare_with_project(
+                    xknx, device, gc, master, factory, second, key, security
+                )
+                out.append({"name": device.name, **result.as_dict()})
+            return out
+
+        future = self.run_async(work())
+        if future is None:
+            self._clear_busy()
+            return None
+        future.add_done_callback(lambda _f: self._clear_busy())
+        return future
+
     def restore_snapshot(
         self, path: str | Path, *, unlock_locked: bool = False
     ) -> Future[Any] | None:

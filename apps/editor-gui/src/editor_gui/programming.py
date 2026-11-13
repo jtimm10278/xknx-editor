@@ -35,6 +35,7 @@ if TYPE_CHECKING:
 
     from editor_gui.device import Device
     from xknxeditor.catalog.core.hardware import FactoryData
+    from xknxeditor.download.compare import ComparePlan, CompareResult
     from xknxeditor.download.data_secure import DeviceSecurity
     from xknxeditor.download.download import DownloadResult
     from xknxeditor.download.dry_run import DryRunResult
@@ -804,6 +805,84 @@ async def snapshot_before_download(
             f"no snapshot of {address} before the download ({exc}); "
             "the download was not started"
         ) from exc
+
+
+async def compare_plan_device(
+    device: Device,
+    group_communication: GroupCommunication | None,
+    master: MasterData | None,
+    factory_image: FactoryData | None,
+    second_application: Application | None,
+    access_key: int,
+) -> ComparePlan:
+    """What a read-only compare of ``device`` with the project would read, without the bus: a
+    dry run of its full download (see :func:`dry_run_device`). Segment addresses of a System B
+    device are only known once its table references are read, so they are simulated here (the
+    counts are right)."""
+    from xknxeditor.download.compare import compare_plan, expected_from_dry_run
+
+    dry = await dry_run_device(
+        device,
+        DownloadScope.FULL,
+        group_communication,
+        master,
+        factory_image,
+        second_application,
+        access_key,
+    )
+    placed = {f.segment_object for f in dry.frames if f.segment_object is not None}
+    return compare_plan(expected_from_dry_run(dry, placed))
+
+
+async def compare_with_project(
+    xknx: XKNX,
+    device: Device,
+    group_communication: GroupCommunication | None,
+    master: MasterData | None,
+    factory_image: FactoryData | None,
+    second_application: Application | None,
+    access_key: int,
+    security: DeviceSecurity | None,
+) -> CompareResult:
+    """Does ``device`` hold what the project would download? Reads its table references, dry-runs
+    its full download with the segments placed there, then reads exactly the bytes and properties
+    that download would write and lists what differs. Reads only: every frame goes through
+    :class:`~xknxeditor.download.compare.ReadOnlyManager`, which refuses anything else."""
+    from xknx.telegram import IndividualAddress
+
+    from xknxeditor.download.compare import (
+        CompareResult,
+        ReadOnlyManager,
+        compare_device,
+        expected_from_dry_run,
+    )
+    from xknxeditor.download.session import management_session
+    from xknxeditor.download.snapshot import read_table_references
+
+    address = _address(device)
+    target = IndividualAddress(address)
+    try:
+        references = await read_table_references(
+            ReadOnlyManager(management_session(xknx, target, security))
+        )
+        dry = await dry_run_device(
+            device,
+            DownloadScope.FULL,
+            group_communication,
+            master,
+            factory_image,
+            second_application,
+            access_key,
+            table_references=references,
+        )
+    except Exception as exc:
+        return CompareResult(
+            address=address, error=f"{type(exc).__name__}: {exc}"[:300]
+        )
+    expected = expected_from_dry_run(dry, placed=references)
+    return await compare_device(
+        management_session(xknx, target, security), expected, address=address
+    )
 
 
 async def download_device(
