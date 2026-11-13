@@ -533,6 +533,9 @@ class LoadProcedureRunner:
         # index/type addressing and overlapping ranges refer to the same bytes.
         # Keep this separate from the caller's immutable download image.
         self._property_captures: dict[tuple[int, int, int], bytes] = {}
+        # Inline memory writes the procedure later rewrites from the image: steps, written
+        # exactly as given (see _inline_memory_steps).
+        self._inline_steps: set[int] = set()
         self._memory_captures: dict[
             tuple[LdCtrlMemAddrSpace | int | None, int], int
         ] = {}
@@ -647,6 +650,7 @@ class LoadProcedureRunner:
             property_tables=self._property_tables(),
         )
         self._prevalidate(in_scope)
+        self._inline_steps = _inline_memory_steps(in_scope)
         self._property_captures.clear()
         self._memory_captures.clear()
         self._factory_registered.clear()
@@ -778,6 +782,7 @@ class LoadProcedureRunner:
             property_tables=self._property_tables(),
         )
         self._prevalidate(in_scope)
+        self._inline_steps = _inline_memory_steps(in_scope)
         self._property_captures.clear()
         self._memory_captures.clear()
         self._factory_registered.clear()
@@ -886,7 +891,11 @@ class LoadProcedureRunner:
     def _overlay_inline_memory(
         address: int, inline: bytes, runs: list[tuple[int, bytes]] | None
     ) -> bytes:
-        """Use inline bytes only where the supplied or captured image has no data."""
+        """Use inline bytes only where the supplied or captured image has no data.
+
+        Inline data that only fills a write (placeholders, e.g. zeros) give way to the image.
+        A write the procedure later repeats from the image is a step instead and keeps its
+        inline data (:func:`_inline_memory_steps`)."""
         data = bytearray(inline)
         end = address + len(data)
         for start, overlay in runs or []:
@@ -908,7 +917,10 @@ class LoadProcedureRunner:
             runs = self._memory_runs(address, control.size, control.address_space)
         if control.inline_data is not None:
             inline = _inline_memory_data(control.inline_data, control.size)
-            runs = [(address, self._overlay_inline_memory(address, inline, runs))]
+            if id(control) in self._inline_steps:
+                runs = [(address, inline)]
+            else:
+                runs = [(address, self._overlay_inline_memory(address, inline, runs))]
         return self._leave_factory_memory(control, index, runs)
 
     def _prevalidate(self, in_scope: list[object]) -> None:
@@ -3834,6 +3846,34 @@ def _writes_no_elements(control: LdCtrlWriteProp) -> bool:
     """Whether ``control`` writes no element: a count of 0 from element 1 on, without
     inline data (element 0, the number of elements, is a write of its own)."""
     return control.count == 0 and control.start_element > 0 and not control.inline_data
+
+
+def _inline_memory_steps(controls: Sequence[object]) -> set[int]:
+    """The inline memory writes (by ``id``) that a later write of ``controls`` repeats from the
+    image, in the same address space and overlapping range.
+
+    Such a write sets a temporary state on purpose, e.g. BCU 1 (MV-0012) "Load all" cuts the
+    address table to the individual address (0x116 = 01) while it loads, and writes 0x116
+    from the image at the end. Its inline data must reach the device as given, not be
+    replaced by the image's final value.
+    """
+    steps: set[int] = set()
+    pending: list[LdCtrlWriteMem] = []
+    for control in controls:
+        if not isinstance(control, LdCtrlWriteMem):
+            continue
+        if control.inline_data is not None:
+            pending.append(control)
+            continue
+        lo, hi = control.address, control.address + control.size
+        for earlier in pending:
+            if (
+                earlier.address_space == control.address_space
+                and earlier.address < hi
+                and lo < earlier.address + earlier.size
+            ):
+                steps.add(id(earlier))
+    return steps
 
 
 def _memory_procedure_steps(controls: Sequence[object]) -> set[tuple[bool, int, int]]:
