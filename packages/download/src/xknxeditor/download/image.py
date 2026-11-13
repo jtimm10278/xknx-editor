@@ -196,6 +196,9 @@ class GroupTables:
 
     segments: list[MemorySegment]
     moved: MovedTables | None = None
+    # (address, bits) of flag-byte bits set only because the table is a BCU1 one
+    # (:data:`BCU1_FLAGS`); a device of another mask clears them (see mask_retarget).
+    forced_flag_bits: tuple[tuple[int, int], ...] = ()
 
 
 def _packs_group_tables(application: Application) -> bool:
@@ -457,6 +460,9 @@ class DownloadImage:
     segments: tuple[MemorySegment, ...]
     properties: tuple[PropertyValue, ...]
     relative_segments: tuple[RelativeSegment, ...] = ()
+    # (address, bits) of group-object flag bits set only because the project's mask has a
+    # BCU1 table (bit 7, :data:`BCU1_FLAGS`): a device of another mask gets them cleared.
+    forced_flag_bits: tuple[tuple[int, int], ...] = ()
     # Interface object index -> the segment data whose MCB CRC covers it.
     object_segments: Mapping[int, bytes] = MappingProxyType({})
     # A line/backbone coupler's group-address filter-table bitmap. Written by the coupler's own
@@ -795,6 +801,7 @@ def build_image(
     tables: PropertyTables | None = None
     moved: MovedTables | None = None
     table_memory: list[tuple[int, int]] = []
+    forced_flag_bits: tuple[tuple[int, int], ...] = ()
     if group_communication is not None:
         static = application.program.static
         # Tables in a relative segment live in their objects' relative memory, as without
@@ -830,6 +837,7 @@ def build_image(
             )
             table_memory.extend(table_ranges(group_tables.segments))
             moved = group_tables.moved
+            forced_flag_bits = group_tables.forced_flag_bits
         else:
             relative_segments.extend(
                 _group_communication_relative_segments(
@@ -922,6 +930,7 @@ def build_image(
         user_segments=tuple(user_segments),
         group_table_memory=tuple(table_memory),
         bit_masks=MappingProxyType(bit_masks),
+        forced_flag_bits=forced_flag_bits,
     )
 
 
@@ -1264,6 +1273,7 @@ def _group_communication_segments(
     linked_numbers = {number_of[link.com_object_ref_id] for link in links}
 
     result: list[MemorySegment] = []
+    forced_bits: list[tuple[int, int]] = []
     packed: PackedGroupTables | None = None
     com_object_table = static.com_object_table
     referenced_numbers = set(number_of.values())
@@ -1315,6 +1325,7 @@ def _group_communication_segments(
             # record laid out from the segment start overwrites the application id
             # and the table pointers.
             if bcu1_group_object_table(mask_version):
+                forced_offsets: list[tuple[int, int]] = []
                 data, mask, partial_octets = _short_com_object_table(
                     seed[0],
                     ui,
@@ -1326,7 +1337,9 @@ def _group_communication_segments(
                     record_count,
                     set_flags=BCU1_FLAGS,
                     count_unset=count_unset,
+                    forced=forced_offsets,
                 )
+                forced_bits.extend((base + o, b) for o, b in forced_offsets)
                 seed_mask = bytearray(b"\xff" * len(data))
                 run_control = 0x010D - base
                 if 0 <= run_control < len(seed_mask):
@@ -1405,7 +1418,7 @@ def _group_communication_segments(
             system1=system1,
             easy=easy,
         )
-        return GroupTables(result, moved)
+        return GroupTables(result, moved, tuple(forced_bits))
     address_table = static.address_table
     if address_table is not None and address_table.code_segment is not None:
         base = base_addresses.get(address_table.code_segment)
@@ -1440,7 +1453,7 @@ def _group_communication_segments(
                     )
                 address = packed.association_address
             result.append(MemorySegment(address, data, mask=b"\xff" * len(data)))
-    return GroupTables(result)
+    return GroupTables(result, forced_flag_bits=tuple(forced_bits))
 
 
 def _address_table_mask(data: bytes) -> bytes:
@@ -2393,6 +2406,7 @@ def _short_com_object_table(
     set_flags: int = 0,
     pointers: bool = True,
     count_unset: bool = False,
+    forced: list[tuple[int, int]] | None = None,
 ) -> tuple[bytes, bytes, tuple[tuple[int, int], ...]]:
     """Write a table of 3-octet records at ``table_offset`` of its segment seed.
 
@@ -2446,6 +2460,9 @@ def _short_com_object_table(
             | (flags & ~SEGMENT_SELECTOR_BIT)
             | set_flags
         )
+        added = set_flags & ~flags & ~SEGMENT_SELECTOR_BIT
+        if forced is not None and added:
+            forced.append((record + 1, added))
         if pointers:
             mask[record] = 0xFF
         mask[record + 1] = mask[record + 2] = 0xFF

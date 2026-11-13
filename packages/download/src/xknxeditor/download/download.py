@@ -397,6 +397,34 @@ _TABLE_SCOPES = frozenset(
 )
 
 
+async def _device_mask_retarget(
+    xknx: XKNX,
+    address: IndividualAddress,
+    security: DeviceSecurity | None,
+    image: DownloadImage,
+    application: Application,
+    master: MasterData | None,
+) -> DownloadImage:
+    """``image`` fitted to the mask the device reports (fixups, BCU1 flag bits; see
+    :mod:`.mask_retarget`). No device answering (a device to commission) keeps the image
+    as built."""
+    from .mask_retarget import needs_retarget, retarget_image
+    from .programmer import DeviceProgrammer
+
+    if not needs_retarget(image, application):
+        return image
+    manager = _connection_manager(xknx, address, security)
+    try:
+        connection = await manager.open()
+        descriptor = await DeviceProgrammer(connection).read_device_descriptor()
+    except (ManagementConnectionError, DownloadError) as exc:
+        logger.debug("download: device descriptor not readable: %s", exc)
+        return image
+    finally:
+        await manager.close()
+    return retarget_image(image, application, master, descriptor)
+
+
 async def _device_association_format(
     xknx: XKNX,
     address: IndividualAddress,
@@ -815,6 +843,14 @@ async def download(
         image = _with_second_program(
             _with_mask_memory(image, application, master), application2
         )
+        image = await _device_mask_retarget(
+            xknx,
+            IndividualAddress(individual_address),
+            security,
+            image,
+            application,
+            master,
+        )
     controls = _resolve_controls(
         application,
         master,
@@ -1097,6 +1133,14 @@ async def preflight(
     if prepared is None:
         image = _with_second_program(
             _with_mask_memory(image, application, master), application2
+        )
+        image = await _device_mask_retarget(
+            xknx,
+            IndividualAddress(individual_address),
+            security,
+            image,
+            application,
+            master,
         )
     address = IndividualAddress(individual_address)
     application_loaded = False

@@ -980,6 +980,7 @@ async def dry_run_download(
     application2: Application | None = None,
     access_key: int | None = None,
     max_apdu_length: int | None = None,
+    device_descriptor: int | None = None,
 ) -> DryRunResult:
     """Run the download of ``application`` for ``individual_address`` against a recorder and
     return every frame it would send, the memory it would write and how that compares with
@@ -988,7 +989,8 @@ async def dry_run_download(
     The arguments are those of :func:`.download.download`; ``stored_image`` also seeds the
     simulated device's memory and properties, so reads during the download answer as the
     device last programmed would. Unload scopes and KNX Data Secure are refused
-    (:class:`DryRunRefused`)."""
+    (:class:`DryRunRefused`). ``device_descriptor`` simulates a device reporting
+    another mask than the application's (e.g. a BCU1 program on a ``0x0021`` device)."""
     from .download import download
     from .programmer import FREE_ACCESS_KEY
     from .scope import mask_object_types
@@ -1003,7 +1005,13 @@ async def dry_run_download(
         object_types = mask_object_types(raw, device_mask_version(application))
     regions = _Regions(application)
     recorder = Recorder(
-        SimulatedDevice(mask_descriptor(application), object_types, stored_image),
+        SimulatedDevice(
+            mask_descriptor(application)
+            if device_descriptor is None
+            else device_descriptor,
+            object_types,
+            stored_image,
+        ),
         regions,
     )
     assumptions: list[str] = []
