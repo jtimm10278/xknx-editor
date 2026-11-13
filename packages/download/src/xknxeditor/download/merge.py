@@ -354,11 +354,13 @@ def _finalize_controls(
         and number & 0xFF0 == 0x7B0
     )
     announces_table = _announces_object_table(mask_version)
+    if not announces_table:
+        controls = _without_object_table_lsm(controls, mask_version)
     # Automatic transformations precede removal of the absent second program.
     return [
         _explicit(c)
         for c in scoped_controls(
-            [c for c in controls if announces_table or not _object_table_lsm(c)],
+            list(controls),
             scope,
             object_types,
             has_application_program2=has_application_program2,
@@ -378,6 +380,38 @@ def _announces_object_table(mask_version: str) -> bool:
     return (
         resources is None
         or resources.location(ResourceName.GROUP_OBJECT_TABLE_LOAD_CONTROL) is not None
+    )
+
+
+def _without_object_table_lsm(
+    controls: Sequence[object], mask_version: str
+) -> list[object]:
+    """Leave out the group object table's load state machine (LSM 5) on a mask without one.
+
+    BCU 2 (MV-0020/0021) has no LSM 5: product procedures such as Siemens' (Crabtree 7172,
+    app 9084) still end with ``LdCtrlTaskSegment LsmIdx=5 Address=436``, but the device gets
+    the table address through the application's ``LdCtrlTaskCtrl2`` (Address=436) already.
+    A device ETS loaded that way holds what the download writes without the step (a 7172 read
+    back: all 710 bytes the same). The skip is logged, not silent.
+    """
+    kept: list[object] = []
+    for control in controls:
+        if _object_table_lsm(control):
+            logger.info(
+                "load procedure: %s left out, mask %s has no group object table load state "
+                "machine (the address reaches the device through LdCtrlTaskCtrl2)",
+                _describe(control),
+                mask_version,
+            )
+            continue
+        kept.append(control)
+    return kept
+
+
+def _describe(control: object) -> str:
+    address = getattr(control, "address", None)
+    return f"{type(control).__name__} LSM {getattr(control, 'lsm_idx', None)}" + (
+        f" address {address} (0x{address:04X})" if isinstance(address, int) else ""
     )
 
 
