@@ -30,7 +30,7 @@ from xknx.telegram.apci import ReturnCode
 
 from editor_gui.cemi_diagnostics import current_knxip_packet, handle_cemi_with_packet
 from editor_gui.plugins.connection.diagnostic_transport import DiagnosticTCPTunnel
-from editor_gui.plugins.connection.write_guard import BusWritesBlocked, is_bus_write
+from editor_gui.plugins.connection.write_guard import check_frame
 
 # Seconds to wait for a tunnelling feature response.
 _FEATURE_TIMEOUT = 2.0
@@ -45,12 +45,6 @@ _knx_logger = logging.getLogger("xknx.log")
 if TYPE_CHECKING:
     from xknx import XKNX
     from xknx.io.connection import ConnectionConfig
-
-
-def _refuse_write(writes_blocked: Callable[[], bool] | None, cemi: CEMIFrame) -> None:
-    """Raise :class:`BusWritesBlocked` for a write while Block Bus Writes is on."""
-    if writes_blocked is not None and writes_blocked() and is_bus_write(cemi):
-        raise BusWritesBlocked(cemi)
 
 
 def _notify_sent(callback: Callable[[bytes], None], cemi: CEMIFrame) -> None:
@@ -106,7 +100,7 @@ class ObservableKNXIPInterface(_DiagnosticKNXIPInterface):
 
     async def send_cemi(self, cemi: CEMIFrame) -> None:
         # Every frame the app sends passes here, whichever code path built it.
-        _refuse_write(self._writes_blocked, cemi)
+        check_frame(self._writes_blocked, cemi)
         if self._sent_cemi_callback:
             _notify_sent(self._sent_cemi_callback, cemi)
         await super().send_cemi(cemi)
@@ -143,7 +137,7 @@ class ObservableKNXIPInterfaceThreaded(
 
     async def send_cemi(self, cemi: CEMIFrame) -> None:
         # Every frame the app sends passes here, whichever code path built it.
-        _refuse_write(self._writes_blocked, cemi)
+        check_frame(self._writes_blocked, cemi)
         if self._sent_cemi_callback:
             _notify_sent(self._sent_cemi_callback, cemi)
         await super().send_cemi(cemi)

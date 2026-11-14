@@ -908,6 +908,7 @@ class ConnectionPlugin:
                 self._xknx,
                 mode="usb" if usb is not None else config.connection_type.name.lower(),
                 target=self._connection_target,
+                writes_blocked=self._api.connection.writes_blocked,
             )
             # Replace the inert default interface so all internal send paths use ours.
             self._xknx.knxip_interface = self._interface
