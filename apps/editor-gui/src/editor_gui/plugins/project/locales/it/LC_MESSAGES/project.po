@@ -3357,3 +3357,6 @@ msgstr "rilettura corrispondente"
 
 msgid "setting changed in the plug-in view"
 msgstr "impostazione cambiata nella vista del plug-in"
+
+msgid "worked as set when used"
+msgstr "ha funzionato come impostato durante l’uso"

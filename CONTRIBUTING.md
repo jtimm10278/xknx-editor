@@ -33,7 +33,8 @@ was right. One entry per application (all devices running it share the entry):
 - `proven`: what you did, one or more of
   - `download`: a download to the real device finished without errors and the device worked as set;
   - `read_back`: what the device holds was read back and matched what the editor expects;
-  - `plugin_edit`: a setting changed in a plug-in view (e.g. the Generic Plug-in) reached the device.
+  - `plugin_edit`: a setting changed in a plug-in view (e.g. the Generic Plug-in) reached the device;
+  - `live_test`: used by hand after the download, the device sent what it was set to send.
 - `date`: the day of the proof (YYYY-MM-DD); `xets_version`: the editor version you used.
 - `notes`: anything another user should know (a different reported mask, a step that needed a second
   try, what was not proven). Keep it general: no addresses, names or details of your installation.

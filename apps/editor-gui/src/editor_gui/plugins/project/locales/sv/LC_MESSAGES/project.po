@@ -3353,3 +3353,6 @@ msgstr "återläsning stämde"
 
 msgid "setting changed in the plug-in view"
 msgstr "inställning ändrad i insticksvyn"
+
+msgid "worked as set when used"
+msgstr "fungerade som inställt vid användning"

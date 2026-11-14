@@ -21,8 +21,9 @@ if TYPE_CHECKING:
 
 DATA_FILE = Path(__file__).parent / "tested_devices.json"
 FORMAT = 1
-# What can be proven: a download, a read-back that matched, an edit made in a plug-in view.
-PROOFS = ("download", "read_back", "plugin_edit")
+# What can be proven: a download, a read-back that matched, an edit made in a plug-in view, and a
+# live test (the device, used by hand, sent its configured group telegrams).
+PROOFS = ("download", "read_back", "plugin_edit", "live_test")
 
 _APPLICATION = re.compile(r"^(M-[0-9A-F]{4})_A-([0-9A-F]{4})-([0-9A-F]{2})", re.I)
 

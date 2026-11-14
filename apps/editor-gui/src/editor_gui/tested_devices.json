@@ -8,7 +8,10 @@
       "application": "M-0001_A-2207-10",
       "application_name": "12 S2 On-off-toggle/Dim/Shu/Scene 220710",
       "mask": "MV-0011",
-      "proven": ["download", "read_back"],
+      "proven": [
+        "download",
+        "read_back"
+      ],
       "date": "2026-11-13",
       "xets_version": "0.12.0 (with download fixes)",
       "notes": "Full download four times; each time the read-back matched. The device reports mask 0012."
@@ -20,10 +23,28 @@
       "application": "M-0021_A-9084-02",
       "application_name": "20 S1 Rocker (BCU2) 908402",
       "mask": "MV-0020",
-      "proven": ["read_back"],
+      "proven": [
+        "read_back"
+      ],
       "date": "2026-11-13",
       "xets_version": "0.12.0 (with download fixes)",
       "notes": "Read-only: the device's memory matched the image of its last download (710 of 710 bytes). Not yet downloaded with XETS. The device reports mask 0021."
+    },
+    {
+      "manufacturer": "Crabtree",
+      "product": "Push Button Platinum 6g (3-fold) 7176",
+      "order_number": "7176/EIB/__",
+      "application": "M-0021_A-2302-01",
+      "application_name": "12 S3 On-Off-Toggle/Dim/Shu/Scene 230201",
+      "mask": "MV-0012",
+      "proven": [
+        "download",
+        "read_back",
+        "live_test"
+      ],
+      "date": "2026-11-14",
+      "xets_version": "0.13.1 (with mask-fit and download fixes)",
+      "notes": "This unit reports mask 0021 (newer chip) while the application is for MV-0012: the program has to be fitted to the device's mask (function addresses from the master data, BCU1 flag bit 7 cleared); the result matched what ETS had written. Read-back matched except the last EEPROM byte (0x1FF), which the device sets itself. Pressed live: switch on/off and shutter up sent as configured; shutter down and stop not yet pressed."
     },
     {
       "manufacturer": "Siemens",
@@ -32,7 +53,11 @@
       "application": "M-0001_A-9820-03",
       "application_name": "07B0 A15 Switching Actuator 982003",
       "mask": "MV-07B0",
-      "proven": ["download", "read_back", "plugin_edit"],
+      "proven": [
+        "download",
+        "read_back",
+        "plugin_edit"
+      ],
       "date": "2026-11-13",
       "xets_version": "0.12.0 (with download fixes)",
       "notes": "Full download with a setting changed in the Generic Plug-in view; the parameters read back the same (140 of 140 blocks)."

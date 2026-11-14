@@ -20,6 +20,7 @@ def proof_texts(entry: TestedDevice) -> list[str]:
         "download": S.TESTED_PROOF_DOWNLOAD,
         "read_back": S.TESTED_PROOF_READ_BACK,
         "plugin_edit": S.TESTED_PROOF_PLUGIN_EDIT,
+        "live_test": S.TESTED_PROOF_LIVE_TEST,
     }
     return [words[p] for p in entry.proven if p in words]
 

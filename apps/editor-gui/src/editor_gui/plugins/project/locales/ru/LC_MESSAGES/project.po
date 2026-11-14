@@ -3405,3 +3405,6 @@ msgstr "обратное чтение совпало"
 
 msgid "setting changed in the plug-in view"
 msgstr "параметр изменён в представлении плагина"
+
+msgid "worked as set when used"
+msgstr "при использовании работало как настроено"

@@ -3355,3 +3355,6 @@ msgstr "la relectura coincidió"
 
 msgid "setting changed in the plug-in view"
 msgstr "ajuste cambiado en la vista del plug-in"
+
+msgid "worked as set when used"
+msgstr "funcionó como se configuró al usarlo"

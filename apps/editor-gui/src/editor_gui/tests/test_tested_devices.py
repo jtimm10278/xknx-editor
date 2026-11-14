@@ -31,6 +31,7 @@ def test_the_bundled_list_is_valid_and_seeded() -> None:
         "M-0001_A-2207-10",
         "M-0021_A-9084-02",
         "M-0001_A-9820-03",
+        "M-0021_A-2302-01",
     }
     for entry in entries:
         assert entry.proven and set(entry.proven) <= set(PROOFS)
@@ -97,3 +98,9 @@ def test_badge_names_the_proofs_and_notes() -> None:
     assert entry.date in tooltip and entry.notes in tooltip
     text, tooltip = badge_text(None)
     assert text == "Not yet tested" and "spare device" in tooltip
+
+
+def test_a_live_test_is_named_in_the_badge() -> None:
+    entry = find("M-0021_A-2302-01-E518-O0001")
+    assert entry is not None and "live_test" in entry.proven
+    assert "worked as set when used" in badge_text(entry)[1]
