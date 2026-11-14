@@ -1779,3 +1779,9 @@ msgstr "Nie je nastavený platný podpisový kľúč, takže exportovaný .knxpr
 
 msgid "Export Anyway"
 msgstr "Napriek tomu exportovať"
+
+msgid "Open Last Project on Startup"
+msgstr "Pri spustení otvoriť posledný projekt"
+
+msgid "When no project is given at the start, opens the project that was open last. A protected project asks for its password, unless --password-file gives it."
+msgstr "Ak pri spustení nie je zadaný žiadny projekt, otvorí naposledy otvorený projekt. Chránený projekt si vyžiada heslo, ak ho nezadáva --password-file."

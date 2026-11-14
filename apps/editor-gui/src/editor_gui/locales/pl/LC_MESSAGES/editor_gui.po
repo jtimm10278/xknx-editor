@@ -1707,3 +1707,9 @@ msgstr "Nie ustawiono prawidłowego klucza podpisywania, więc wyeksportowany pl
 
 msgid "Export Anyway"
 msgstr "Eksportuj mimo to"
+
+msgid "Open Last Project on Startup"
+msgstr "Otwórz ostatni projekt przy uruchomieniu"
+
+msgid "When no project is given at the start, opens the project that was open last. A protected project asks for its password, unless --password-file gives it."
+msgstr "Gdy przy uruchomieniu nie podano projektu, otwiera ostatnio otwarty projekt. Chroniony projekt pyta o hasło, chyba że podaje je --password-file."

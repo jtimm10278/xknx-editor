@@ -1691,3 +1691,9 @@ msgstr "Ingen giltig signeringsnyckel är angiven, så den exporterade .knxproj 
 
 msgid "Export Anyway"
 msgstr "Exportera ändå"
+
+msgid "Open Last Project on Startup"
+msgstr "Öppna senaste projektet vid start"
+
+msgid "When no project is given at the start, opens the project that was open last. A protected project asks for its password, unless --password-file gives it."
+msgstr "När inget projekt anges vid start öppnas det projekt som senast var öppet. Ett skyddat projekt frågar efter sitt lösenord, om inte --password-file anger det."

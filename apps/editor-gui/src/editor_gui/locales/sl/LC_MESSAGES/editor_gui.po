@@ -1795,3 +1795,9 @@ msgstr "Veljaven podpisni ključ ni nastavljen, zato izvožena datoteka .knxproj
 
 msgid "Export Anyway"
 msgstr "Vseeno izvozi"
+
+msgid "Open Last Project on Startup"
+msgstr "Ob zagonu odpri zadnji projekt"
+
+msgid "When no project is given at the start, opens the project that was open last. A protected project asks for its password, unless --password-file gives it."
+msgstr "Če ob zagonu ni podan noben projekt, odpre nazadnje odprti projekt. Zaščiten projekt vpraša za geslo, razen če ga poda --password-file."
