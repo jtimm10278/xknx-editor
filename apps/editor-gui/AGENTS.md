@@ -21,6 +21,7 @@ Before building any feature, assume it may already exist and grep first. Current
   - device header: Name, Individual Address; Manufacturer / Application / Order Number / Hardware / Description (`_get_device_info`)
   - tab **Parameters**: full application parameter tree editor (`widgets` `render_ui_tree`, `count_parameters`, `_on_param_change`)
   - tab **Group Objects**: `widgets/group_objects_widgets.py::GroupObjectsTable` — columns `#`, Name, DPT, Group Addresses + flags C/R/W/T/U, link/unlink com-objects
+  - **Tested badge** (title row, `project/ui/tested_badge.py`, core `editor_gui.tested_devices`): "Tested" / "Not yet tested" from the community list `tested_devices.json` (by application without hash; proofs download/read_back/plugin_edit; how to add: `CONTRIBUTING.md`); MCP `project_tested_devices`
   - **Programming/Download**: `DownloadScope` selector (FULL/partial), load-procedures preview, program-confirm, `memory_preview`, `preflight_result`
 - **Catalog** (`catalog/`): local `.knxprod` import; browse tree with search; add device to project; **online catalog** (onlinecatalog.knx.org) — manufacturer list, per-manufacturer product browse + `.knxprod` download+import, search, country/language combo (persisted)
 - **Connection** (`connection/`): tunneling/routing connect, `GatewayScanner` discovery, **startup auto-connect** to preferred/first gateway (`autostart()`), settings persisted via `settings.py`; management procedures (individual address read/write, serial write)

@@ -5034,5 +5034,36 @@ class ProjectStrings:
     def TOOLS_TOPOLOGY_DUPLICATE(self) -> str:
         return _("{device}: duplicate address {address}")
 
+    @property
+    def TESTED_BADGE(self) -> str:
+        return _("Tested")
+
+    @property
+    def NOT_TESTED_BADGE(self) -> str:
+        return _("Not yet tested")
+
+    @property
+    def TESTED_TOOLTIP(self) -> str:
+        return _("Proven with this editor ({version}, {date}): {proofs}")
+
+    @property
+    def NOT_TESTED_TOOLTIP(self) -> str:
+        return _(
+            "Nobody has reported this application as proven with this editor yet. Try a first "
+            "download on a spare device, and see CONTRIBUTING.md to add it to the list."
+        )
+
+    @property
+    def TESTED_PROOF_DOWNLOAD(self) -> str:
+        return _("download")
+
+    @property
+    def TESTED_PROOF_READ_BACK(self) -> str:
+        return _("read-back matched")
+
+    @property
+    def TESTED_PROOF_PLUGIN_EDIT(self) -> str:
+        return _("setting changed in the plug-in view")
+
 
 S = ProjectStrings()

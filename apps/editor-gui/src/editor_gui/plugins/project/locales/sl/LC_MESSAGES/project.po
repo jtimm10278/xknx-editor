@@ -3361,3 +3361,21 @@ msgstr "Notranje vrednosti"
 
 msgid "Acknowledge Group Address"
 msgstr "Potrdi Skupinski Naslov"
+
+msgid "Not yet tested"
+msgstr "Še ni preizkušeno"
+
+msgid "Proven with this editor ({version}, {date}): {proofs}"
+msgstr "Preverjeno s tem urejevalnikom ({version}, {date}): {proofs}"
+
+msgid "Nobody has reported this application as proven with this editor yet. Try a first download on a spare device, and see CONTRIBUTING.md to add it to the list."
+msgstr "Nihče še ni sporočil, da je ta aplikacija preverjena s tem urejevalnikom. Prvi prenos poskusite na rezervni napravi; kako jo dodate na seznam, piše v CONTRIBUTING.md."
+
+msgid "download"
+msgstr "prenos"
+
+msgid "read-back matched"
+msgstr "povratno branje se je ujemalo"
+
+msgid "setting changed in the plug-in view"
+msgstr "nastavitev spremenjena v pogledu vtičnika"

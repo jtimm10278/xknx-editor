@@ -3282,3 +3282,21 @@ msgstr "Внутрішні значення"
 
 msgid "Acknowledge Group Address"
 msgstr "Підтверджувати Групову Адресу"
+
+msgid "Not yet tested"
+msgstr "Ще не перевірено"
+
+msgid "Proven with this editor ({version}, {date}): {proofs}"
+msgstr "Перевірено з цим редактором ({version}, {date}): {proofs}"
+
+msgid "Nobody has reported this application as proven with this editor yet. Try a first download on a spare device, and see CONTRIBUTING.md to add it to the list."
+msgstr "Ще ніхто не повідомив, що цей застосунок перевірено з цим редактором. Спробуйте перше завантаження на запасному пристрої; як додати його до списку, див. CONTRIBUTING.md."
+
+msgid "download"
+msgstr "завантаження"
+
+msgid "read-back matched"
+msgstr "зворотне читання збіглося"
+
+msgid "setting changed in the plug-in view"
+msgstr "параметр змінено в поданні плагіна"

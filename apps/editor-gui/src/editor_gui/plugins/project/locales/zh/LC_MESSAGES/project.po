@@ -3178,3 +3178,21 @@ msgstr "内部值"
 
 msgid "Acknowledge Group Address"
 msgstr "确认组地址"
+
+msgid "Not yet tested"
+msgstr "尚未测试"
+
+msgid "Proven with this editor ({version}, {date}): {proofs}"
+msgstr "已用本编辑器验证（{version}，{date}）：{proofs}"
+
+msgid "Nobody has reported this application as proven with this editor yet. Try a first download on a spare device, and see CONTRIBUTING.md to add it to the list."
+msgstr "尚无人报告此应用程序已用本编辑器验证。请先在备用设备上尝试首次下载，并参阅 CONTRIBUTING.md 将其加入列表。"
+
+msgid "download"
+msgstr "下载"
+
+msgid "read-back matched"
+msgstr "回读一致"
+
+msgid "setting changed in the plug-in view"
+msgstr "在插件视图中更改了设置"

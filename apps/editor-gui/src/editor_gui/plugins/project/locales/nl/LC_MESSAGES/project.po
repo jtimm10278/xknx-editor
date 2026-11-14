@@ -3263,3 +3263,21 @@ msgstr "Interne waarden"
 
 msgid "Acknowledge Group Address"
 msgstr "Groepsadres Bevestigen"
+
+msgid "Not yet tested"
+msgstr "Nog niet getest"
+
+msgid "Proven with this editor ({version}, {date}): {proofs}"
+msgstr "Beproefd met deze editor ({version}, {date}): {proofs}"
+
+msgid "Nobody has reported this application as proven with this editor yet. Try a first download on a spare device, and see CONTRIBUTING.md to add it to the list."
+msgstr "Niemand heeft deze applicatie nog als beproefd met deze editor gemeld. Probeer een eerste download op een reserveapparaat; zie CONTRIBUTING.md om haar aan de lijst toe te voegen."
+
+msgid "download"
+msgstr "download"
+
+msgid "read-back matched"
+msgstr "teruglezen klopte"
+
+msgid "setting changed in the plug-in view"
+msgstr "instelling gewijzigd in de plug-in-weergave"
