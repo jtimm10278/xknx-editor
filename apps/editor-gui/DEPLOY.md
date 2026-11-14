@@ -6,13 +6,22 @@ using [PyInstaller](https://pyinstaller.org/). Based on the imgui_bundle desktop
 ## Build
 
 ```bash
-apps/editor-gui/tools/build_desktop.sh
+apps/editor-gui/tools/build_desktop.sh          # add --zip on macOS for a release-style archive
 ```
 
 This regenerates the app icon and runs PyInstaller from [`xknx-editor.spec`](xknx-editor.spec).
-Output lands in `apps/editor-gui/dist/` — `XKNX Editor.app` on macOS, an `XKNX Editor/` folder
+Output lands in `apps/editor-gui/dist/` — `XKNX-Editor.app` on macOS, an `XKNX-Editor/` folder
 (with the executable + dependencies) on Windows/Linux. PyInstaller is fetched ephemerally via
 `uv --with`, so it is not added to the project dependencies.
+
+## macOS
+
+The app is built for the Mac's own architecture (arm64 on Apple silicon; the release builds on
+`macos-latest`, which is arm64). PyInstaller signs the bundle ad hoc, which Apple silicon requires
+to run it at all; the script checks that signature. There is no Apple Developer ID signature or
+notarization, so a downloaded copy needs the Gatekeeper step of the README on its first start.
+`--zip` packs the app with `ditto` as the release workflow does
+(`dist/XKNX-Editor-macos-<arch>.zip`).
 
 ## Windows release assets
 
