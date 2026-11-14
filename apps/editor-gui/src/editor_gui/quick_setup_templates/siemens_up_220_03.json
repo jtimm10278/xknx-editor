@@ -4,7 +4,9 @@
     "name": "Siemens UP 220/03 (2207-10)",
     "manufacturer": "M-0001",
     "application_number": "2207",
-    "application_versions": ["10"]
+    "application_versions": [
+      "10"
+    ]
   },
   "templates": [
     {
@@ -18,26 +20,56 @@
         "de": "Für zwei rastende Schalter. Eingang A sendet beim Schließen Ein und beim Öffnen Aus (Licht). Eingang B sendet beim Schließen Aus (auf) und beim Öffnen Ein (ab), für das Auf/Ab-Objekt einer Jalousie. Beide Eingänge senden bei jeder Flanke. Nur Eingänge A und B."
       },
       "parameters": [
-        {"parameter": "P-543", "value": "0"},
-        {"parameter": "P-108", "value": "0"},
-        {"parameter": "P-355", "value": "2"},
-        {"parameter": "UP-363", "value": "1"},
-        {"parameter": "UP-356", "value": "0"},
-        {"parameter": "P-382", "value": "2"},
-        {"parameter": "UP-391", "value": "0"},
-        {"parameter": "UP-392", "value": "1"}
+        {
+          "parameter": "P-543",
+          "value": "0"
+        },
+        {
+          "parameter": "P-108",
+          "value": "0"
+        },
+        {
+          "parameter": "P-355",
+          "value": "2"
+        },
+        {
+          "parameter": "UP-363",
+          "value": "1"
+        },
+        {
+          "parameter": "UP-356",
+          "value": "0"
+        },
+        {
+          "parameter": "P-382",
+          "value": "2"
+        },
+        {
+          "parameter": "UP-391",
+          "value": "0"
+        },
+        {
+          "parameter": "UP-392",
+          "value": "1"
+        }
       ],
       "slots": [
         {
           "id": "lights",
-          "label": {"en": "Lights On/Off (Input A)", "de": "Licht Ein/Aus (Eingang A)"},
+          "label": {
+            "en": "Lights On/Off (Input A)",
+            "de": "Licht Ein/Aus (Eingang A)"
+          },
           "object": 0,
           "sending": true,
           "required": true
         },
         {
           "id": "blinds",
-          "label": {"en": "Blinds Up/Down (Input B)", "de": "Jalousie Auf/Ab (Eingang B)"},
+          "label": {
+            "en": "Blinds Up/Down (Input B)",
+            "de": "Jalousie Auf/Ab (Eingang B)"
+          },
           "object": 1,
           "sending": true,
           "required": true
@@ -51,31 +83,96 @@
         "de": "Taster: Licht umschalten"
       },
       "description": {
-        "en": "For two push-buttons. Each press (rising edge) toggles its light. Input B is optional. Uses inputs A and B only.",
-        "de": "Für zwei Taster. Jeder Druck (steigende Flanke) schaltet sein Licht um. Eingang B ist optional. Nur Eingänge A und B."
+        "en": "For two momentary push-buttons (not latching switches: a latching switch would toggle only when it closes). Each press (rising edge) toggles its light. Input B is optional. Uses inputs A and B only.",
+        "de": "Für zwei Taster (keine rastenden Schalter: ein rastender Schalter würde nur beim Schließen umschalten). Jeder Druck (steigende Flanke) schaltet sein Licht um. Eingang B ist optional. Nur Eingänge A und B."
       },
       "parameters": [
-        {"parameter": "P-543", "value": "0"},
-        {"parameter": "P-108", "value": "0"},
-        {"parameter": "P-355", "value": "1"},
-        {"parameter": "UP-362", "value": "2"},
-        {"parameter": "P-382", "value": "1"},
-        {"parameter": "UP-395", "value": "2"}
+        {
+          "parameter": "P-543",
+          "value": "0"
+        },
+        {
+          "parameter": "P-108",
+          "value": "0"
+        },
+        {
+          "parameter": "P-355",
+          "value": "1"
+        },
+        {
+          "parameter": "UP-362",
+          "value": "2"
+        },
+        {
+          "parameter": "P-382",
+          "value": "1"
+        },
+        {
+          "parameter": "UP-395",
+          "value": "2"
+        }
       ],
       "slots": [
         {
           "id": "light_a",
-          "label": {"en": "Light (Input A)", "de": "Licht (Eingang A)"},
+          "label": {
+            "en": "Light (Input A)",
+            "de": "Licht (Eingang A)"
+          },
           "object": 0,
           "sending": true,
           "required": true
         },
         {
           "id": "light_b",
-          "label": {"en": "Light (Input B)", "de": "Licht (Eingang B)"},
+          "label": {
+            "en": "Light (Input B)",
+            "de": "Licht (Eingang B)"
+          },
           "object": 1,
           "sending": true,
           "required": false
+        }
+      ]
+    },
+    {
+      "id": "push-toggle-light-a",
+      "name": {
+        "en": "Push-button on input A: toggle a light (input B unchanged)",
+        "de": "Taster an Eingang A: Licht umschalten (Eingang B unverändert)"
+      },
+      "description": {
+        "en": "For one momentary push-button on input A (not a latching switch). Each press toggles the light. Input B's settings and links are left as they are, as long as inputs A / B already use the function \"Switch, push buttons, send value, scene\" (a blind set up as Shutter Up / Down on A / B would be switched to that function). Uses inputs A and B only.",
+        "de": "Für einen Taster an Eingang A (keinen rastenden Schalter). Jeder Druck schaltet das Licht um. Einstellungen und Verknüpfungen von Eingang B bleiben, sofern die Eingänge A / B schon die Funktion \"Schalten, Taster, Wert senden, Szene\" haben (eine Jalousie als Jalousie Auf / Ab an A / B würde auf diese Funktion umgestellt). Nur Eingänge A und B."
+      },
+      "parameters": [
+        {
+          "parameter": "P-543",
+          "value": "0"
+        },
+        {
+          "parameter": "P-108",
+          "value": "0"
+        },
+        {
+          "parameter": "P-355",
+          "value": "1"
+        },
+        {
+          "parameter": "UP-362",
+          "value": "2"
+        }
+      ],
+      "slots": [
+        {
+          "id": "light",
+          "label": {
+            "en": "Light (Input A)",
+            "de": "Licht (Eingang A)"
+          },
+          "object": 0,
+          "sending": true,
+          "required": true
         }
       ]
     },
@@ -86,24 +183,36 @@
         "de": "Taster: Jalousie auf/ab/stopp"
       },
       "description": {
-        "en": "For a pair of push-buttons on one blind (input A and input B, as the application's Shutter Up / Down function defines them). A long press moves the blind; a short press stops it or steps the slats.",
-        "de": "Für ein Tasterpaar an einer Jalousie (Eingang A und B, wie die Funktion Jalousie Auf / Ab der Applikation sie festlegt). Langer Druck fährt, kurzer Druck stoppt bzw. verstellt die Lamellen."
+        "en": "For a pair of momentary push-buttons on one blind (input A and input B, as the application's Shutter Up / Down function defines them); not for latching switches. A long press moves the blind; a short press stops it or steps the slats.",
+        "de": "Für ein Tasterpaar an einer Jalousie (Eingang A und B, wie die Funktion Jalousie Auf / Ab der Applikation sie festlegt); nicht für rastende Schalter. Langer Druck fährt, kurzer Druck stoppt bzw. verstellt die Lamellen."
       },
       "parameters": [
-        {"parameter": "P-543", "value": "0"},
-        {"parameter": "P-108", "value": "3"}
+        {
+          "parameter": "P-543",
+          "value": "0"
+        },
+        {
+          "parameter": "P-108",
+          "value": "3"
+        }
       ],
       "slots": [
         {
           "id": "move",
-          "label": {"en": "Blind Up/Down (Long Press)", "de": "Jalousie Auf/Ab (langer Druck)"},
+          "label": {
+            "en": "Blind Up/Down (Long Press)",
+            "de": "Jalousie Auf/Ab (langer Druck)"
+          },
           "object": 1,
           "sending": true,
           "required": true
         },
         {
           "id": "stop",
-          "label": {"en": "Stop/Slats (Short Press)", "de": "Stopp/Lamellen (kurzer Druck)"},
+          "label": {
+            "en": "Stop/Slats (Short Press)",
+            "de": "Stopp/Lamellen (kurzer Druck)"
+          },
           "object": 0,
           "sending": true,
           "required": true

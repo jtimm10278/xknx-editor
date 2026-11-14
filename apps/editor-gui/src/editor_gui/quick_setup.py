@@ -30,7 +30,9 @@ application, for example::
 ``parameter`` is a parameter id (the ParameterRef id without its ``_R-…``): it is resolved, at its
 turn, to the ref the device shows it with, so an earlier step that changes a mode can show the
 next parameter under another ref. ``value`` is the raw value (an enumeration's value, not its
-text). ``object`` is the group object number, looked up after all parameters are set. ``name``,
+text). ``object`` is the group object number (``objects``: several, all linked to the slot's group
+address), looked up after all parameters are set. A template changes only the parameters it lists,
+so another input or channel keeps its settings and links. ``name``,
 ``description`` and ``label`` give a text per UI language code; English (``en``) is required and
 used when the language has none.
 
@@ -81,7 +83,9 @@ class ParameterStep:
 class Slot:
     id: str
     labels: Mapping[str, str]
-    object: int  # group object number
+    objects: tuple[
+        int, ...
+    ]  # group object numbers, all linked to the slot's group address
     sending: bool = True
     required: bool = True
 
@@ -154,6 +158,27 @@ def _require(data: Mapping[str, Any], key: str, kind: type, where: str) -> Any:
     return value
 
 
+def _slot_objects(slot: Mapping[str, Any], where: str) -> tuple[int, ...]:
+    """``object`` (one number) or ``objects`` (several, e.g. the on and the off contact of a
+    rocker that both switch one light)."""
+    if "objects" in slot:
+        numbers: Any = slot["objects"]
+        if (
+            not isinstance(numbers, list)
+            or not numbers
+            or not all(
+                isinstance(n, int) and not isinstance(n, bool)
+                for n in numbers  # pyright: ignore[reportUnknownVariableType]
+            )
+        ):
+            raise QuickSetupError(f"{where}: 'objects' must be a list of numbers")
+        found = tuple(int(n) for n in numbers)  # pyright: ignore[reportUnknownVariableType, reportUnknownArgumentType]
+        if len(set(found)) != len(found):
+            raise QuickSetupError(f"{where}: 'objects' lists a number twice")
+        return found
+    return (_require(slot, "object", int, where),)
+
+
 def parse_templates(data: Any, source: str = "") -> list[Template]:
     """The templates of one file's JSON data; raises QuickSetupError naming what is wrong."""
     if not isinstance(data, dict):
@@ -210,7 +235,7 @@ def parse_templates(data: Any, source: str = "") -> list[Template]:
                 Slot(
                     id=slot_id,
                     labels=_texts(s.get("label"), f"{s_where}.label"),
-                    object=_require(s, "object", int, s_where),
+                    objects=_slot_objects(s, s_where),
                     sending=bool(s.get("sending", True)),
                     required=bool(s.get("required", True)),
                 )
@@ -452,28 +477,29 @@ def apply_template(
                 ga_id = assignments.get(slot.id)
                 if ga_id is None:
                     continue
-                co = objects.get(slot.object)
-                if co is None or co.db_id is None:
-                    raise QuickSetupError(
-                        f"group object {slot.object} ({slot.id}) is not shown"
-                    )
-                if replace_links:
-                    for link in project.get_links_for_com_object(co.db_id):
-                        if link.group_address_id != ga_id:
-                            project.unlink_com_object_from_ga(
-                                link.id, co.db_id, link.group_address_id
-                            )
-                            removed += 1
-                if (
-                    project.link_com_object_to_ga(
-                        co.db_id, ga_id, is_sending=slot.sending
-                    )
-                    is None
-                ):
-                    raise QuickSetupError(
-                        f"group object {slot.object} ({slot.id}): link refused"
-                    )
-                links.append(AppliedLink(slot.id, slot.object, ga_id, slot.sending))
+                for number in slot.objects:
+                    co = objects.get(number)
+                    if co is None or co.db_id is None:
+                        raise QuickSetupError(
+                            f"group object {number} ({slot.id}) is not shown"
+                        )
+                    if replace_links:
+                        for link in project.get_links_for_com_object(co.db_id):
+                            if link.group_address_id != ga_id:
+                                project.unlink_com_object_from_ga(
+                                    link.id, co.db_id, link.group_address_id
+                                )
+                                removed += 1
+                    if (
+                        project.link_com_object_to_ga(
+                            co.db_id, ga_id, is_sending=slot.sending
+                        )
+                        is None
+                    ):
+                        raise QuickSetupError(
+                            f"group object {number} ({slot.id}): link refused"
+                        )
+                    links.append(AppliedLink(slot.id, number, ga_id, slot.sending))
     except QuickSetupError:
         _rewind(project, start)
         raise
@@ -516,7 +542,7 @@ def describe(template: Template, language: str) -> dict[str, Any]:
             {
                 "id": s.id,
                 "label": s.label(language),
-                "object": s.object,
+                "objects": list(s.objects),
                 "sending": s.sending,
                 "required": s.required,
             }
