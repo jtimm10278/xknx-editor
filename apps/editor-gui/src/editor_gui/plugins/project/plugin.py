@@ -82,12 +82,15 @@ from editor_gui.plugins.project.ui.project_diff import (
     DiffOutcome,
     DiffResult,
 )
+from editor_gui.plugins.project.ui.quick_setup_dialog import QuickSetupDialog
 from editor_gui.plugins.project.ui.read_device_dialog import ReadDeviceDialog
 from editor_gui.plugins.project.ui.secure_commissioning import SecureCommissioningDialog
 from editor_gui.plugins.project.ui.siemens_dali import SiemensDaliPanel
 from editor_gui.plugins.project.ui.space_details import SpaceDetailsPanel
 from editor_gui.plugins.project.ui.tools import apply_name_swap, shifted_ia
 from editor_gui.plugins.project.ui.topology import Area, Line, Segment
+from editor_gui.quick_setup import library as quick_setup_library
+from editor_gui.strings import get_locale
 from editor_gui.widgets import ButtonActions
 from editor_gui.widgets.dpt_value import GroupValueBus
 from editor_gui.widgets.icons import (
@@ -104,12 +107,14 @@ from xknxeditor.proj.core.medium import MediumError
 from xknxeditor.proj.core.paste import PasteOptions
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
     from concurrent.futures import Future
 
     from editor_gui.device import ComObject, Device, UnloadedDevice
     from editor_gui.device_info import DeviceInfo
     from editor_gui.plugin_params import CollectionBinding
     from editor_gui.plugins.project.ui.configure import ProgramRequest
+    from editor_gui.quick_setup import Template as QuickSetupTemplate
     from xknxeditor.catalog import ProgramSummary
     from xknxeditor.dali import DaliBusState, EcgAssignment, Scene
     from xknxeditor.download.image import GroupCommunication
@@ -232,6 +237,11 @@ class ProjectPlugin:
         )
         self._preflight_result = PreflightResultWindow()
         self._read_device_dialog = ReadDeviceDialog(self._request_device_info)
+        self._quick_setup_dialog = QuickSetupDialog(
+            get_group_addresses=lambda: api.project.group_addresses,
+            on_apply=self._apply_quick_setup,
+            language=get_locale,
+        )
         # The device a certificate is asked for, while the dialog is open.
         self._certificate_device: Device | None = None
         self._certificate_dialog = DeviceCertificateDialog(
@@ -354,6 +364,8 @@ class ProjectPlugin:
             get_change_targets=self._api.project.application_change_targets,
             on_change_application=self._change_application,
             on_read_device_info=self._read_device_info,
+            quick_setup_available=lambda d: bool(quick_setup_library().for_device(d)),
+            on_quick_setup=self.open_quick_setup,
             on_restart_device=self._restart_device,
             on_master_reset_device=self._master_reset_device,
             suggest_ga=self._suggest_ga_for_object,
@@ -1542,6 +1554,39 @@ class ProjectPlugin:
             )
             return
         self._queue_bus_action(device.node_id, "siemens_dca", data=entry.data)
+
+    def open_quick_setup(self, device: "Device") -> None:
+        """Open "Quick Setup…" for ``device`` (nothing when no template fits its application)."""
+        templates = quick_setup_library().for_device(device)
+        self._quick_setup_dialog.open(device.node_id, device_label(device), templates)
+
+    def _apply_quick_setup(
+        self,
+        node_id: int,
+        template: "QuickSetupTemplate",
+        assignments: "Mapping[str, int | None]",
+        replace_links: bool,
+    ) -> str | None:
+        from editor_gui.quick_setup import QuickSetupError, apply_template
+
+        name = template.name(get_locale())
+        try:
+            apply_template(
+                self._api.project,
+                node_id,
+                template,
+                assignments,
+                replace_links=replace_links,
+                label=S.QUICK_SETUP_UNDO.format(template=name),
+            )
+        except QuickSetupError as exc:
+            return str(exc)
+        device = self._api.project.find_device_by_node_id(node_id)
+        if self._api.notify is not None and device is not None:
+            self._api.notify(
+                S.QUICK_SETUP_APPLIED.format(device=device_label(device), template=name)
+            )
+        return None
 
     def _read_device_info(self, device: "Device") -> None:
         self._open_read_dialog(device.node_id)
@@ -3512,6 +3557,7 @@ class ProjectPlugin:
         self._comment_panel.tick()
         self._group_addresses_panel.render_import()
         self._read_device_dialog.render()
+        self._quick_setup_dialog.render()
         self._certificate_dialog.render()
         self._secure_commissioning_dialog.render()
         self._object_group_value.render()

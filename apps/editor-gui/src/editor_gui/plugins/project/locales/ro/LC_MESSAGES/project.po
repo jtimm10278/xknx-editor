@@ -3309,3 +3309,42 @@ msgstr "Valori interne"
 
 msgid "Acknowledge Group Address"
 msgstr "Confirmă Adresa de Grup"
+
+msgid "Quick Setup…"
+msgstr "Configurare rapidă…"
+
+msgid "Quick Setup"
+msgstr "Configurare rapidă"
+
+msgid "Template"
+msgstr "Șablon"
+
+msgid "Not linked"
+msgstr "Neconectat"
+
+msgid "{label} (optional)"
+msgstr "{label} (opțional)"
+
+msgid "Filter group addresses"
+msgstr "Filtrare adrese de grup"
+
+msgid "Replace the other links of these objects"
+msgstr "Înlocuiește celelalte legături ale acestor obiecte"
+
+msgid "Sets the parameters and links in one undo step. Nothing is sent to the device until you download it."
+msgstr "Setează parametrii și legăturile într-un singur pas de anulare. Nimic nu este trimis dispozitivului până nu îl descărcați."
+
+msgid "Choose a group address for every object that is not optional"
+msgstr "Alegeți o adresă de grup pentru fiecare obiect care nu este opțional"
+
+msgid "Apply"
+msgstr "Aplică"
+
+msgid "Quick Setup: {template}"
+msgstr "Configurare rapidă: {template}"
+
+msgid "Quick Setup applied to {device}: {template}"
+msgstr "Configurare rapidă aplicată pe {device}: {template}"
+
+msgid "Quick Setup not applied: {error}"
+msgstr "Configurarea rapidă nu a fost aplicată: {error}"

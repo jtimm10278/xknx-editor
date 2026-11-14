@@ -130,6 +130,10 @@ the filter, or Without module for ungrouped objects. Bulk actions use only the s
 
 ![Project editor](docs/images/editor.png)
 
+**Quick Setup** — ready-made set-ups for common wall-switch patterns (e.g. two latching inputs for
+a light and a blind) set a device's parameters and links in one undo step. Templates are data files,
+so more devices can be added without code: see [Quick Setup templates](docs/QUICK_SETUP.md).
+
 The same in the light theme:
 
 ![Project editor in the light theme](docs/images/editor-light.png)

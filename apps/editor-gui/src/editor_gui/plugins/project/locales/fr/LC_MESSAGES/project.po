@@ -3230,3 +3230,42 @@ msgstr "Valeurs internes"
 
 msgid "Acknowledge Group Address"
 msgstr "Acquitter l’Adresse de Groupe"
+
+msgid "Quick Setup…"
+msgstr "Configuration rapide…"
+
+msgid "Quick Setup"
+msgstr "Configuration rapide"
+
+msgid "Template"
+msgstr "Modèle"
+
+msgid "Not linked"
+msgstr "Non lié"
+
+msgid "{label} (optional)"
+msgstr "{label} (facultatif)"
+
+msgid "Filter group addresses"
+msgstr "Filtrer les adresses de groupe"
+
+msgid "Replace the other links of these objects"
+msgstr "Remplacer les autres liaisons de ces objets"
+
+msgid "Sets the parameters and links in one undo step. Nothing is sent to the device until you download it."
+msgstr "Définit les paramètres et les liaisons en une seule étape d’annulation. Rien n’est envoyé à l’appareil avant son téléchargement."
+
+msgid "Choose a group address for every object that is not optional"
+msgstr "Choisissez une adresse de groupe pour chaque objet qui n’est pas facultatif"
+
+msgid "Apply"
+msgstr "Appliquer"
+
+msgid "Quick Setup: {template}"
+msgstr "Configuration rapide : {template}"
+
+msgid "Quick Setup applied to {device}: {template}"
+msgstr "Configuration rapide appliquée à {device} : {template}"
+
+msgid "Quick Setup not applied: {error}"
+msgstr "Configuration rapide non appliquée : {error}"

@@ -3263,3 +3263,42 @@ msgstr "Interne waarden"
 
 msgid "Acknowledge Group Address"
 msgstr "Groepsadres Bevestigen"
+
+msgid "Quick Setup…"
+msgstr "Snelle installatie…"
+
+msgid "Quick Setup"
+msgstr "Snelle installatie"
+
+msgid "Template"
+msgstr "Sjabloon"
+
+msgid "Not linked"
+msgstr "Niet gekoppeld"
+
+msgid "{label} (optional)"
+msgstr "{label} (optioneel)"
+
+msgid "Filter group addresses"
+msgstr "Groepsadressen filteren"
+
+msgid "Replace the other links of these objects"
+msgstr "De andere koppelingen van deze objecten vervangen"
+
+msgid "Sets the parameters and links in one undo step. Nothing is sent to the device until you download it."
+msgstr "Stelt de parameters en koppelingen in één ongedaanmaakstap in. Er wordt pas iets naar het apparaat gestuurd als u het downloadt."
+
+msgid "Choose a group address for every object that is not optional"
+msgstr "Kies een groepsadres voor elk object dat niet optioneel is"
+
+msgid "Apply"
+msgstr "Toepassen"
+
+msgid "Quick Setup: {template}"
+msgstr "Snelle installatie: {template}"
+
+msgid "Quick Setup applied to {device}: {template}"
+msgstr "Snelle installatie toegepast op {device}: {template}"
+
+msgid "Quick Setup not applied: {error}"
+msgstr "Snelle installatie niet toegepast: {error}"

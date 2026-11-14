@@ -313,6 +313,8 @@ class ConfigurePanel:
         get_change_targets: "Callable[[Device], list[ProgramSummary]] | None" = None,
         on_change_application: "Callable[[Device, ProgramSummary], None] | None" = None,
         on_read_device_info: Callable[[Device], None] | None = None,
+        quick_setup_available: Callable[[Device], bool] | None = None,
+        on_quick_setup: Callable[[Device], None] | None = None,
         on_restart_device: Callable[[Device], None] | None = None,
         on_master_reset_device: Callable[[Device, int], None] | None = None,
         suggest_ga: Callable[[Device, ComObject], tuple[str, str]] | None = None,
@@ -418,6 +420,8 @@ class ConfigurePanel:
         self._get_change_targets = get_change_targets
         self._on_change_application = on_change_application
         self._on_read_device_info = on_read_device_info
+        self._quick_setup_available = quick_setup_available
+        self._on_quick_setup = on_quick_setup
         self._on_restart_device = on_restart_device
         self._on_master_reset_device = on_master_reset_device
         self._reset_armed = False  # confirm checkbox in the master-reset popup
@@ -612,6 +616,7 @@ class ConfigurePanel:
         # directly below the "Read from Device" action.
         imgui.spacing()
         self._render_application_program(device)
+        self._render_quick_setup_button(device)
         imgui.spacing()
         self._render_manual_button(self._get_device_info(device.node_id))
         self._render_ip_config(device)
@@ -1048,6 +1053,19 @@ class ConfigurePanel:
                 ):
                     self._on_routing_blocking(device, mode)
             imgui.end_combo()
+
+    def _render_quick_setup_button(self, device: Device) -> bool:
+        """ "Quick Setup…" when a ready-made set-up exists for the device's application; returns
+        whether the button was shown."""
+        available, on_click = self._quick_setup_available, self._on_quick_setup
+        if available is None or on_click is None or not self._ready(device):
+            return False
+        if not available(device):
+            return False
+        imgui.spacing()
+        if imgui.button(S.QUICK_SETUP_BUTTON):
+            on_click(device)
+        return True
 
     def _render_device_actions(self, device: Device) -> None:
         """The device's occasional actions (read-out, restart, reset) in one row that wraps when

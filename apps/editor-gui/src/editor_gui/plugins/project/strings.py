@@ -5034,5 +5034,64 @@ class ProjectStrings:
     def TOOLS_TOPOLOGY_DUPLICATE(self) -> str:
         return _("{device}: duplicate address {address}")
 
+    @property
+    def QUICK_SETUP_BUTTON(self) -> str:
+        return _("Quick Setup…")
+
+    @property
+    def QUICK_SETUP_TITLE(self) -> str:
+        return _("Quick Setup")
+
+    @property
+    def QUICK_SETUP_TEMPLATE(self) -> str:
+        return _("Template")
+
+    @property
+    def QUICK_SETUP_GROUP_ADDRESSES(self) -> str:
+        return _("Group Addresses")
+
+    @property
+    def QUICK_SETUP_NOT_LINKED(self) -> str:
+        return _("Not linked")
+
+    @property
+    def QUICK_SETUP_OPTIONAL(self) -> str:
+        return _("{label} (optional)")
+
+    @property
+    def QUICK_SETUP_FILTER_HINT(self) -> str:
+        return _("Filter group addresses")
+
+    @property
+    def QUICK_SETUP_REPLACE_LINKS(self) -> str:
+        return _("Replace the other links of these objects")
+
+    @property
+    def QUICK_SETUP_HINT(self) -> str:
+        return _(
+            "Sets the parameters and links in one undo step. Nothing is sent to the device "
+            "until you download it."
+        )
+
+    @property
+    def QUICK_SETUP_CHOOSE_REQUIRED(self) -> str:
+        return _("Choose a group address for every object that is not optional")
+
+    @property
+    def QUICK_SETUP_APPLY(self) -> str:
+        return _("Apply")
+
+    @property
+    def QUICK_SETUP_UNDO(self) -> str:
+        return _("Quick Setup: {template}")
+
+    @property
+    def QUICK_SETUP_APPLIED(self) -> str:
+        return _("Quick Setup applied to {device}: {template}")
+
+    @property
+    def QUICK_SETUP_FAILED(self) -> str:
+        return _("Quick Setup not applied: {error}")
+
 
 S = ProjectStrings()
