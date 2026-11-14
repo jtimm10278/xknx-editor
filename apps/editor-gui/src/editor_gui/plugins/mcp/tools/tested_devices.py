@@ -32,7 +32,7 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
         Each entry: {manufacturer, product, order_number, application (e.g. "M-0001_A-2207-10":
         manufacturer, number and version, without the hash), application_name, mask (as the
         product data gives it), proven (list of "download", "read_back", "plugin_edit"), date
-        (YYYY-MM-DD), xets_version (the editor version used), notes}."""
+        (YYYY-MM-DD), editor_version (the editor version used), notes}."""
         from editor_gui.tested_devices import for_device, tested_devices
 
         if node_id is None and device_address is None:

@@ -42,7 +42,7 @@ class TestedDevice:
     mask: str  # "MV-0011", as the product data gives it
     proven: tuple[str, ...]
     date: str  # ISO date of the proof
-    xets_version: str
+    editor_version: str
     notes: str = ""
 
     def matches(self, application_id: str) -> bool:
@@ -58,7 +58,7 @@ class TestedDevice:
             "mask": self.mask,
             "proven": list(self.proven),
             "date": self.date,
-            "xets_version": self.xets_version,
+            "editor_version": self.editor_version,
             "notes": self.notes,
         }
 
@@ -81,7 +81,7 @@ _FIELDS = (
     "application_name",
     "mask",
     "date",
-    "xets_version",
+    "editor_version",
 )
 
 
@@ -139,7 +139,7 @@ def parse(data: Any) -> list[TestedDevice]:
                 mask=item["mask"],
                 proven=tuple(p for p in PROOFS if p in proven),  # pyright: ignore[reportUnknownArgumentType]
                 date=item["date"],
-                xets_version=item["xets_version"],
+                editor_version=item["editor_version"],
                 notes=notes,
             )
         )
