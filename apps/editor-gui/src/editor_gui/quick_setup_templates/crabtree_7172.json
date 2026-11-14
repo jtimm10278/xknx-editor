@@ -1,0 +1,99 @@
+{
+  "format": 1,
+  "device": {
+    "name": "Crabtree Push Button Platinum 1-fold 7172 (9084-02)",
+    "manufacturer": "M-0021",
+    "application_number": "9084",
+    "application_versions": ["02"]
+  },
+  "templates": [
+    {
+      "id": "rocker-toggle-lights",
+      "name": {
+        "en": "Rocker: each side toggles a light",
+        "de": "Wippe: jede Seite schaltet ein Licht um"
+      },
+      "description": {
+        "en": "Each press of the left or right contact toggles its light. The right contact is optional: link only the left one for a single light. The LED settings are left as they are.",
+        "de": "Jeder Druck auf den linken oder rechten Kontakt schaltet sein Licht um. Der rechte Kontakt ist optional: für ein einzelnes Licht nur den linken verknüpfen. Die LED-Einstellungen bleiben unverändert."
+      },
+      "parameters": [
+        {"parameter": "P-128", "value": "0"},
+        {"parameter": "UP-160", "value": "64"},
+        {"parameter": "UP-161", "value": "64"}
+      ],
+      "slots": [
+        {
+          "id": "light_left",
+          "label": {"en": "Light (Left Contact)", "de": "Licht (linker Kontakt)"},
+          "object": 0,
+          "sending": true,
+          "required": true
+        },
+        {
+          "id": "light_right",
+          "label": {"en": "Light (Right Contact)", "de": "Licht (rechter Kontakt)"},
+          "object": 1,
+          "sending": true,
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "rocker-on-off",
+      "name": {
+        "en": "Rocker: one light, left on / right off",
+        "de": "Wippe: ein Licht, links ein / rechts aus"
+      },
+      "description": {
+        "en": "The left contact switches the light on, the right contact switches it off (left and right as the application names the contacts; which is top depends on how the switch is mounted). Both contacts send on one group address. The LED settings are left as they are.",
+        "de": "Der linke Kontakt schaltet das Licht ein, der rechte aus (links und rechts wie in der Applikation; was oben ist, hängt von der Einbaulage ab). Beide Kontakte senden auf eine Gruppenadresse. Die LED-Einstellungen bleiben unverändert."
+      },
+      "parameters": [
+        {"parameter": "P-128", "value": "0"},
+        {"parameter": "UP-160", "value": "128"},
+        {"parameter": "UP-161", "value": "0"}
+      ],
+      "slots": [
+        {
+          "id": "light",
+          "label": {"en": "Light On/Off", "de": "Licht Ein/Aus"},
+          "objects": [0, 1],
+          "sending": true,
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "rocker-blinds",
+      "name": {
+        "en": "Rocker: blinds up/down/stop",
+        "de": "Wippe: Jalousie auf/ab/stopp"
+      },
+      "description": {
+        "en": "For one blind: left contact up, right contact down. A long press moves the blind; a short press stops it or steps the slats. The LED settings are left as they are.",
+        "de": "Für eine Jalousie: linker Kontakt auf, rechter Kontakt ab. Langer Druck fährt, kurzer Druck stoppt bzw. verstellt die Lamellen. Die LED-Einstellungen bleiben unverändert."
+      },
+      "parameters": [
+        {"parameter": "P-128", "value": "1"},
+        {"parameter": "UP-129", "value": "4241"}
+      ],
+      "slots": [
+        {
+          "id": "move",
+          "label": {"en": "Blind Up/Down (Long Press)", "de": "Jalousie Auf/Ab (langer Druck)"},
+          "object": 1,
+          "sending": true,
+          "required": true
+        },
+        {
+          "id": "stop",
+          "label": {"en": "Stop/Slats (Short Press)", "de": "Stopp/Lamellen (kurzer Druck)"},
+          "object": 0,
+          "sending": true,
+          "required": true
+        }
+      ]
+    }
+  ]
+}

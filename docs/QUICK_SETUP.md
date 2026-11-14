@@ -13,7 +13,11 @@ same application and template id replaces the bundled one.
 
 | Device | Application | Templates |
 |---|---|---|
-| Siemens UP 220/03 | 2207 version 10 | 2 latching inputs: lights on/off + blinds up/down; Push-buttons: toggle lights; Push-buttons: blinds up/down/stop |
+| Siemens UP 220/03 | 2207 version 10 | 2 latching inputs: lights on/off + blinds up/down; Push-buttons: toggle lights; Push-button on input A: toggle a light (input B unchanged); Push-buttons: blinds up/down/stop |
+| Crabtree Push Button Platinum 1-fold 7172 | 9084 version 02 | Rocker: each side toggles a light; Rocker: one light, left on / right off; Rocker: blinds up/down/stop |
+| Crabtree Push Button Platinum 3-fold 7176 | 2302 version 01 | Upper / middle rocker: one light, left on / right off; Middle / lower rocker: blinds up/down/stop (each changes only its own rocker) |
+
+The push-button templates need **momentary push-buttons**. On a latching (on/off) switch they would act only when it closes; use the latching template there. Wall push-buttons such as the Crabtree rockers are momentary.
 
 ## Adding a device or a template
 
@@ -54,8 +58,10 @@ One JSON file per application:
   resolved at its turn, so a step that switches a mode can show the next parameter under another ref.
   Module parameters keep their module part, e.g. `MD-1_M-100_MI-1_UP-3`. `value` is the raw value
   (an enumeration's value, not its text).
-- `slots` are the group objects to link, by object number, looked up after all parameters are set.
+- `slots` are the group objects to link, by object number (`object`, or `objects` for several that share
+  one group address, e.g. the on and off contacts of a rocker), looked up after all parameters are set.
   `required: false` lets the user leave one unlinked.
+- A template changes only the parameters it lists; leave out the other input's parameters to keep its settings (and its links: only the slots' objects are relinked). Say in the description when a shared parameter (e.g. a function for a pair of inputs) still affects the other input.
 - `name`, `description` and `label` take a text per UI language; English (`en`) is required.
 
 Check a new template on a copy of a project: apply it, look at the Parameters and Group Objects tabs,

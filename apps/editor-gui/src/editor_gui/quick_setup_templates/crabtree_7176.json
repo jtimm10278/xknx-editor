@@ -1,0 +1,123 @@
+{
+  "format": 1,
+  "device": {
+    "name": "Crabtree Push Button Platinum 3-fold 7176 (2302-01)",
+    "manufacturer": "M-0021",
+    "application_number": "2302",
+    "application_versions": ["01"]
+  },
+  "templates": [
+    {
+      "id": "upper-rocker-on-off",
+      "name": {
+        "en": "Upper rocker: one light, left on / right off",
+        "de": "Obere Wippe: ein Licht, links ein / rechts aus"
+      },
+      "description": {
+        "en": "The upper rocker switches one light: left contact on, right contact off, both on one group address. The middle and lower rockers keep their settings and links.",
+        "de": "Die obere Wippe schaltet ein Licht: linker Kontakt ein, rechter Kontakt aus, beide auf einer Gruppenadresse. Mittlere und untere Wippe behalten ihre Einstellungen und Verknüpfungen."
+      },
+      "parameters": [
+        {"parameter": "P-108", "value": "4"},
+        {"parameter": "P-36", "value": "1"},
+        {"parameter": "P-112", "value": "2"}
+      ],
+      "slots": [
+        {
+          "id": "light",
+          "label": {"en": "Light On/Off (Upper Rocker)", "de": "Licht Ein/Aus (obere Wippe)"},
+          "objects": [0, 1],
+          "sending": true,
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "middle-rocker-on-off",
+      "name": {
+        "en": "Middle rocker: one light, left on / right off",
+        "de": "Mittlere Wippe: ein Licht, links ein / rechts aus"
+      },
+      "description": {
+        "en": "The middle rocker switches one light: left contact on, right contact off, both on one group address. The upper and lower rockers keep their settings and links.",
+        "de": "Die mittlere Wippe schaltet ein Licht: linker Kontakt ein, rechter Kontakt aus, beide auf einer Gruppenadresse. Obere und untere Wippe behalten ihre Einstellungen und Verknüpfungen."
+      },
+      "parameters": [
+        {"parameter": "P-239", "value": "4"},
+        {"parameter": "P-260", "value": "1"},
+        {"parameter": "P-265", "value": "2"}
+      ],
+      "slots": [
+        {
+          "id": "light",
+          "label": {"en": "Light On/Off (Middle Rocker)", "de": "Licht Ein/Aus (mittlere Wippe)"},
+          "objects": [2, 3],
+          "sending": true,
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "middle-rocker-blinds",
+      "name": {
+        "en": "Middle rocker: blinds up/down/stop",
+        "de": "Mittlere Wippe: Jalousie auf/ab/stopp"
+      },
+      "description": {
+        "en": "The middle rocker drives one blind: left up, right down; a long press moves it, a short press stops it or steps the slats. The upper and lower rockers keep their settings and links.",
+        "de": "Die mittlere Wippe steuert eine Jalousie: links auf, rechts ab; langer Druck fährt, kurzer Druck stoppt bzw. verstellt die Lamellen. Obere und untere Wippe behalten ihre Einstellungen und Verknüpfungen."
+      },
+      "parameters": [
+        {"parameter": "P-239", "value": "0"},
+        {"parameter": "P-249", "value": "1"}
+      ],
+      "slots": [
+        {
+          "id": "move",
+          "label": {"en": "Blind Up/Down (Long Press)", "de": "Jalousie Auf/Ab (langer Druck)"},
+          "object": 3,
+          "sending": true,
+          "required": true
+        },
+        {
+          "id": "stop",
+          "label": {"en": "Stop/Slats (Short Press)", "de": "Stopp/Lamellen (kurzer Druck)"},
+          "object": 2,
+          "sending": true,
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "lower-rocker-blinds",
+      "name": {
+        "en": "Lower rocker: blinds up/down/stop",
+        "de": "Untere Wippe: Jalousie auf/ab/stopp"
+      },
+      "description": {
+        "en": "The lower rocker drives one blind: left up, right down; a long press moves it, a short press stops it or steps the slats. The upper and middle rockers keep their settings and links.",
+        "de": "Die untere Wippe steuert eine Jalousie: links auf, rechts ab; langer Druck fährt, kurzer Druck stoppt bzw. verstellt die Lamellen. Obere und mittlere Wippe behalten ihre Einstellungen und Verknüpfungen."
+      },
+      "parameters": [
+        {"parameter": "P-287", "value": "0"},
+        {"parameter": "P-288", "value": "1"}
+      ],
+      "slots": [
+        {
+          "id": "move",
+          "label": {"en": "Blind Up/Down (Long Press)", "de": "Jalousie Auf/Ab (langer Druck)"},
+          "object": 5,
+          "sending": true,
+          "required": true
+        },
+        {
+          "id": "stop",
+          "label": {"en": "Stop/Slats (Short Press)", "de": "Stopp/Lamellen (kurzer Druck)"},
+          "object": 4,
+          "sending": true,
+          "required": true
+        }
+      ]
+    }
+  ]
+}
