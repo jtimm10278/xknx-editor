@@ -3178,3 +3178,21 @@ msgstr "内部値"
 
 msgid "Acknowledge Group Address"
 msgstr "グループアドレスを確認応答"
+
+msgid "Not yet tested"
+msgstr "未テスト"
+
+msgid "Proven with this editor ({version}, {date}): {proofs}"
+msgstr "このエディターで確認済み（{version}、{date}）：{proofs}"
+
+msgid "Nobody has reported this application as proven with this editor yet. Try a first download on a spare device, and see CONTRIBUTING.md to add it to the list."
+msgstr "このアプリケーションがこのエディターで確認済みという報告はまだありません。まず予備のデバイスでダウンロードを試し、リストへの追加方法は CONTRIBUTING.md を参照してください。"
+
+msgid "download"
+msgstr "ダウンロード"
+
+msgid "read-back matched"
+msgstr "読み戻しが一致"
+
+msgid "setting changed in the plug-in view"
+msgstr "プラグインビューで設定を変更"

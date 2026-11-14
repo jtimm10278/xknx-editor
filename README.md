@@ -130,6 +130,10 @@ the filter, or Without module for ungrouped objects. Bulk actions use only the s
 
 ![Project editor](docs/images/editor.png)
 
+**Tested devices** — beside each device the panel shows **Tested** when its application is on the
+community list of devices proven with this editor (downloaded and/or read back), or **Not yet tested**.
+To add a device you have proven, see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 The same in the light theme:
 
 ![Project editor in the light theme](docs/images/editor-light.png)

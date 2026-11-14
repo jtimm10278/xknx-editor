@@ -3230,3 +3230,21 @@ msgstr "Valores internos"
 
 msgid "Acknowledge Group Address"
 msgstr "Confirmar Endereço de Grupo"
+
+msgid "Not yet tested"
+msgstr "Ainda não testado"
+
+msgid "Proven with this editor ({version}, {date}): {proofs}"
+msgstr "Comprovado com este editor ({version}, {date}): {proofs}"
+
+msgid "Nobody has reported this application as proven with this editor yet. Try a first download on a spare device, and see CONTRIBUTING.md to add it to the list."
+msgstr "Ainda ninguém reportou esta aplicação como comprovada com este editor. Experimente uma primeira transferência num dispositivo de reserva e consulte CONTRIBUTING.md para a adicionar à lista."
+
+msgid "download"
+msgstr "transferência"
+
+msgid "read-back matched"
+msgstr "releitura coincidiu"
+
+msgid "setting changed in the plug-in view"
+msgstr "definição alterada na vista do plug-in"

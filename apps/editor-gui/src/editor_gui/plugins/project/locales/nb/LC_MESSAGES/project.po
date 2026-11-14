@@ -3230,3 +3230,21 @@ msgstr "Interne verdier"
 
 msgid "Acknowledge Group Address"
 msgstr "Bekreft Gruppeadresse"
+
+msgid "Not yet tested"
+msgstr "Ikke testet ennå"
+
+msgid "Proven with this editor ({version}, {date}): {proofs}"
+msgstr "Prøvd med denne editoren ({version}, {date}): {proofs}"
+
+msgid "Nobody has reported this application as proven with this editor yet. Try a first download on a spare device, and see CONTRIBUTING.md to add it to the list."
+msgstr "Ingen har ennå meldt denne applikasjonen som prøvd med denne editoren. Prøv en første nedlasting på en reserveenhet, og se CONTRIBUTING.md for å legge den til i listen."
+
+msgid "download"
+msgstr "nedlasting"
+
+msgid "read-back matched"
+msgstr "tilbakelesing stemte"
+
+msgid "setting changed in the plug-in view"
+msgstr "innstilling endret i plugin-visningen"

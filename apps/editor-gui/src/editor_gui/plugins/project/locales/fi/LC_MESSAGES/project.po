@@ -3230,3 +3230,21 @@ msgstr "Sisäiset arvot"
 
 msgid "Acknowledge Group Address"
 msgstr "Kuittaa Ryhmäosoite"
+
+msgid "Not yet tested"
+msgstr "Ei vielä testattu"
+
+msgid "Proven with this editor ({version}, {date}): {proofs}"
+msgstr "Todettu toimivaksi tällä editorilla ({version}, {date}): {proofs}"
+
+msgid "Nobody has reported this application as proven with this editor yet. Try a first download on a spare device, and see CONTRIBUTING.md to add it to the list."
+msgstr "Kukaan ei ole vielä ilmoittanut tätä sovellusta toimivaksi tällä editorilla. Kokeile ensimmäistä latausta varalaitteeseen ja katso CONTRIBUTING.md, jos haluat lisätä sen luetteloon."
+
+msgid "download"
+msgstr "lataus"
+
+msgid "read-back matched"
+msgstr "takaisinluku täsmäsi"
+
+msgid "setting changed in the plug-in view"
+msgstr "asetusta muutettu laajennusnäkymässä"

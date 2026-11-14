@@ -3309,3 +3309,21 @@ msgstr "Valori interne"
 
 msgid "Acknowledge Group Address"
 msgstr "Confirmă Adresa de Grup"
+
+msgid "Not yet tested"
+msgstr "Netestat încă"
+
+msgid "Proven with this editor ({version}, {date}): {proofs}"
+msgstr "Verificat cu acest editor ({version}, {date}): {proofs}"
+
+msgid "Nobody has reported this application as proven with this editor yet. Try a first download on a spare device, and see CONTRIBUTING.md to add it to the list."
+msgstr "Nimeni nu a raportat încă această aplicație ca verificată cu acest editor. Încercați o primă descărcare pe un dispozitiv de rezervă și consultați CONTRIBUTING.md pentru a o adăuga în listă."
+
+msgid "download"
+msgstr "descărcare"
+
+msgid "read-back matched"
+msgstr "recitirea a corespuns"
+
+msgid "setting changed in the plug-in view"
+msgstr "setare modificată în vizualizarea plug-in"

@@ -30,6 +30,7 @@ from editor_gui.os_open import open_url
 from editor_gui.plugins.project.strings import S
 from editor_gui.plugins.project.ui import name_focus
 from editor_gui.plugins.project.ui.status_field import status_combo
+from editor_gui.plugins.project.ui.tested_badge import render_tested_badge
 from editor_gui.widgets.dpi import label_column_width, px, px_vec2
 from editor_gui.widgets.filter_box import filter_box
 from editor_gui.widgets.flow import button_width, same_line_if_fits
@@ -651,6 +652,7 @@ class ConfigurePanel:
         beside it, or below it when the panel is too narrow."""
         imgui.align_text_to_frame_padding()
         imgui.text(device_label(device))
+        render_tested_badge(device)
         buttons = self._programming_labels()
         if not buttons:
             return

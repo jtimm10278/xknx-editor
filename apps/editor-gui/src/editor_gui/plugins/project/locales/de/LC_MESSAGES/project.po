@@ -3370,3 +3370,21 @@ msgstr "Interne Werte"
 
 msgid "Acknowledge Group Address"
 msgstr "Gruppenadresse quittieren"
+
+msgid "Not yet tested"
+msgstr "Noch nicht getestet"
+
+msgid "Proven with this editor ({version}, {date}): {proofs}"
+msgstr "Mit diesem Editor erprobt ({version}, {date}): {proofs}"
+
+msgid "Nobody has reported this application as proven with this editor yet. Try a first download on a spare device, and see CONTRIBUTING.md to add it to the list."
+msgstr "Diese Applikation wurde noch von niemandem als mit diesem Editor erprobt gemeldet. Versuchen Sie einen ersten Download an einem Ersatzgerät; wie Sie sie in die Liste aufnehmen, steht in CONTRIBUTING.md."
+
+msgid "download"
+msgstr "Download"
+
+msgid "read-back matched"
+msgstr "Rücklesen stimmte überein"
+
+msgid "setting changed in the plug-in view"
+msgstr "Einstellung in der Plug-in-Ansicht geändert"

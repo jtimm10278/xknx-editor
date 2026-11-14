@@ -3282,3 +3282,21 @@ msgstr "Interní hodnoty"
 
 msgid "Acknowledge Group Address"
 msgstr "Potvrzovat Skupinovou Adresu"
+
+msgid "Not yet tested"
+msgstr "Zatím neotestováno"
+
+msgid "Proven with this editor ({version}, {date}): {proofs}"
+msgstr "Ověřeno s tímto editorem ({version}, {date}): {proofs}"
+
+msgid "Nobody has reported this application as proven with this editor yet. Try a first download on a spare device, and see CONTRIBUTING.md to add it to the list."
+msgstr "Tuto aplikaci zatím nikdo nenahlásil jako ověřenou s tímto editorem. Zkuste první nahrání na náhradním zařízení a podle CONTRIBUTING.md ji přidejte do seznamu."
+
+msgid "download"
+msgstr "nahrání"
+
+msgid "read-back matched"
+msgstr "zpětné čtení se shodovalo"
+
+msgid "setting changed in the plug-in view"
+msgstr "nastavení změněno v zobrazení plug-inu"
