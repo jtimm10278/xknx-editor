@@ -5065,5 +5065,9 @@ class ProjectStrings:
     def TESTED_PROOF_PLUGIN_EDIT(self) -> str:
         return _("setting changed in the plug-in view")
 
+    @property
+    def TESTED_PROOF_LIVE_TEST(self) -> str:
+        return _("worked as set when used")
+
 
 S = ProjectStrings()

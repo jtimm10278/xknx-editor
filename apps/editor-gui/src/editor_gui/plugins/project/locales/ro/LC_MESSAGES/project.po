@@ -3327,3 +3327,6 @@ msgstr "recitirea a corespuns"
 
 msgid "setting changed in the plug-in view"
 msgstr "setare modificată în vizualizarea plug-in"
+
+msgid "worked as set when used"
+msgstr "a funcționat conform setărilor la utilizare"

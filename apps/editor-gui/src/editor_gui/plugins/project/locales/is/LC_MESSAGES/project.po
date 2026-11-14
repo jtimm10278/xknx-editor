@@ -3275,3 +3275,6 @@ msgstr "endurlestur passaði"
 
 msgid "setting changed in the plug-in view"
 msgstr "stillingu breytt í viðbótarskjá"
+
+msgid "worked as set when used"
+msgstr "virkaði eins og stillt við notkun"

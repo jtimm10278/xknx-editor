@@ -3223,3 +3223,6 @@ msgstr "a visszaolvasás egyezett"
 
 msgid "setting changed in the plug-in view"
 msgstr "beállítás módosítva a bővítménynézetben"
+
+msgid "worked as set when used"
+msgstr "használatkor a beállítás szerint működött"

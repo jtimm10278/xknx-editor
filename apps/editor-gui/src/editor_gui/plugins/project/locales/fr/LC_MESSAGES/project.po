@@ -3248,3 +3248,6 @@ msgstr "relecture identique"
 
 msgid "setting changed in the plug-in view"
 msgstr "réglage modifié dans la vue du plug-in"
+
+msgid "worked as set when used"
+msgstr "a fonctionné comme réglé à l’usage"

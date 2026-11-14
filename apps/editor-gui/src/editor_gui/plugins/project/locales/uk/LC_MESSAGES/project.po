@@ -3300,3 +3300,6 @@ msgstr "зворотне читання збіглося"
 
 msgid "setting changed in the plug-in view"
 msgstr "параметр змінено в поданні плагіна"
+
+msgid "worked as set when used"
+msgstr "під час використання працювало як налаштовано"

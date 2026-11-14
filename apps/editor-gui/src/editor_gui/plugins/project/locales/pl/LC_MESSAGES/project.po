@@ -3300,3 +3300,6 @@ msgstr "odczyt zwrotny zgodny"
 
 msgid "setting changed in the plug-in view"
 msgstr "ustawienie zmienione w widoku wtyczki"
+
+msgid "worked as set when used"
+msgstr "działało zgodnie z ustawieniami podczas użycia"

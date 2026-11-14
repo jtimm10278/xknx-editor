@@ -3379,3 +3379,6 @@ msgstr "povratno branje se je ujemalo"
 
 msgid "setting changed in the plug-in view"
 msgstr "nastavitev spremenjena v pogledu vtičnika"
+
+msgid "worked as set when used"
+msgstr "med uporabo je delovalo kot nastavljeno"
