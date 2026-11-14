@@ -27,6 +27,8 @@ MCP clients do the same with `project_ets_handover` (`out_path` writes the ZIP).
 
 ## Steps in ETS
 
+Verified with ETS 6: importing the hand-over's `group-addresses.xml` adds the group addresses without warnings, creates main and middle groups that do not exist yet, and leaves devices and links unchanged.
+
 1. Back up the ETS project first.
 2. Import `group-addresses.xml` (Group Addresses panel > Import). An import adds and updates
    group addresses but never removes one: delete those the checklist marks *removed* by hand.
