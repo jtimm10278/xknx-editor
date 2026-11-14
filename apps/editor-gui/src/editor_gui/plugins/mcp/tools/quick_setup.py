@@ -102,7 +102,7 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
         the user's own folder (``quick_setup`` under the editor's config folder, JSON files).
 
         Returns {templates, errors}. Each template: {key, id, device, name, description,
-        parameters: [{parameter, value}], slots: [{id, label, object, sending, required}],
+        parameters: [{parameter, value}], slots: [{id, label, objects, sending, required}],
         source}. ``slots`` are the group objects the template links: pass a group address per
         slot id to project_quick_setup_apply. ``errors`` lists template files that could not be
         read."""

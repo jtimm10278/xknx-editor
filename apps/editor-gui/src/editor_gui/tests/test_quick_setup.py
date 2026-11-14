@@ -54,10 +54,16 @@ def test_bundled_files_parse_and_up220_has_its_three_templates() -> None:
     library.reload()
     assert library.errors == []
     ids = {t.id for t in library.for_application(APP)}
-    assert ids == {"latching-lights-blinds", "push-toggle-lights", "push-blinds"}
+    assert ids == {
+        "latching-lights-blinds",
+        "push-toggle-lights",
+        "push-toggle-light-a",
+        "push-blinds",
+    }
     for template in library.templates:
         assert template.name("en") and template.description("en")
-        assert len({s.object for s in template.slots}) == len(template.slots)
+        numbers = [n for s in template.slots for n in s.objects]
+        assert len(set(numbers)) == len(numbers)
 
 
 def test_up220_latching_template_matches_the_proven_setup() -> None:
@@ -78,7 +84,10 @@ def test_up220_latching_template_matches_the_proven_setup() -> None:
         "UP-391": "0",
         "UP-392": "1",
     }
-    assert [(s.id, s.object) for s in template.slots] == [("lights", 0), ("blinds", 1)]
+    assert [(s.id, s.objects) for s in template.slots] == [
+        ("lights", (0,)),
+        ("blinds", (1,)),
+    ]
 
 
 @pytest.mark.parametrize(
@@ -112,7 +121,7 @@ def test_texts_fall_back_to_english() -> None:
     assert describe(template, "de")["slots"][1] == {
         "id": "b",
         "label": "Light B",
-        "object": 1,
+        "objects": [1],
         "sending": True,
         "required": False,
     }
@@ -420,3 +429,56 @@ def test_a_device_set_in_its_plug_in_is_refused() -> None:
     project.device.plugin_type = "download"
     with pytest.raises(QuickSetupError, match="plug-in"):
         apply_template(project, 1, template, {"a": 3})
+
+
+def test_crabtree_7172_templates_fit_its_application() -> None:
+    library = TemplateLibrary([BUNDLED_DIR])
+    library.reload()
+    ids = {t.id for t in library.for_application("M-0021_A-9084-02-0F47-O0001")}
+    assert ids == {"rocker-toggle-lights", "rocker-on-off", "rocker-blinds"}
+    on_off = library.find("rocker-on-off")
+    assert on_off is not None and on_off.slots[0].objects == (0, 1)
+
+
+def test_a_slot_can_link_several_objects_to_one_group_address() -> None:
+    (template,) = parse_templates(
+        _doc(slots=[{"id": "a", "label": "Light", "objects": [0, 1]}])
+    )
+    project = _project()
+    result = apply_template(project, 1, template, {"a": 3})
+    assert [(lk.object, lk.group_address_id) for lk in result.links] == [(0, 3), (1, 3)]
+    assert [lk.group_address_id for lk in project.links[101]] == [3]
+
+
+@pytest.mark.parametrize("objects", [[], [0, 0], ["0"], True])
+def test_bad_object_lists_are_refused(objects: Any) -> None:
+    with pytest.raises(QuickSetupError, match="objects"):
+        parse_templates(_doc(slots=[{"id": "a", "label": "A", "objects": objects}]))
+
+
+def test_up220_input_a_only_template_leaves_input_b_alone() -> None:
+    library = TemplateLibrary([BUNDLED_DIR])
+    library.reload()
+    template = library.find("push-toggle-light-a")
+    assert template is not None
+    touched = {s.parameter for s in template.parameters}
+    # Input B's own parameters (P-382, UP-391/392/395) are not touched.
+    assert not touched & {"P-382", "UP-391", "UP-392", "UP-395"}
+    assert [s.objects for s in template.slots] == [(0,)]
+
+
+def test_crabtree_7176_templates_each_touch_only_their_rocker() -> None:
+    library = TemplateLibrary([BUNDLED_DIR])
+    library.reload()
+    templates = library.for_application("M-0021_A-2302-01-E518-O0001")
+    assert {t.id for t in templates} == {
+        "upper-rocker-on-off",
+        "middle-rocker-on-off",
+        "middle-rocker-blinds",
+        "lower-rocker-blinds",
+    }
+    upper = {"P-108", "P-36", "P-112"}
+    lower = {"P-287", "P-288"}
+    found = {t.id: {s.parameter for s in t.parameters} for t in templates}
+    assert found["upper-rocker-on-off"] == upper
+    assert found["lower-rocker-blinds"] == lower
