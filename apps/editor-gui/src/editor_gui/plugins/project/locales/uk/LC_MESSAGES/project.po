@@ -3282,3 +3282,42 @@ msgstr "Внутрішні значення"
 
 msgid "Acknowledge Group Address"
 msgstr "Підтверджувати Групову Адресу"
+
+msgid "Quick Setup…"
+msgstr "Швидке налаштування…"
+
+msgid "Quick Setup"
+msgstr "Швидке налаштування"
+
+msgid "Template"
+msgstr "Шаблон"
+
+msgid "Not linked"
+msgstr "Не пов’язано"
+
+msgid "{label} (optional)"
+msgstr "{label} (необов’язково)"
+
+msgid "Filter group addresses"
+msgstr "Фільтр групових адрес"
+
+msgid "Replace the other links of these objects"
+msgstr "Замінити інші зв’язки цих об’єктів"
+
+msgid "Sets the parameters and links in one undo step. Nothing is sent to the device until you download it."
+msgstr "Задає параметри та зв’язки за один крок скасування. Нічого не надсилається до пристрою, доки ви не виконаєте завантаження."
+
+msgid "Choose a group address for every object that is not optional"
+msgstr "Виберіть групову адресу для кожного обов’язкового об’єкта"
+
+msgid "Apply"
+msgstr "Застосувати"
+
+msgid "Quick Setup: {template}"
+msgstr "Швидке налаштування: {template}"
+
+msgid "Quick Setup applied to {device}: {template}"
+msgstr "Швидке налаштування застосовано до {device}: {template}"
+
+msgid "Quick Setup not applied: {error}"
+msgstr "Швидке налаштування не застосовано: {error}"

@@ -3230,3 +3230,42 @@ msgstr "Interna värden"
 
 msgid "Acknowledge Group Address"
 msgstr "Bekräfta Gruppadress"
+
+msgid "Quick Setup…"
+msgstr "Snabbinställning…"
+
+msgid "Quick Setup"
+msgstr "Snabbinställning"
+
+msgid "Template"
+msgstr "Mall"
+
+msgid "Not linked"
+msgstr "Inte länkad"
+
+msgid "{label} (optional)"
+msgstr "{label} (valfritt)"
+
+msgid "Filter group addresses"
+msgstr "Filtrera gruppadresser"
+
+msgid "Replace the other links of these objects"
+msgstr "Ersätt de andra länkarna för dessa objekt"
+
+msgid "Sets the parameters and links in one undo step. Nothing is sent to the device until you download it."
+msgstr "Anger parametrarna och länkarna i ett ångra-steg. Inget skickas till enheten förrän du laddar ned den."
+
+msgid "Choose a group address for every object that is not optional"
+msgstr "Välj en gruppadress för varje objekt som inte är valfritt"
+
+msgid "Apply"
+msgstr "Verkställ"
+
+msgid "Quick Setup: {template}"
+msgstr "Snabbinställning: {template}"
+
+msgid "Quick Setup applied to {device}: {template}"
+msgstr "Snabbinställning tillämpad på {device}: {template}"
+
+msgid "Quick Setup not applied: {error}"
+msgstr "Snabbinställningen tillämpades inte: {error}"

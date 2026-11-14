@@ -3361,3 +3361,42 @@ msgstr "Notranje vrednosti"
 
 msgid "Acknowledge Group Address"
 msgstr "Potrdi Skupinski Naslov"
+
+msgid "Quick Setup…"
+msgstr "Hitra nastavitev…"
+
+msgid "Quick Setup"
+msgstr "Hitra nastavitev"
+
+msgid "Template"
+msgstr "Predloga"
+
+msgid "Not linked"
+msgstr "Ni povezano"
+
+msgid "{label} (optional)"
+msgstr "{label} (neobvezno)"
+
+msgid "Filter group addresses"
+msgstr "Filtriraj skupinske naslove"
+
+msgid "Replace the other links of these objects"
+msgstr "Zamenjaj druge povezave teh objektov"
+
+msgid "Sets the parameters and links in one undo step. Nothing is sent to the device until you download it."
+msgstr "Nastavi parametre in povezave v enem koraku razveljavitve. Napravi se nič ne pošlje, dokler je ne naložite."
+
+msgid "Choose a group address for every object that is not optional"
+msgstr "Izberite skupinski naslov za vsak objekt, ki ni neobvezen"
+
+msgid "Apply"
+msgstr "Uporabi"
+
+msgid "Quick Setup: {template}"
+msgstr "Hitra nastavitev: {template}"
+
+msgid "Quick Setup applied to {device}: {template}"
+msgstr "Hitra nastavitev uporabljena za {device}: {template}"
+
+msgid "Quick Setup not applied: {error}"
+msgstr "Hitra nastavitev ni bila uporabljena: {error}"

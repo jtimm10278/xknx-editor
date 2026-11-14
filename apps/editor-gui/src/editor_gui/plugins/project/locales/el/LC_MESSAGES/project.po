@@ -3230,3 +3230,42 @@ msgstr "Εσωτερικές τιμές"
 
 msgid "Acknowledge Group Address"
 msgstr "Επιβεβαίωση Ομαδικής Διεύθυνσης"
+
+msgid "Quick Setup…"
+msgstr "Γρήγορη ρύθμιση…"
+
+msgid "Quick Setup"
+msgstr "Γρήγορη ρύθμιση"
+
+msgid "Template"
+msgstr "Πρότυπο"
+
+msgid "Not linked"
+msgstr "Χωρίς σύνδεση"
+
+msgid "{label} (optional)"
+msgstr "{label} (προαιρετικό)"
+
+msgid "Filter group addresses"
+msgstr "Φιλτράρισμα διευθύνσεων ομάδας"
+
+msgid "Replace the other links of these objects"
+msgstr "Αντικατάσταση των άλλων συνδέσεων αυτών των αντικειμένων"
+
+msgid "Sets the parameters and links in one undo step. Nothing is sent to the device until you download it."
+msgstr "Ορίζει τις παραμέτρους και τις συνδέσεις σε ένα βήμα αναίρεσης. Τίποτα δεν αποστέλλεται στη συσκευή μέχρι να γίνει λήψη."
+
+msgid "Choose a group address for every object that is not optional"
+msgstr "Επιλέξτε διεύθυνση ομάδας για κάθε αντικείμενο που δεν είναι προαιρετικό"
+
+msgid "Apply"
+msgstr "Εφαρμογή"
+
+msgid "Quick Setup: {template}"
+msgstr "Γρήγορη ρύθμιση: {template}"
+
+msgid "Quick Setup applied to {device}: {template}"
+msgstr "Η γρήγορη ρύθμιση εφαρμόστηκε στο {device}: {template}"
+
+msgid "Quick Setup not applied: {error}"
+msgstr "Η γρήγορη ρύθμιση δεν εφαρμόστηκε: {error}"

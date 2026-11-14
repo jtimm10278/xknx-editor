@@ -3282,3 +3282,42 @@ msgstr "Interní hodnoty"
 
 msgid "Acknowledge Group Address"
 msgstr "Potvrzovat Skupinovou Adresu"
+
+msgid "Quick Setup…"
+msgstr "Rychlé nastavení…"
+
+msgid "Quick Setup"
+msgstr "Rychlé nastavení"
+
+msgid "Template"
+msgstr "Šablona"
+
+msgid "Not linked"
+msgstr "Nepropojeno"
+
+msgid "{label} (optional)"
+msgstr "{label} (volitelné)"
+
+msgid "Filter group addresses"
+msgstr "Filtrovat skupinové adresy"
+
+msgid "Replace the other links of these objects"
+msgstr "Nahradit ostatní propojení těchto objektů"
+
+msgid "Sets the parameters and links in one undo step. Nothing is sent to the device until you download it."
+msgstr "Nastaví parametry a propojení v jednom kroku zpět. Do zařízení se nic neodešle, dokud jej nenahrajete."
+
+msgid "Choose a group address for every object that is not optional"
+msgstr "Zvolte skupinovou adresu pro každý objekt, který není volitelný"
+
+msgid "Apply"
+msgstr "Použít"
+
+msgid "Quick Setup: {template}"
+msgstr "Rychlé nastavení: {template}"
+
+msgid "Quick Setup applied to {device}: {template}"
+msgstr "Rychlé nastavení použito na {device}: {template}"
+
+msgid "Quick Setup not applied: {error}"
+msgstr "Rychlé nastavení nebylo použito: {error}"

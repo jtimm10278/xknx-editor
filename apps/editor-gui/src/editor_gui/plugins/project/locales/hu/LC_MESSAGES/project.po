@@ -3205,3 +3205,42 @@ msgstr "Belső értékek"
 
 msgid "Acknowledge Group Address"
 msgstr "Csoportcím Nyugtázása"
+
+msgid "Quick Setup…"
+msgstr "Gyorsbeállítás…"
+
+msgid "Quick Setup"
+msgstr "Gyorsbeállítás"
+
+msgid "Template"
+msgstr "Sablon"
+
+msgid "Not linked"
+msgstr "Nincs csatolva"
+
+msgid "{label} (optional)"
+msgstr "{label} (nem kötelező)"
+
+msgid "Filter group addresses"
+msgstr "Csoportcímek szűrése"
+
+msgid "Replace the other links of these objects"
+msgstr "Az objektumok többi kapcsolatának cseréje"
+
+msgid "Sets the parameters and links in one undo step. Nothing is sent to the device until you download it."
+msgstr "Egyetlen visszavonható lépésben beállítja a paramétereket és a kapcsolatokat. Az eszközre semmi sem kerül, amíg le nem tölti."
+
+msgid "Choose a group address for every object that is not optional"
+msgstr "Válasszon csoportcímet minden nem kötelező objektumhoz"
+
+msgid "Apply"
+msgstr "Alkalmaz"
+
+msgid "Quick Setup: {template}"
+msgstr "Gyorsbeállítás: {template}"
+
+msgid "Quick Setup applied to {device}: {template}"
+msgstr "Gyorsbeállítás alkalmazva: {device}: {template}"
+
+msgid "Quick Setup not applied: {error}"
+msgstr "A gyorsbeállítás nem lett alkalmazva: {error}"

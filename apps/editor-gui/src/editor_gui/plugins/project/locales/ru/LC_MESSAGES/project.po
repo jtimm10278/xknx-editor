@@ -3282,3 +3282,42 @@ msgstr "Внутренние значения"
 
 msgid "Acknowledge Group Address"
 msgstr "Подтверждать Групповой Адрес"
+
+msgid "Quick Setup…"
+msgstr "Быстрая настройка…"
+
+msgid "Quick Setup"
+msgstr "Быстрая настройка"
+
+msgid "Template"
+msgstr "Шаблон"
+
+msgid "Not linked"
+msgstr "Не связано"
+
+msgid "{label} (optional)"
+msgstr "{label} (необязательно)"
+
+msgid "Filter group addresses"
+msgstr "Фильтр групповых адресов"
+
+msgid "Replace the other links of these objects"
+msgstr "Заменить другие связи этих объектов"
+
+msgid "Sets the parameters and links in one undo step. Nothing is sent to the device until you download it."
+msgstr "Задаёт параметры и связи за один шаг отмены. Ничего не отправляется в устройство, пока вы не выполните загрузку."
+
+msgid "Choose a group address for every object that is not optional"
+msgstr "Выберите групповой адрес для каждого обязательного объекта"
+
+msgid "Apply"
+msgstr "Применить"
+
+msgid "Quick Setup: {template}"
+msgstr "Быстрая настройка: {template}"
+
+msgid "Quick Setup applied to {device}: {template}"
+msgstr "Быстрая настройка применена к {device}: {template}"
+
+msgid "Quick Setup not applied: {error}"
+msgstr "Быстрая настройка не применена: {error}"

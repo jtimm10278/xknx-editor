@@ -3178,3 +3178,42 @@ msgstr "Dahili değerler"
 
 msgid "Acknowledge Group Address"
 msgstr "Grup Adresini Onayla"
+
+msgid "Quick Setup…"
+msgstr "Hızlı Kurulum…"
+
+msgid "Quick Setup"
+msgstr "Hızlı Kurulum"
+
+msgid "Template"
+msgstr "Şablon"
+
+msgid "Not linked"
+msgstr "Bağlı değil"
+
+msgid "{label} (optional)"
+msgstr "{label} (isteğe bağlı)"
+
+msgid "Filter group addresses"
+msgstr "Grup adreslerini filtrele"
+
+msgid "Replace the other links of these objects"
+msgstr "Bu nesnelerin diğer bağlantılarını değiştir"
+
+msgid "Sets the parameters and links in one undo step. Nothing is sent to the device until you download it."
+msgstr "Parametreleri ve bağlantıları tek bir geri alma adımında ayarlar. İndirene kadar cihaza hiçbir şey gönderilmez."
+
+msgid "Choose a group address for every object that is not optional"
+msgstr "İsteğe bağlı olmayan her nesne için bir grup adresi seçin"
+
+msgid "Apply"
+msgstr "Uygula"
+
+msgid "Quick Setup: {template}"
+msgstr "Hızlı Kurulum: {template}"
+
+msgid "Quick Setup applied to {device}: {template}"
+msgstr "Hızlı Kurulum {device} cihazına uygulandı: {template}"
+
+msgid "Quick Setup not applied: {error}"
+msgstr "Hızlı Kurulum uygulanmadı: {error}"

@@ -3178,3 +3178,42 @@ msgstr "内部值"
 
 msgid "Acknowledge Group Address"
 msgstr "确认组地址"
+
+msgid "Quick Setup…"
+msgstr "快速设置…"
+
+msgid "Quick Setup"
+msgstr "快速设置"
+
+msgid "Template"
+msgstr "模板"
+
+msgid "Not linked"
+msgstr "未链接"
+
+msgid "{label} (optional)"
+msgstr "{label}（可选）"
+
+msgid "Filter group addresses"
+msgstr "筛选组地址"
+
+msgid "Replace the other links of these objects"
+msgstr "替换这些对象的其他链接"
+
+msgid "Sets the parameters and links in one undo step. Nothing is sent to the device until you download it."
+msgstr "在一个撤销步骤中设置参数和链接。下载之前不会向设备发送任何内容。"
+
+msgid "Choose a group address for every object that is not optional"
+msgstr "请为每个非可选对象选择一个组地址"
+
+msgid "Apply"
+msgstr "应用"
+
+msgid "Quick Setup: {template}"
+msgstr "快速设置：{template}"
+
+msgid "Quick Setup applied to {device}: {template}"
+msgstr "已将快速设置应用于 {device}：{template}"
+
+msgid "Quick Setup not applied: {error}"
+msgstr "未应用快速设置：{error}"

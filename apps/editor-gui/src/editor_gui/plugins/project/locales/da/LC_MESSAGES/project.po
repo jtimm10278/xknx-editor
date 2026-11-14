@@ -3230,3 +3230,42 @@ msgstr "Interne værdier"
 
 msgid "Acknowledge Group Address"
 msgstr "Bekræft Gruppeadresse"
+
+msgid "Quick Setup…"
+msgstr "Hurtig opsætning…"
+
+msgid "Quick Setup"
+msgstr "Hurtig opsætning"
+
+msgid "Template"
+msgstr "Skabelon"
+
+msgid "Not linked"
+msgstr "Ikke forbundet"
+
+msgid "{label} (optional)"
+msgstr "{label} (valgfri)"
+
+msgid "Filter group addresses"
+msgstr "Filtrer gruppeadresser"
+
+msgid "Replace the other links of these objects"
+msgstr "Erstat de andre forbindelser for disse objekter"
+
+msgid "Sets the parameters and links in one undo step. Nothing is sent to the device until you download it."
+msgstr "Indstiller parametrene og forbindelserne i ét fortryd-trin. Intet sendes til enheden, før du downloader den."
+
+msgid "Choose a group address for every object that is not optional"
+msgstr "Vælg en gruppeadresse for hvert objekt, der ikke er valgfrit"
+
+msgid "Apply"
+msgstr "Anvend"
+
+msgid "Quick Setup: {template}"
+msgstr "Hurtig opsætning: {template}"
+
+msgid "Quick Setup applied to {device}: {template}"
+msgstr "Hurtig opsætning anvendt på {device}: {template}"
+
+msgid "Quick Setup not applied: {error}"
+msgstr "Hurtig opsætning ikke anvendt: {error}"

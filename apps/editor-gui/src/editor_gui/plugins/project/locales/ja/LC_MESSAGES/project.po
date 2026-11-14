@@ -3178,3 +3178,42 @@ msgstr "内部値"
 
 msgid "Acknowledge Group Address"
 msgstr "グループアドレスを確認応答"
+
+msgid "Quick Setup…"
+msgstr "クイックセットアップ…"
+
+msgid "Quick Setup"
+msgstr "クイックセットアップ"
+
+msgid "Template"
+msgstr "テンプレート"
+
+msgid "Not linked"
+msgstr "リンクなし"
+
+msgid "{label} (optional)"
+msgstr "{label}（任意）"
+
+msgid "Filter group addresses"
+msgstr "グループアドレスを絞り込み"
+
+msgid "Replace the other links of these objects"
+msgstr "これらのオブジェクトの他のリンクを置き換える"
+
+msgid "Sets the parameters and links in one undo step. Nothing is sent to the device until you download it."
+msgstr "パラメーターとリンクを 1 回の元に戻す操作で設定します。ダウンロードするまでデバイスには何も送信されません。"
+
+msgid "Choose a group address for every object that is not optional"
+msgstr "任意でないすべてのオブジェクトにグループアドレスを選択してください"
+
+msgid "Apply"
+msgstr "適用"
+
+msgid "Quick Setup: {template}"
+msgstr "クイックセットアップ: {template}"
+
+msgid "Quick Setup applied to {device}: {template}"
+msgstr "{device} にクイックセットアップを適用しました: {template}"
+
+msgid "Quick Setup not applied: {error}"
+msgstr "クイックセットアップは適用されませんでした: {error}"

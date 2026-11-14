@@ -3230,3 +3230,42 @@ msgstr "Vlera të brendshme"
 
 msgid "Acknowledge Group Address"
 msgstr "Konfirmo Adresën e Grupit"
+
+msgid "Quick Setup…"
+msgstr "Konfigurim i shpejtë…"
+
+msgid "Quick Setup"
+msgstr "Konfigurim i shpejtë"
+
+msgid "Template"
+msgstr "Shabllon"
+
+msgid "Not linked"
+msgstr "I palidhur"
+
+msgid "{label} (optional)"
+msgstr "{label} (opsionale)"
+
+msgid "Filter group addresses"
+msgstr "Filtro adresat e grupit"
+
+msgid "Replace the other links of these objects"
+msgstr "Zëvendëso lidhjet e tjera të këtyre objekteve"
+
+msgid "Sets the parameters and links in one undo step. Nothing is sent to the device until you download it."
+msgstr "Vendos parametrat dhe lidhjet në një hap zhbërjeje. Asgjë nuk dërgohet te pajisja derisa ta shkarkoni."
+
+msgid "Choose a group address for every object that is not optional"
+msgstr "Zgjidhni një adresë grupi për çdo objekt që nuk është opsional"
+
+msgid "Apply"
+msgstr "Zbato"
+
+msgid "Quick Setup: {template}"
+msgstr "Konfigurim i shpejtë: {template}"
+
+msgid "Quick Setup applied to {device}: {template}"
+msgstr "Konfigurimi i shpejtë u zbatua te {device}: {template}"
+
+msgid "Quick Setup not applied: {error}"
+msgstr "Konfigurimi i shpejtë nuk u zbatua: {error}"
