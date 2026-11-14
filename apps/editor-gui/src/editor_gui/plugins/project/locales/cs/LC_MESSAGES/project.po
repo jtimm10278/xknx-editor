@@ -3300,3 +3300,6 @@ msgstr "zpětné čtení se shodovalo"
 
 msgid "setting changed in the plug-in view"
 msgstr "nastavení změněno v zobrazení plug-inu"
+
+msgid "worked as set when used"
+msgstr "při použití fungovalo podle nastavení"

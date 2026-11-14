@@ -3248,3 +3248,6 @@ msgstr "tilbakelesing stemte"
 
 msgid "setting changed in the plug-in view"
 msgstr "innstilling endret i plugin-visningen"
+
+msgid "worked as set when used"
+msgstr "virket som innstilt ved bruk"

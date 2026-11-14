@@ -3248,3 +3248,6 @@ msgstr "takaisinluku täsmäsi"
 
 msgid "setting changed in the plug-in view"
 msgstr "asetusta muutettu laajennusnäkymässä"
+
+msgid "worked as set when used"
+msgstr "toimi käytössä asetusten mukaisesti"

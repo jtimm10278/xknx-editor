@@ -3388,3 +3388,6 @@ msgstr "Rücklesen stimmte überein"
 
 msgid "setting changed in the plug-in view"
 msgstr "Einstellung in der Plug-in-Ansicht geändert"
+
+msgid "worked as set when used"
+msgstr "funktionierte im Betrieb wie eingestellt"

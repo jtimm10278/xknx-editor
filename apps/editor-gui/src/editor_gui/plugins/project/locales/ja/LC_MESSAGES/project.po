@@ -3196,3 +3196,6 @@ msgstr "読み戻しが一致"
 
 msgid "setting changed in the plug-in view"
 msgstr "プラグインビューで設定を変更"
+
+msgid "worked as set when used"
+msgstr "使用時に設定どおり動作"

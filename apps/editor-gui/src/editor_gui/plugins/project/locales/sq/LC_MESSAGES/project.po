@@ -3248,3 +3248,6 @@ msgstr "rileximi përputhej"
 
 msgid "setting changed in the plug-in view"
 msgstr "cilësim i ndryshuar në pamjen e shtojcës"
+
+msgid "worked as set when used"
+msgstr "funksionoi siç ishte vendosur gjatë përdorimit"

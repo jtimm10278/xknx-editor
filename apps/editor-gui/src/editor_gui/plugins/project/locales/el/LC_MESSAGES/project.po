@@ -3248,3 +3248,6 @@ msgstr "η ανάγνωση ταίριαξε"
 
 msgid "setting changed in the plug-in view"
 msgstr "ρύθμιση αλλαγμένη στην προβολή πρόσθετου"
+
+msgid "worked as set when used"
+msgstr "λειτούργησε όπως ρυθμίστηκε κατά τη χρήση"

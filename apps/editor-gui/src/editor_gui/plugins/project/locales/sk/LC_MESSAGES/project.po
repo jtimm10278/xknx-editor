@@ -3327,3 +3327,6 @@ msgstr "spätné čítanie sa zhodovalo"
 
 msgid "setting changed in the plug-in view"
 msgstr "nastavenie zmenené v zobrazení doplnku"
+
+msgid "worked as set when used"
+msgstr "pri použití fungovalo podľa nastavenia"

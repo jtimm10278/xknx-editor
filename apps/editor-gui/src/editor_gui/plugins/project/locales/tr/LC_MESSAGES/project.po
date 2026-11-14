@@ -3196,3 +3196,6 @@ msgstr "geri okuma eşleşti"
 
 msgid "setting changed in the plug-in view"
 msgstr "eklenti görünümünde ayar değiştirildi"
+
+msgid "worked as set when used"
+msgstr "kullanımda ayarlandığı gibi çalıştı"

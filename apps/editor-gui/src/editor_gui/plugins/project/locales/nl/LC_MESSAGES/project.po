@@ -3281,3 +3281,6 @@ msgstr "teruglezen klopte"
 
 msgid "setting changed in the plug-in view"
 msgstr "instelling gewijzigd in de plug-in-weergave"
+
+msgid "worked as set when used"
+msgstr "werkte in gebruik zoals ingesteld"

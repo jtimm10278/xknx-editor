@@ -3196,3 +3196,6 @@ msgstr "回读一致"
 
 msgid "setting changed in the plug-in view"
 msgstr "在插件视图中更改了设置"
+
+msgid "worked as set when used"
+msgstr "实际使用时按设置工作"
