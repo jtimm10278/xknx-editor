@@ -30,7 +30,7 @@ def badge_text(entry: TestedDevice | None) -> tuple[str, str]:
     if entry is None:
         return S.NOT_TESTED_BADGE, S.NOT_TESTED_TOOLTIP
     tooltip = S.TESTED_TOOLTIP.format(
-        version=entry.xets_version,
+        version=entry.editor_version,
         date=entry.date,
         proofs=", ".join(proof_texts(entry)),
     )

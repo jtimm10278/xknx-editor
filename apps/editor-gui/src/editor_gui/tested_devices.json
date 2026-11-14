@@ -13,7 +13,7 @@
         "read_back"
       ],
       "date": "2026-11-13",
-      "xets_version": "0.12.0 (with download fixes)",
+      "editor_version": "0.12.0 with the download fixes queued upstream",
       "notes": "Full download four times; each time the read-back matched. The device reports mask 0012."
     },
     {
@@ -27,8 +27,8 @@
         "read_back"
       ],
       "date": "2026-11-13",
-      "xets_version": "0.12.0 (with download fixes)",
-      "notes": "Read-only: the device's memory matched the image of its last download (710 of 710 bytes). Not yet downloaded with XETS. The device reports mask 0021."
+      "editor_version": "0.12.0 with the download fixes queued upstream",
+      "notes": "Read-only: the device's memory matched the image of its last download (710 of 710 bytes). Not yet downloaded with the editor. The device reports mask 0021."
     },
     {
       "manufacturer": "Crabtree",
@@ -43,7 +43,7 @@
         "live_test"
       ],
       "date": "2026-11-14",
-      "xets_version": "0.13.1 (with mask-fit and download fixes)",
+      "editor_version": "0.13.1 with the download fixes queued upstream (incl. fitting the image to the device's mask)",
       "notes": "This unit reports mask 0021 (newer chip) while the application is for MV-0012: the program has to be fitted to the device's mask (function addresses from the master data, BCU1 flag bit 7 cleared); the result matched what ETS had written. Read-back matched except the last EEPROM byte (0x1FF), which the device sets itself. Pressed live: switch on/off and shutter up sent as configured; shutter down and stop not yet pressed."
     },
     {
@@ -59,8 +59,8 @@
         "plugin_edit"
       ],
       "date": "2026-11-13",
-      "xets_version": "0.12.0 (with download fixes)",
-      "notes": "Full download with a setting changed in the Generic Plug-in view; the parameters read back the same (140 of 140 blocks)."
+      "editor_version": "0.12.0 with the download fixes queued upstream",
+      "notes": "Full download with a setting changed in the Generic Plug-in view (queued upstream); the parameters read back the same (140 of 140 blocks)."
     }
   ]
 }

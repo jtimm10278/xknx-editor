@@ -22,7 +22,7 @@ was right. One entry per application (all devices running it share the entry):
   "mask": "MV-0011",
   "proven": ["download", "read_back"],
   "date": "2026-11-13",
-  "xets_version": "0.12.0",
+  "editor_version": "0.12.0",
   "notes": "Full download four times; each time the read-back matched."
 }
 ```
@@ -35,9 +35,9 @@ was right. One entry per application (all devices running it share the entry):
   - `read_back`: what the device holds was read back and matched what the editor expects;
   - `plugin_edit`: a setting changed in a plug-in view (e.g. the Generic Plug-in) reached the device;
   - `live_test`: used by hand after the download, the device sent what it was set to send.
-- `date`: the day of the proof (YYYY-MM-DD); `xets_version`: the editor version you used.
+- `date`: the day of the proof (YYYY-MM-DD); `editor_version`: the editor version you used.
 - `notes`: anything another user should know (a different reported mask, a step that needed a second
   try, what was not proven). Keep it general: no addresses, names or details of your installation.
 
 Run `uv run pytest apps/editor-gui/src/editor_gui/tests/test_tested_devices.py` to check the file.
-Already listed? Add the new proof to `proven`, and update `date`, `xets_version` and `notes`.
+Already listed? Add the new proof to `proven`, and update `date`, `editor_version` and `notes`.
