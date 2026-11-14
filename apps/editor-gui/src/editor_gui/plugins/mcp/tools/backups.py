@@ -11,7 +11,13 @@ from typing import TYPE_CHECKING, Any
 from fastmcp.exceptions import ToolError
 
 from editor_gui.plugins.backups.settings import BackupSettings, default_folder
-from editor_gui.plugins.backups.store import Backup, BackupError, list_backups
+from editor_gui.plugins.backups.store import (
+    Backup,
+    BackupError,
+    list_backups,
+    machine_name,
+    newer_elsewhere,
+)
 from editor_gui.plugins.mcp.context import McpContext, make_tool, require_project
 
 if TYPE_CHECKING:
@@ -106,15 +112,24 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
         """The backups of the open project, the newest first: {folder, backups: [{path,
         created (ISO time, UTC), kind (manual, close, interval, or restore: the project as it
         was before a restore), comment, user, machine, source (the project file it was made
-        from), size (bytes), pinned}]}. A backup's path also works as the other project of
-        project_compare_projects."""
+        from), size (bytes), pinned}], newer_elsewhere}. ``newer_elsewhere`` is the path of
+        the newest backup when it was made on another computer after the open project's last
+        change, with another state (the project was worked on elsewhere since it was copied
+        here; the editor warns about it when the project is opened), else null. A backup's
+        path also works as the other project of project_compare_projects."""
         require_project(ctx)
         meta = ctx.run_locked(lambda: service().meta())
         if meta is None:
             raise ToolError("the project is busy; retry shortly")
         found = list_backups(service().root, meta.guid)
         folder = found[0].path.parent if found else service().root
-        return {"folder": str(folder), "backups": [_backup(b) for b in found]}
+        last_change = ctx.run_locked(lambda: service().last_change())
+        newer = newer_elsewhere(found, meta.state, last_change, machine_name())
+        return {
+            "folder": str(folder),
+            "backups": [_backup(b) for b in found],
+            "newer_elsewhere": None if newer is None else str(newer.path),
+        }
 
     @tool("write")
     def backup_create(comment: str = "", timeout: float = 600.0) -> dict[str, Any]:

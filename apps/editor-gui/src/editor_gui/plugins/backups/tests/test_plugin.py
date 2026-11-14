@@ -316,3 +316,25 @@ def test_a_backup_made_by_hand_is_not_pinned(env: Env) -> None:
     automatic = env.plugin.service.create(kind="interval").future.result(timeout=30)
     assert automatic is not None
     assert env.plugin._actions(automatic)[2][3] == ""  # pyright: ignore[reportPrivateUsage]
+
+
+def test_a_newer_backup_from_another_computer_is_warned_about_once(
+    env: Env, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from editor_gui.plugins.backups.plugin import when
+
+    env.project.set_project_name("Renamed")
+    monkeypatch.setattr(service_mod, "machine_name", lambda: "laptop")
+    laptop = env.backup()
+    monkeypatch.setattr(service_mod, "machine_name", lambda: "desk")
+    env.project.undo()
+    env.frames(1)
+    env.plugin.service.wait_idle(30)
+    env.frames(3)
+    text = S.NEWER_ELSEWHERE.format(machine="laptop", time=when(laptop.info.created))
+    assert env.warnings == [text]
+    # Also shown in the list of backups.
+    env.plugin.show_window()
+    env.frames()
+    assert env.list_shown()
+    assert env.warnings == [text]

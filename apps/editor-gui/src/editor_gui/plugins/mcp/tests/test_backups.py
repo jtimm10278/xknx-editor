@@ -151,3 +151,26 @@ async def test_without_the_backups_service(tmp_path: Path) -> None:
     mcp, _ctx = _server(tmp_path, with_backups=False)
     async with Client(mcp) as client:
         await _error(client, "backup_settings", "not available")
+
+
+async def test_a_newer_backup_from_another_computer_is_listed(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from editor_gui.plugins.backups import service as service_mod
+    from editor_gui.plugins.mcp.tools import backups as backup_tools
+
+    mcp, ctx = _server(tmp_path)
+    async with Client(mcp) as client:
+        await _data(client, "backup_set_settings", folder=str(tmp_path / "backups"))
+        await _data(client, "project_new", path=str(tmp_path / "home.xknx"))
+        await _data(client, "project_set_name", name="Changed")
+        monkeypatch.setattr(backup_tools, "machine_name", lambda: "desk")
+        # Made here: not newer than this computer's copy.
+        await _data(client, "backup_create")
+        assert (await _data(client, "backup_list"))["newer_elsewhere"] is None
+        # Made on the laptop after the change; this computer still has the state before it.
+        monkeypatch.setattr(service_mod, "machine_name", lambda: "laptop")
+        laptop = await _data(client, "backup_create")
+        assert laptop["machine"] == "laptop"
+        ctx.api.project.undo()
+        assert (await _data(client, "backup_list"))["newer_elsewhere"] == laptop["path"]
