@@ -185,6 +185,38 @@ def snapshot_device(
     return DeviceSnapshot(header=header, parameters=parameters, com_objects=com_objects)
 
 
+def default_snapshot(device: Device) -> DeviceSnapshot:
+    """``device`` as its application ships it: every parameter it shows at its default value (keyed
+    as :func:`snapshot_device` keys them) and no group objects, so a comparison with the device's
+    own snapshot lists the parameters set away from their defaults and every group object."""
+    prog = getattr(device.app, "program", None)
+    app_prefix = f"{prog.id}_" if prog is not None and getattr(prog, "id", "") else ""
+    parameters = {
+        _strip_prefix(p.ref_id, app_prefix): ParamCell(
+            label=" > ".join([*path, p.label]) if path else p.label,
+            value=p.default_value,
+            text=option_text(p, p.default_value),
+        )
+        for p, path in _walk_parameters(device.get_ui(), [])
+    }
+    return DeviceSnapshot(header={}, parameters=parameters, com_objects={})
+
+
+def option_text(parameter: UiParameter, value: str) -> str:
+    """The text of an enumerated parameter's option ``value``; "" for any other parameter or a
+    value no option has."""
+    from xknxeditor.prod.parser_v2.ui.parameter import EnumWidget
+
+    widget = parameter.widget
+    if not isinstance(widget, EnumWidget):
+        return ""
+    try:
+        number = int(value)
+    except (TypeError, ValueError):
+        return ""
+    return next((c.label for c in widget.choices if c.value == number), "")
+
+
 def parameter_text(parameter: UiParameter) -> str:
     """The text of an enumerated parameter's chosen option, as the parameter page and ETS show
     it; "" for any other parameter or a value no option has."""

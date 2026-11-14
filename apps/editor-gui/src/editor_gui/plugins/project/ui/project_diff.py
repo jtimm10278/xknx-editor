@@ -130,6 +130,9 @@ class DiffJob:
 
 # The differing parameters and group objects of a device in both projects (base, other).
 DeviceDetails = Callable[[DeviceSnap, DeviceSnap], list[DetailRow]]
+# The parameters set away from their defaults and the group objects (with links) of a device only
+# the other project has.
+AddedDetails = Callable[[DeviceSnap], list[DetailRow]]
 # How far the detailed comparison is: devices compared, of how many.
 DiffProgress = Callable[[int, int], None]
 
@@ -143,9 +146,11 @@ def diff_projects(
     other: ProjectSnapshot,
     details: DeviceDetails | None = None,
     progress: DiffProgress | None = None,
+    added_details: AddedDetails | None = None,
 ) -> DiffResult:
     """Report how ``other`` differs from ``base`` for devices and group addresses; ``details``
-    lists the differing parameters and group objects of a device whose settings differ, and
+    lists the differing parameters and group objects of a device whose settings differ,
+    ``added_details`` those of a device only ``other`` has (what it takes to recreate it), and
     ``progress`` learns how many of those devices are compared."""
     same_project = bool(base.project_id) and base.project_id == other.project_id
     return DiffResult(
@@ -153,6 +158,7 @@ def diff_projects(
             match_devices(base.devices, other.devices, same_project=same_project),
             details,
             progress,
+            added_details,
         ),
         group_addresses=_diff_section(
             base.group_addresses, other.group_addresses, _ga_detail, _ga_label
@@ -213,6 +219,7 @@ def _diff_devices(
     pairs: list[tuple[DeviceSnap | None, DeviceSnap | None]],
     details: DeviceDetails | None,
     progress: DiffProgress | None = None,
+    added_details: AddedDetails | None = None,
 ) -> list[DiffEntry]:
     total = (
         sum(1 for b, o in pairs if b and o and b.inputs != o.inputs) if details else 0
@@ -224,7 +231,8 @@ def _diff_devices(
     for b, o in pairs:
         if b is None:
             assert o is not None
-            entries.append(DiffEntry(_device_key(o), "added", _device_label(o)))
+            rows = tuple(added_details(o)) if added_details is not None else ()
+            entries.append(DiffEntry(_device_key(o), "added", _added_detail(o), rows))
         elif o is None:
             entries.append(DiffEntry(_device_key(b), "removed", _device_label(b)))
         else:
@@ -277,6 +285,20 @@ def _diff_section[V](
         elif b != o:
             entries.append(DiffEntry(key, "changed", changed_detail(b, o)))
     return entries
+
+
+def _added_detail(d: DeviceSnap) -> str:
+    """A device only the other project has: its name with what it takes to recreate it."""
+    parts = [_device_label(d)]
+    if d.product and d.product != parts[0]:
+        parts.append(f"product {d.product}")
+    if d.order:
+        parts.append(f"order number {d.order}")
+    if d.application:
+        parts.append(f"application {d.application}")
+    if d.ia:
+        parts.append(f"address {d.ia}")
+    return ", ".join(p for p in parts if p)
 
 
 def _device_label(d: DeviceSnap) -> str:

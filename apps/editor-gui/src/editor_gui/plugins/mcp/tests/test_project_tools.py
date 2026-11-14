@@ -1070,6 +1070,22 @@ async def test_ets_handover(tmp_path: Path) -> None:
         await _data(
             client, "project_create_group_address", address="1/0/2", name="New one"
         )
+        # A device only the edited project has, with one link.
+        node_id = await _device(client, "1.1.60")
+        co = next(
+            c["ref_id"]
+            for c in (await _data(client, "project_list_com_objects", node_id=node_id))[
+                "items"
+            ]
+            if c["linkable"]
+        )
+        await _data(
+            client,
+            "project_link_com_object",
+            node_id=node_id,
+            com_object_ref_id=co,
+            group_address="1/0/2",
+        )
         result = await _data(
             client,
             "project_ets_handover",
@@ -1085,6 +1101,11 @@ async def test_ets_handover(tmp_path: Path) -> None:
     xml = result["group_addresses_xml"]
     assert 'Address="1/0/2"' in xml and 'Address="1/0/1"' not in xml
     assert "Nothing here is signed" in result["readme"]
+    markdown = result["markdown"]
+    assert (
+        "### 1.1.60 (added)" in markdown and "New device: add the product" in markdown
+    )
+    assert "link 1/0/2" in markdown
     written = Path(result["written"])
     assert written.name == "handover.zip"
     with zipfile.ZipFile(written) as archive:

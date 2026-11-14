@@ -202,3 +202,31 @@ def test_entries_sorted_by_key():
     result = diff_projects(base, other)
     assert [e.key for e in result.group_addresses] == ["1/0/1", "1/0/2", "1/0/3"]
     assert [e.key for e in result.devices] == ["1.1.1", "1.1.3"]
+
+
+def test_an_added_device_carries_what_it_takes_to_recreate_it():
+    base = _snap("A", [], [])
+    added = DeviceSnap(
+        "1.0.62", "Bench", "Push Button 3-fold", "7176/EIB", application="2302-01"
+    )
+    other = _snap("B", [added], [])
+    seen = []
+
+    def settings(device):
+        seen.append(device)
+        return [DetailRow("parameter", "Upper > Function", "changed", "1", "4")]
+
+    result = diff_projects(base, other, added_details=settings)
+    (entry,) = result.devices
+    assert entry.kind == "added" and seen == [added]
+    assert entry.rows[0].label == "Upper > Function"
+    for part in (
+        "Bench",
+        "product Push Button 3-fold",
+        "order number 7176/EIB",
+        "application 2302-01",
+        "address 1.0.62",
+    ):
+        assert part in entry.detail
+    # Without the callback an added device has no rows, as before.
+    assert diff_projects(base, other).devices[0].rows == ()

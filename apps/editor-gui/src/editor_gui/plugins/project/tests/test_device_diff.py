@@ -110,3 +110,38 @@ def test_header_difference_is_counted() -> None:
     assert kinds["Name"] == "changed"
     assert kinds["Application"] == "same"
     assert result.difference_count == 1
+
+
+def test_option_text_and_default_snapshot_of_a_stand_in_device():
+    from types import SimpleNamespace
+
+    from editor_gui.plugins.project.ui.device_diff import default_snapshot, option_text
+    from xknxeditor.namespaces.intermediate.parameter_type_t_type_restriction_base import (
+        ParameterTypeTypeRestrictionBase,
+    )
+    from xknxeditor.prod.parser_v2.ui import UiParameter
+    from xknxeditor.prod.parser_v2.ui.parameter import EnumChoice, EnumWidget
+
+    widget = EnumWidget(
+        choices=(
+            EnumChoice(value=0, label="Shutter", id="E-0"),
+            EnumChoice(value=4, label="Switch", id="E-4"),
+        ),
+        base=ParameterTypeTypeRestrictionBase.VALUE,
+    )
+    param = UiParameter(
+        ref_id="M-1_A-1_P-108_R-108",
+        label="Function",
+        value="0",
+        widget=widget,
+        default_value="4",
+    )
+    assert option_text(param, "4") == "Switch"
+    assert option_text(param, "9") == ""
+    device = SimpleNamespace(
+        app=SimpleNamespace(program=SimpleNamespace(id="M-1_A-1")),
+        get_ui=lambda: [param],
+    )
+    snap = default_snapshot(device)  # pyright: ignore[reportArgumentType]
+    cell = snap.parameters["P-108_R-108"]
+    assert (cell.value, cell.text) == ("4", "Switch") and snap.com_objects == {}

@@ -4711,7 +4711,22 @@ class ProjectService:
                 )
                 return []
 
-        return diff_projects(base, theirs, details, progress)
+        def added(b: "DeviceSnap") -> "list[DetailRow]":
+            if canceled():
+                raise DiffCanceled
+            try:
+                return self._device_settings(
+                    (other, other_pid, row(1, other, other_pid, b.id)), resolve
+                )
+            except Exception as e:
+                self._log.warning(
+                    "added device not read",
+                    device=b.ia or b.name,
+                    error=f"{type(e).__name__}: {e}",
+                )
+                return []
+
+        return diff_projects(base, theirs, details, progress, added)
 
     def resolve_application(
         self, program_ref: str | None, application_ref: str | None = None
@@ -4734,7 +4749,6 @@ class ProjectService:
             diff_devices,
             snapshot_device,
         )
-        from editor_gui.plugins.project.ui.project_diff import DetailRow
 
         def snapshot(svc: _ProjectService, pid: str, row: Any) -> DeviceSnapshot | None:
             if row is None:
@@ -4772,16 +4786,56 @@ class ProjectService:
         b = snapshot(*theirs)
         if a is None or b is None:
             return []
-        result = diff_devices(a, b)
-        return [
-            DetailRow(section, r.label, r.kind, r.a, r.b, r.a_text, r.b_text, r.key)
-            for section, section_rows in (
-                ("parameter", result.parameters),
-                ("group_object", result.com_objects),
-            )
-            for r in section_rows
-            if r.kind != "same"
-        ]
+        return _detail_rows(diff_devices(a, b))
+
+    def _device_settings(
+        self,
+        theirs: tuple[_ProjectService, str, Any],
+        resolve_app: "Callable[[str | None, str | None], Application | None]",
+    ) -> "list[DetailRow]":
+        """What it takes to recreate a device of another project: its parameters set away from
+        their defaults and its group objects that have links, as rows of a comparison with the
+        device as its application ships it; none when it cannot be built."""
+        from editor_gui.plugins.project.ui.device_diff import (
+            default_snapshot,
+            diff_devices,
+            snapshot_device,
+        )
+
+        svc, pid, row = theirs
+        if row is None:
+            return []
+        app = resolve_app(
+            row.hardware2program_ref_id,
+            getattr(row, "application_program_ref_id", None),
+        )
+        if app is None:
+            return []
+        device = _compute_device(
+            self._device_inputs(
+                row,
+                app.program.id,
+                individual_address=svc.individual_address(pid, row.id) or "",
+            ),
+            app,
+        )
+
+        def links(db_id: int) -> list[tuple[int, bool]]:
+            return [
+                (link.group_address_id, link.is_sending)
+                for link in svc.com_object_links(pid, db_id)
+            ]
+
+        def address(ga_id: int) -> str:
+            try:
+                return svc.group_address(pid, ga_id).text
+            except KeyError:
+                return ""
+
+        current = snapshot_device(device, links, address)
+        linked = {k: c for k, c in current.com_objects.items() if c.links}
+        current = type(current)(current.header, current.parameters, linked)
+        return _detail_rows(diff_devices(default_snapshot(device), current))
 
     def set_project_name(self, name: str) -> None:
         """Rename the project (one undo step); an empty name keeps the current one."""
@@ -9078,3 +9132,18 @@ class ProjectService:
         Opening a previously-edited project is not "modified"; only edits (or undo/redo) made in
         this session since the open count. Used to gate the read-only pre-flight self-test."""
         return self._history_key() != self._history_baseline
+
+
+def _detail_rows(result: Any) -> "list[DetailRow]":
+    """The differing parameter and group-object rows of a device comparison."""
+    from editor_gui.plugins.project.ui.project_diff import DetailRow
+
+    return [
+        DetailRow(section, r.label, r.kind, r.a, r.b, r.a_text, r.b_text, r.key)
+        for section, section_rows in (
+            ("parameter", result.parameters),
+            ("group_object", result.com_objects),
+        )
+        for r in section_rows
+        if r.kind != "same"
+    ]

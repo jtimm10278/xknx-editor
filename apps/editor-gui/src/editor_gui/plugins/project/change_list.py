@@ -21,6 +21,12 @@ if TYPE_CHECKING:
     )
 
 FORMAT = "xknx-editor-change-list/1"
+# Under a device only the edited project has: its parameters are those set away from their
+# defaults, its group objects those with links.
+ADDED_HINT = (
+    "New device: add the product in ETS with the application and address above, then set the "
+    "parameters listed (all others stay at their defaults) and link the group objects."
+)
 # The group-object summary of a comparison ends with its linked group addresses after this.
 _LINKS = "-> "
 _PART = "  ·  "
@@ -129,6 +135,8 @@ def _device_markdown(device: dict[str, Any]) -> list[str]:
     lines = [f"### {device['address']} ({device['change']})", ""]
     if device["detail"]:
         lines += [device["detail"], ""]
+    if device["change"] == "added":
+        lines += [ADDED_HINT, ""]
     parameters: list[dict[str, str]] = device.get("parameters", [])
     if parameters:
         lines += ["Parameters:", ""]
@@ -248,6 +256,8 @@ def change_list_html(data: dict[str, Any]) -> str:
         )
         if device["detail"]:
             out.append(box(escape(device["detail"])))
+        if device["change"] == "added":
+            out.append(f'<li class="note">{escape(ADDED_HINT)}</li>')
         for p in device.get("parameters", []):
             out.append(
                 box(

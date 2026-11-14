@@ -201,3 +201,44 @@ def test_parameter_text_is_the_chosen_option() -> None:
     assert parameter_text(parameter("9")) == ""
     assert parameter_text(parameter("x")) == ""
     assert parameter_text(parameter("2", None)) == ""
+
+
+def test_an_added_device_says_how_to_recreate_it() -> None:
+    from editor_gui.plugins.project.change_list import ADDED_HINT, change_list_html
+
+    result = DiffResult(
+        devices=[
+            DiffEntry(
+                "1.0.62",
+                "added",
+                "Bench, product Push Button, address 1.0.62",
+                (
+                    DetailRow(
+                        "parameter",
+                        "Upper > Function",
+                        "changed",
+                        "1",
+                        "4",
+                        "Dimming",
+                        "Switch",
+                        "P-108_R-108",
+                    ),
+                    DetailRow(
+                        "group_object",
+                        "Switch, upper rocker",
+                        "added",
+                        "",
+                        "1.001  ·  -> 1/1/19",
+                        key="00000",
+                    ),
+                ),
+            )
+        ],
+        group_addresses=[],
+    )
+    data = change_list(result, "before", "after")
+    markdown = change_list_markdown(data)
+    assert ADDED_HINT in markdown
+    assert '"Dimming" -> **"Switch"**' in markdown
+    assert "link 1/1/19" in markdown
+    assert ADDED_HINT in change_list_html(data)
