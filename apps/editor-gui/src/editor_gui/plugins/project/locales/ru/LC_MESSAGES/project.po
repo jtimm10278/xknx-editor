@@ -3387,3 +3387,21 @@ msgstr "Структура памяти изменилась во время ч�
 
 msgid "Compared with device memory read in this session."
 msgstr "Сравнение с памятью устройства, прочитанной в этом сеансе."
+
+msgid "Not yet tested"
+msgstr "Ещё не проверено"
+
+msgid "Proven with this editor ({version}, {date}): {proofs}"
+msgstr "Проверено с этим редактором ({version}, {date}): {proofs}"
+
+msgid "Nobody has reported this application as proven with this editor yet. Try a first download on a spare device, and see CONTRIBUTING.md to add it to the list."
+msgstr "Никто ещё не сообщил, что это приложение проверено с этим редактором. Попробуйте первую загрузку на запасном устройстве; как добавить его в список, см. CONTRIBUTING.md."
+
+msgid "download"
+msgstr "загрузка"
+
+msgid "read-back matched"
+msgstr "обратное чтение совпало"
+
+msgid "setting changed in the plug-in view"
+msgstr "параметр изменён в представлении плагина"

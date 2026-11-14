@@ -3335,3 +3335,21 @@ msgstr "Hukommelseslayoutet blev ændret under læsningen. Læs igen for at samm
 
 msgid "Compared with device memory read in this session."
 msgstr "Sammenlignet med enhedens hukommelse læst i denne session."
+
+msgid "Not yet tested"
+msgstr "Endnu ikke testet"
+
+msgid "Proven with this editor ({version}, {date}): {proofs}"
+msgstr "Afprøvet med denne editor ({version}, {date}): {proofs}"
+
+msgid "Nobody has reported this application as proven with this editor yet. Try a first download on a spare device, and see CONTRIBUTING.md to add it to the list."
+msgstr "Ingen har endnu meldt denne applikation afprøvet med denne editor. Prøv en første download på en reserveenhed, og se CONTRIBUTING.md for at føje den til listen."
+
+msgid "download"
+msgstr "download"
+
+msgid "read-back matched"
+msgstr "tilbagelæsning stemte"
+
+msgid "setting changed in the plug-in view"
+msgstr "indstilling ændret i plug-in-visningen"

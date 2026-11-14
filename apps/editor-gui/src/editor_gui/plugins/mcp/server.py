@@ -39,6 +39,7 @@ from editor_gui.plugins.mcp.tools import (
     settings,
     status,
     structure,
+    tested_devices,
     web_files,
 )
 
@@ -249,6 +250,7 @@ def build_server(ctx: McpContext, auth: Any = None) -> FastMCP:
         recover,
         home_assistant,
         web_files,
+        tested_devices,
     ):
         module.register(mcp, ctx)
     if _SKILLS_DIR.is_dir():
