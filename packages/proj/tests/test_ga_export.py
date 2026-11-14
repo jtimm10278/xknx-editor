@@ -276,3 +276,34 @@ def test_write_overwrites_existing_dest(tmp_path: Path) -> None:
     out.write_text("stale", encoding="utf-8")
     write_ga_export(project, out)
     assert is_ga_export(out) is True
+
+
+def test_write_only_some_addresses_keeps_their_ranges(tmp_path: Path) -> None:
+    # Only the new/changed addresses: the ranges holding them stay, the others are left out,
+    # and the file still reads back as an export.
+    source = _write(tmp_path, "e.xml", _EXPORT)
+    project = tmp_path / "p.xknx"
+    import_ga_export(source, project)
+    wanted = {parse_three(1, 0, 2), parse_three(1, 1, 0)}
+
+    out = tmp_path / "only.xml"
+    assert write_ga_export(project, out, only=wanted) == 2
+    export = read_ga_export(out)
+    assert {a.address for a in export.addresses} == wanted
+    assert {r.name for r in export.ranges} == {"Beleuchtung"}
+    assert {c.name for r in export.ranges for c in r.children} == {"Schalten", "Dimmen"}
+
+    assert write_ga_export(project, tmp_path / "none.xml", only=set()) == 0
+
+
+def test_csv_only_some_addresses(tmp_path: Path) -> None:
+    from xknxeditor.proj.core.ga_export import read_ga_csv, write_ga_csv
+
+    source = _write(tmp_path, "e.xml", _EXPORT)
+    project = tmp_path / "p.xknx"
+    import_ga_export(source, project)
+    out = tmp_path / "only.csv"
+    assert write_ga_csv(project, out, only={parse_three(1, 0, 1)}) == 1
+    text = out.read_bytes().decode("cp1252")
+    assert "Licht Buero" in text and "Licht Flur" not in text and "Jalousie" not in text
+    assert {a.address for a in read_ga_csv(out).addresses} == {parse_three(1, 0, 1)}

@@ -3178,3 +3178,47 @@ msgstr "Dahili değerler"
 
 msgid "Acknowledge Group Address"
 msgstr "Grup Adresini Onayla"
+
+msgid "Hand Over to ETS…"
+msgstr "ETS'ye Teslim Et…"
+
+msgid "Hand Over to ETS"
+msgstr "ETS'ye Teslim Et"
+
+msgid "Choose the project as ETS has it (an ETS export, or a backup). The hand-over lists what to change in ETS so it matches this project, with the new and changed group addresses as a file ETS imports. Nothing is written into or signed for ETS."
+msgstr "Projeyi ETS'de olduğu hâliyle seçin (bir ETS dışa aktarımı veya yedek). Teslim, ETS'nin bu projeyle eşleşmesi için neyin değişeceğini listeler; yeni ve değişen grup adreslerini ETS'nin içe aktardığı bir dosyaya yazar. ETS'ye hiçbir şey yazılmaz veya imzalanmaz."
+
+msgid "Choose Baseline…"
+msgstr "Temel Seç…"
+
+msgid "Choose the Project as ETS Has It"
+msgstr "Projeyi ETS'deki Hâliyle Seç"
+
+msgid "Projects and backups"
+msgstr "Projeler ve yedekler"
+
+msgid "Comparing with this project…"
+msgstr "Bu projeyle karşılaştırılıyor…"
+
+msgid "Nothing to hand over: the projects are the same."
+msgstr "Teslim edilecek bir şey yok: projeler aynı."
+
+msgid "Save Hand-Over…"
+msgstr "Teslimi Kaydet…"
+
+msgid "Save Hand-Over for ETS"
+msgstr "ETS için Teslimi Kaydet"
+
+msgid "ZIP archives"
+msgstr "ZIP arşivleri"
+
+msgid "Hand-over saved: {path}"
+msgstr "Teslim kaydedildi: {path}"
+
+msgid "{count} device to change in ETS"
+msgid_plural "{count} devices to change in ETS"
+msgstr[0] "ETS'de değiştirilecek {count} cihaz"
+
+msgid "{count} group address to change in ETS"
+msgid_plural "{count} group addresses to change in ETS"
+msgstr[0] "ETS'de değiştirilecek {count} grup adresi"

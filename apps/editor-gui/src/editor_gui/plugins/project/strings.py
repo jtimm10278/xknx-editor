@@ -5034,5 +5034,79 @@ class ProjectStrings:
     def TOOLS_TOPOLOGY_DUPLICATE(self) -> str:
         return _("{device}: duplicate address {address}")
 
+    @property
+    def ETS_HANDOVER_MENU(self) -> str:
+        return _("Hand Over to ETS…")
+
+    @property
+    def ETS_HANDOVER_TITLE(self) -> str:
+        return _("Hand Over to ETS")
+
+    @property
+    def ETS_HANDOVER_INTRO(self) -> str:
+        return _(
+            "Choose the project as ETS has it (an ETS export, or a backup). The hand-over lists "
+            "what to change in ETS so it matches this project, with the new and changed group "
+            "addresses as a file ETS imports. Nothing is written into or signed for ETS."
+        )
+
+    @property
+    def ETS_HANDOVER_CHOOSE(self) -> str:
+        return _("Choose Baseline…")
+
+    @property
+    def ETS_HANDOVER_CHOOSE_TITLE(self) -> str:
+        return _("Choose the Project as ETS Has It")
+
+    @property
+    def ETS_HANDOVER_PROJECT_FILES(self) -> str:
+        return _("Projects and backups")
+
+    @property
+    def ETS_HANDOVER_PASSWORD(self) -> str:
+        return _("Password")
+
+    @property
+    def ETS_HANDOVER_COMPARE(self) -> str:
+        return _("Compare")
+
+    @property
+    def ETS_HANDOVER_COMPARING(self) -> str:
+        return _("Comparing with this project…")
+
+    @property
+    def ETS_HANDOVER_NOTHING(self) -> str:
+        return _("Nothing to hand over: the projects are the same.")
+
+    def ETS_HANDOVER_DEVICES(self, count: int) -> str:
+        return _.plural(
+            "{count} device to change in ETS",
+            "{count} devices to change in ETS",
+            count,
+        )
+
+    def ETS_HANDOVER_GROUP_ADDRESSES(self, count: int) -> str:
+        return _.plural(
+            "{count} group address to change in ETS",
+            "{count} group addresses to change in ETS",
+            count,
+        )
+
+    @property
+    def ETS_HANDOVER_SAVE(self) -> str:
+        return _("Save Hand-Over…")
+
+    @property
+    def ETS_HANDOVER_SAVE_TITLE(self) -> str:
+        return _("Save Hand-Over for ETS")
+
+    @property
+    def ETS_HANDOVER_ZIP_FILES(self) -> str:
+        return _("ZIP archives")
+
+    @property
+    def ETS_HANDOVER_SAVED(self) -> str:
+        return _("Hand-over saved: {path}")
+
 
 S = ProjectStrings()

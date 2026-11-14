@@ -3230,3 +3230,49 @@ msgstr "Sisäiset arvot"
 
 msgid "Acknowledge Group Address"
 msgstr "Kuittaa Ryhmäosoite"
+
+msgid "Hand Over to ETS…"
+msgstr "Luovuta ETS:ään…"
+
+msgid "Hand Over to ETS"
+msgstr "Luovuta ETS:ään"
+
+msgid "Choose the project as ETS has it (an ETS export, or a backup). The hand-over lists what to change in ETS so it matches this project, with the new and changed group addresses as a file ETS imports. Nothing is written into or signed for ETS."
+msgstr "Valitse projekti sellaisena kuin se on ETS:ssä (ETS-vienti tai varmuuskopio). Luovutus luettelee, mitä ETS:ssä on muutettava, jotta se vastaa tätä projektia, ja uudet ja muuttuneet ryhmäosoitteet tiedostona, jonka ETS tuo. ETS:ään ei kirjoiteta eikä allekirjoiteta mitään."
+
+msgid "Choose Baseline…"
+msgstr "Valitse Lähtökohta…"
+
+msgid "Choose the Project as ETS Has It"
+msgstr "Valitse Projekti Sellaisena kuin Se On ETS:ssä"
+
+msgid "Projects and backups"
+msgstr "Projektit ja varmuuskopiot"
+
+msgid "Comparing with this project…"
+msgstr "Verrataan tähän projektiin…"
+
+msgid "Nothing to hand over: the projects are the same."
+msgstr "Ei luovutettavaa: projektit ovat samat."
+
+msgid "Save Hand-Over…"
+msgstr "Tallenna Luovutus…"
+
+msgid "Save Hand-Over for ETS"
+msgstr "Tallenna Luovutus ETS:lle"
+
+msgid "ZIP archives"
+msgstr "ZIP-arkistot"
+
+msgid "Hand-over saved: {path}"
+msgstr "Luovutus tallennettu: {path}"
+
+msgid "{count} device to change in ETS"
+msgid_plural "{count} devices to change in ETS"
+msgstr[0] "{count} laite muutettavana ETS:ssä"
+msgstr[1] "{count} laitetta muutettavana ETS:ssä"
+
+msgid "{count} group address to change in ETS"
+msgid_plural "{count} group addresses to change in ETS"
+msgstr[0] "{count} ryhmäosoite muutettavana ETS:ssä"
+msgstr[1] "{count} ryhmäosoitetta muutettavana ETS:ssä"

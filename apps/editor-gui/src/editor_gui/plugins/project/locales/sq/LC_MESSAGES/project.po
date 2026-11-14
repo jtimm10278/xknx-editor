@@ -3230,3 +3230,49 @@ msgstr "Vlera të brendshme"
 
 msgid "Acknowledge Group Address"
 msgstr "Konfirmo Adresën e Grupit"
+
+msgid "Hand Over to ETS…"
+msgstr "Dorëzo në ETS…"
+
+msgid "Hand Over to ETS"
+msgstr "Dorëzo në ETS"
+
+msgid "Choose the project as ETS has it (an ETS export, or a backup). The hand-over lists what to change in ETS so it matches this project, with the new and changed group addresses as a file ETS imports. Nothing is written into or signed for ETS."
+msgstr "Zgjidhni projektin siç e ka ETS (një eksport ETS ose një kopje rezervë). Dorëzimi rendit çfarë duhet ndryshuar në ETS që të përputhet me këtë projekt, me adresat e grupit të reja dhe të ndryshuara në një skedar që ETS e importon. Asgjë nuk shkruhet ose nënshkruhet në ETS."
+
+msgid "Choose Baseline…"
+msgstr "Zgjidh Bazën…"
+
+msgid "Choose the Project as ETS Has It"
+msgstr "Zgjidh Projektin siç e Ka ETS"
+
+msgid "Projects and backups"
+msgstr "Projekte dhe kopje rezervë"
+
+msgid "Comparing with this project…"
+msgstr "Po krahasohet me këtë projekt…"
+
+msgid "Nothing to hand over: the projects are the same."
+msgstr "Asgjë për të dorëzuar: projektet janë të njëjta."
+
+msgid "Save Hand-Over…"
+msgstr "Ruaj Dorëzimin…"
+
+msgid "Save Hand-Over for ETS"
+msgstr "Ruaj Dorëzimin për ETS"
+
+msgid "ZIP archives"
+msgstr "Arkiva ZIP"
+
+msgid "Hand-over saved: {path}"
+msgstr "Dorëzimi u ruajt: {path}"
+
+msgid "{count} device to change in ETS"
+msgid_plural "{count} devices to change in ETS"
+msgstr[0] "{count} pajisje për t’u ndryshuar në ETS"
+msgstr[1] "{count} pajisje për t’u ndryshuar në ETS"
+
+msgid "{count} group address to change in ETS"
+msgid_plural "{count} group addresses to change in ETS"
+msgstr[0] "{count} adresë grupi për t’u ndryshuar në ETS"
+msgstr[1] "{count} adresa grupi për t’u ndryshuar në ETS"

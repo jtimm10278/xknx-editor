@@ -3309,3 +3309,51 @@ msgstr "Valori interne"
 
 msgid "Acknowledge Group Address"
 msgstr "Confirmă Adresa de Grup"
+
+msgid "Hand Over to ETS…"
+msgstr "Predă către ETS…"
+
+msgid "Hand Over to ETS"
+msgstr "Predă către ETS"
+
+msgid "Choose the project as ETS has it (an ETS export, or a backup). The hand-over lists what to change in ETS so it matches this project, with the new and changed group addresses as a file ETS imports. Nothing is written into or signed for ETS."
+msgstr "Alegeți proiectul așa cum îl are ETS (un export ETS sau o copie de rezervă). Predarea enumeră ce trebuie schimbat în ETS ca să corespundă acestui proiect, cu adresele de grup noi și modificate într-un fișier pe care ETS îl importă. Nimic nu este scris sau semnat în ETS."
+
+msgid "Choose Baseline…"
+msgstr "Alege Baza…"
+
+msgid "Choose the Project as ETS Has It"
+msgstr "Alege Proiectul așa cum Îl Are ETS"
+
+msgid "Projects and backups"
+msgstr "Proiecte și copii de rezervă"
+
+msgid "Comparing with this project…"
+msgstr "Se compară cu acest proiect…"
+
+msgid "Nothing to hand over: the projects are the same."
+msgstr "Nimic de predat: proiectele sunt la fel."
+
+msgid "Save Hand-Over…"
+msgstr "Salvează Predarea…"
+
+msgid "Save Hand-Over for ETS"
+msgstr "Salvează Predarea pentru ETS"
+
+msgid "ZIP archives"
+msgstr "Arhive ZIP"
+
+msgid "Hand-over saved: {path}"
+msgstr "Predare salvată: {path}"
+
+msgid "{count} device to change in ETS"
+msgid_plural "{count} devices to change in ETS"
+msgstr[0] "{count} dispozitiv de modificat în ETS"
+msgstr[1] "{count} dispozitive de modificat în ETS"
+msgstr[2] "{count} de dispozitive de modificat în ETS"
+
+msgid "{count} group address to change in ETS"
+msgid_plural "{count} group addresses to change in ETS"
+msgstr[0] "{count} adresă de grup de modificat în ETS"
+msgstr[1] "{count} adrese de grup de modificat în ETS"
+msgstr[2] "{count} de adrese de grup de modificat în ETS"

@@ -3282,3 +3282,51 @@ msgstr "Interní hodnoty"
 
 msgid "Acknowledge Group Address"
 msgstr "Potvrzovat Skupinovou Adresu"
+
+msgid "Hand Over to ETS…"
+msgstr "Předat do ETS…"
+
+msgid "Hand Over to ETS"
+msgstr "Předat do ETS"
+
+msgid "Choose the project as ETS has it (an ETS export, or a backup). The hand-over lists what to change in ETS so it matches this project, with the new and changed group addresses as a file ETS imports. Nothing is written into or signed for ETS."
+msgstr "Vyberte projekt tak, jak jej má ETS (export z ETS nebo zálohu). Předání vypíše, co změnit v ETS, aby odpovídal tomuto projektu, a nové a změněné skupinové adresy uloží do souboru, který ETS importuje. Do ETS se nic nezapisuje ani nepodepisuje."
+
+msgid "Choose Baseline…"
+msgstr "Vybrat Základ…"
+
+msgid "Choose the Project as ETS Has It"
+msgstr "Vybrat Projekt, Jak Jej Má ETS"
+
+msgid "Projects and backups"
+msgstr "Projekty a zálohy"
+
+msgid "Comparing with this project…"
+msgstr "Porovnávání s tímto projektem…"
+
+msgid "Nothing to hand over: the projects are the same."
+msgstr "Není co předat: projekty jsou stejné."
+
+msgid "Save Hand-Over…"
+msgstr "Uložit Předání…"
+
+msgid "Save Hand-Over for ETS"
+msgstr "Uložit Předání pro ETS"
+
+msgid "ZIP archives"
+msgstr "Archivy ZIP"
+
+msgid "Hand-over saved: {path}"
+msgstr "Předání uloženo: {path}"
+
+msgid "{count} device to change in ETS"
+msgid_plural "{count} devices to change in ETS"
+msgstr[0] "{count} zařízení ke změně v ETS"
+msgstr[1] "{count} zařízení ke změně v ETS"
+msgstr[2] "{count} zařízení ke změně v ETS"
+
+msgid "{count} group address to change in ETS"
+msgid_plural "{count} group addresses to change in ETS"
+msgstr[0] "{count} skupinová adresa ke změně v ETS"
+msgstr[1] "{count} skupinové adresy ke změně v ETS"
+msgstr[2] "{count} skupinových adres ke změně v ETS"

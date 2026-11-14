@@ -286,6 +286,78 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
         )
         return {"change_list": data, "markdown": change_list_markdown(data)}
 
+    @tool("read")
+    def project_ets_handover(
+        path: str,
+        password: str | None = None,
+        out_path: str | None = None,
+        timeout: float = 300.0,
+    ) -> dict[str, Any]:
+        """Hand Over to ETS, as File > Hand Over to ETS… does: compare the baseline at ``path``
+        (the project as ETS has it: an .xknx, .knxproj or backup .zip on the editor's machine,
+        read-only, ``password`` for a protected one) with the open project, and make the files
+        a person needs to bring the ETS project up to date by hand. Nothing is written into,
+        signed for, or sent to ETS.
+
+        Files: group-addresses.xml (only the group addresses new or changed since the baseline,
+        ETS's group address export format ga-export/01, which ETS imports) and
+        group-addresses.csv (the same, CSV 3/1, tab), left out when there are none;
+        change-list.html (a checklist to tick off), change-list.md, change-list.json (format
+        "xknx-editor-change-list/1", as project_change_list_for_ets) and README.txt (the order
+        of the steps in ETS).
+
+        Returns {files: [names], summary {devices, group_addresses}, readme, markdown,
+        group_addresses_xml (text, or null)}; with ``out_path`` also writes them as one ZIP there
+        (".zip" added when missing) and returns {written: path}. Or {error, needs_password} when
+        the baseline cannot be opened. ``timeout`` in seconds, after which it is stopped."""
+        import json as _json
+
+        from editor_gui.plugins.project.ets_handover import (
+            CHANGE_JSON,
+            CHANGE_MD,
+            GA_XML,
+            README,
+            handover_zip,
+        )
+
+        require_project(ctx)
+        plugin = _plugin()
+        job = ctx.run_locked(
+            lambda: plugin.start_project_diff(path, password, file_first=True)
+        )
+        try:
+            outcome = job.future.result(timeout=timeout)
+        except TimeoutError as exc:
+            job.cancel()
+            raise ToolError(
+                f"the comparison did not finish within {timeout} s and was stopped"
+            ) from exc
+        if outcome.canceled:
+            raise ToolError("the comparison was stopped")
+        if outcome.result is None:
+            return {"error": outcome.error, "needs_password": outcome.needs_password}
+        result = outcome.result
+        files = ctx.run_locked(
+            lambda: plugin.ets_handover_files(result, Path(path).stem)
+        )
+        data = _json.loads(files[CHANGE_JSON])
+        out: dict[str, Any] = {
+            "files": list(files),
+            "summary": data["summary"],
+            "readme": files[README].decode(),
+            "markdown": files[CHANGE_MD].decode(),
+            "group_addresses_xml": files[GA_XML].decode("utf-8-sig")
+            if GA_XML in files
+            else None,
+        }
+        if out_path:
+            target = Path(out_path)
+            if target.suffix.lower() != ".zip":
+                target = target.with_suffix(".zip")
+            target.write_bytes(handover_zip(files))
+            out["written"] = str(target)
+        return out
+
     @tool("write")
     def project_create_group_addresses_for_com_objects(
         com_object_ref_ids: list[str] | None = None,

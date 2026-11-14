@@ -21,6 +21,7 @@ import io
 import logging
 import re
 import xml.etree.ElementTree as ET
+from collections.abc import Collection
 from dataclasses import dataclass, field
 from pathlib import Path
 from uuid import uuid4
@@ -407,7 +408,9 @@ def import_ga_export(
     return pid
 
 
-def write_ga_export(source: Path | str, dest: Path | str) -> int:
+def write_ga_export(
+    source: Path | str, dest: Path | str, *, only: Collection[int] | None = None
+) -> int:
     """Read the project at ``source`` (``.xknx``) and write its group-address tree to ``dest``.
 
     The inverse of :func:`import_ga_export`: only the group-address tree is written - the
@@ -415,7 +418,8 @@ def write_ga_export(source: Path | str, dest: Path | str) -> int:
     each with name, datapoint type and description. No devices, topology or product data,
     matching what an ETS GA export carries. The range nesting is reproduced verbatim so the
     file re-imports to the same tree. Returns the number of addresses written. An existing
-    ``dest`` is overwritten.
+    ``dest`` is overwritten. ``only`` (raw 16-bit addresses) limits the file to those group
+    addresses and the ranges that hold them, e.g. the ones new or changed since a baseline.
     """
     engine = make_engine(url_for(Path(source)))
     try:
@@ -432,7 +436,8 @@ def write_ga_export(source: Path | str, dest: Path | str) -> int:
             root_el = ET.Element(_ROOT_TAG)
             for note in _FORMAT_NOTES:
                 root_el.append(ET.Comment(note))
-            count = sum(_write_range(gr, root_el, style) for gr in roots)
+            wanted = frozenset(only) if only is not None else None
+            count = sum(_write_range(gr, root_el, style, wanted) for gr in roots)
     finally:
         engine.dispose()
 
@@ -479,6 +484,7 @@ def write_ga_csv(
     layout: str = "3/1",
     separator: str = "\t",
     header: bool = False,
+    only: Collection[int] | None = None,
 ) -> int:
     """Write the group-address tree of the project at ``source`` to ``dest`` as CSV.
 
@@ -487,7 +493,8 @@ def write_ga_csv(
     address, with the main, middle and address name in three columns, followed by address,
     central, unfiltered, description, datapoint type and security. Names are trimmed, every
     field is quoted, lines end with CRLF and the text is Windows-1252, like the exports this
-    format comes from. Returns the number of addresses written."""
+    format comes from. Returns the number of addresses written. ``only`` (raw 16-bit
+    addresses) limits it to those group addresses and the groups that hold them."""
     rows: list[list[str]] = []
     engine = make_engine(url_for(Path(source)))
     try:
@@ -500,7 +507,8 @@ def write_ga_csv(
                 .order_by(GroupRange.range_start)
                 .all()
             )
-            count = sum(_csv_range(gr, rows, style, 0) for gr in roots)
+            wanted = frozenset(only) if only is not None else None
+            count = sum(_csv_range(gr, rows, style, 0, wanted) for gr in roots)
     finally:
         engine.dispose()
     out = [_csv_layout_row(row, layout) for row in rows]
@@ -532,8 +540,13 @@ def _csv_layout_row(row: list[str], layout: str) -> list[str]:
 
 
 def _csv_range(
-    gr: GroupRange, rows: list[list[str]], style: GroupAddressStyle, depth: int
+    gr: GroupRange,
+    out: list[list[str]],
+    style: GroupAddressStyle,
+    depth: int,
+    only: frozenset[int] | None = None,
 ) -> int:
+    rows: list[list[str]] = []
     if style is not GroupAddressStyle.FREE:
         main = gr.range_start >> 11
         if depth == 0:
@@ -549,8 +562,10 @@ def _csv_range(
         )
     count = 0
     for child in sorted(gr.children, key=lambda c: c.range_start):
-        count += _csv_range(child, rows, style, depth + 1)
+        count += _csv_range(child, rows, style, depth + 1, only)
     for ga in sorted(gr.group_addresses, key=lambda a: a.address):
+        if only is not None and ga.address not in only:
+            continue
         rows.append(
             [
                 "",
@@ -565,13 +580,19 @@ def _csv_range(
             ]
         )
         count += 1
+    if only is None or count:
+        out.extend(rows)
     return count
 
 
 def _write_range(
-    gr: GroupRange, parent_el: ET.Element, style: GroupAddressStyle
+    gr: GroupRange,
+    parent_el: ET.Element,
+    style: GroupAddressStyle,
+    only: frozenset[int] | None = None,
 ) -> int:
-    """Emit ``gr`` (and its subtree) under ``parent_el``; return addresses written below it."""
+    """Emit ``gr`` (and its subtree) under ``parent_el``; return addresses written below it.
+    With ``only``, just those addresses, and no range that holds none of them."""
     el = ET.SubElement(parent_el, _RANGE_TAG)
     el.set("Name", gr.name)
     el.set("RangeStart", str(gr.range_start))
@@ -581,12 +602,16 @@ def _write_range(
     if gr.security_mode and gr.security_mode != "Auto":
         el.set("Security", gr.security_mode)
     count = sum(
-        _write_range(child, el, style)
+        _write_range(child, el, style, only)
         for child in sorted(gr.children, key=lambda c: c.range_start)
     )
     for ga in sorted(gr.group_addresses, key=lambda a: a.address):
+        if only is not None and ga.address not in only:
+            continue
         _write_address(ga, el, style)
         count += 1
+    if only is not None and not count:
+        parent_el.remove(el)
     return count
 
 

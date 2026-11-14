@@ -3282,3 +3282,51 @@ msgstr "Внутрішні значення"
 
 msgid "Acknowledge Group Address"
 msgstr "Підтверджувати Групову Адресу"
+
+msgid "Hand Over to ETS…"
+msgstr "Передати в ETS…"
+
+msgid "Hand Over to ETS"
+msgstr "Передати в ETS"
+
+msgid "Choose the project as ETS has it (an ETS export, or a backup). The hand-over lists what to change in ETS so it matches this project, with the new and changed group addresses as a file ETS imports. Nothing is written into or signed for ETS."
+msgstr "Виберіть проєкт у тому вигляді, в якому він є в ETS (експорт ETS або резервну копію). Передача перелічує, що змінити в ETS, щоб він відповідав цьому проєкту, а нові й змінені групові адреси зберігає у файл, який імпортує ETS. В ETS нічого не записується і не підписується."
+
+msgid "Choose Baseline…"
+msgstr "Вибрати Основу…"
+
+msgid "Choose the Project as ETS Has It"
+msgstr "Вибрати Проєкт у Вигляді з ETS"
+
+msgid "Projects and backups"
+msgstr "Проєкти та резервні копії"
+
+msgid "Comparing with this project…"
+msgstr "Порівняння з цим проєктом…"
+
+msgid "Nothing to hand over: the projects are the same."
+msgstr "Нічого передавати: проєкти однакові."
+
+msgid "Save Hand-Over…"
+msgstr "Зберегти Передачу…"
+
+msgid "Save Hand-Over for ETS"
+msgstr "Зберегти Передачу для ETS"
+
+msgid "ZIP archives"
+msgstr "Архіви ZIP"
+
+msgid "Hand-over saved: {path}"
+msgstr "Передачу збережено: {path}"
+
+msgid "{count} device to change in ETS"
+msgid_plural "{count} devices to change in ETS"
+msgstr[0] "{count} пристрій для зміни в ETS"
+msgstr[1] "{count} пристрої для зміни в ETS"
+msgstr[2] "{count} пристроїв для зміни в ETS"
+
+msgid "{count} group address to change in ETS"
+msgid_plural "{count} group addresses to change in ETS"
+msgstr[0] "{count} групова адреса для зміни в ETS"
+msgstr[1] "{count} групові адреси для зміни в ETS"
+msgstr[2] "{count} групових адрес для зміни в ETS"

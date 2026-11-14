@@ -191,3 +191,80 @@ def _raw(parameter: dict[str, str]) -> str:
     ):
         return ""
     return f" (stored {parameter['before_value'] or '-'} -> {parameter['after_value'] or '-'})"
+
+
+def change_list_html(data: dict[str, Any]) -> str:
+    """The change list as a stand-alone HTML page to tick off while working in ETS: a checkbox
+    per address change, parameter and group object, and per group address (the boxes are for
+    the reader; nothing is saved)."""
+    from html import escape
+
+    def box(text: str) -> str:
+        return f'<li><label><input type="checkbox"> {text}</label></li>'
+
+    out = [
+        "<!doctype html>",
+        '<html lang="en"><head><meta charset="utf-8">',
+        '<meta name="viewport" content="width=device-width, initial-scale=1">',
+        f"<title>Change list for ETS: {escape(data['before'])}</title>",
+        "<style>body{font-family:system-ui,sans-serif;max-width:52rem;margin:1rem auto;"
+        "padding:0 1rem;line-height:1.45}ul{list-style:none;padding-left:0}"
+        "li{margin:.25rem 0}code{font-size:.9em}h3{margin-top:1.6rem}"
+        ".note{color:#666;font-size:.9em}@media print{input{transform:scale(1.2)}}</style>",
+        "</head><body>",
+        f"<h1>Change list for ETS: {escape(data['before'])} &rarr; {escape(data['after'])}</h1>",
+        f'<p class="note">Made by XKNX Editor{" " + escape(data["made"]) if data.get("made") else ""}. '
+        f"Apply it in ETS to <b>{escape(data['before'])}</b> so that it matches "
+        f"<b>{escape(data['after'])}</b>. Back up the ETS project first.</p>",
+    ]
+    devices: list[dict[str, Any]] = data["devices"]
+    gas: list[dict[str, Any]] = data["group_addresses"]
+    if not devices and not gas:
+        out += [
+            "<p>Nothing to change: the projects are the same.</p>",
+            "</body></html>",
+        ]
+        return "\n".join(out)
+    if gas:
+        out.append(f"<h2>Group addresses ({len(gas)})</h2><ul>")
+        for g in gas:
+            todo = (
+                "delete it by hand in ETS (an import never removes one)"
+                if g["change"] == "removed"
+                else "in the group address import, or set it by hand"
+            )
+            out.append(
+                box(
+                    f"<b>{escape(g['address'])}</b> {escape(g['change'])}: "
+                    f'{escape(g["detail"])} <span class="note">({todo})</span>'
+                )
+            )
+        out.append("</ul>")
+    if devices:
+        out.append(f"<h2>Devices ({len(devices)})</h2>")
+    for device in devices:
+        out.append(
+            f"<h3>{escape(device['address'])} ({escape(device['change'])})</h3><ul>"
+        )
+        if device["detail"]:
+            out.append(box(escape(device["detail"])))
+        for p in device.get("parameters", []):
+            out.append(
+                box(
+                    f"{escape(p['label'])}: {escape(_shown(p['before']))} &rarr; "
+                    f"<b>{escape(_shown(p['after']))}</b>{escape(_raw(p))}"
+                )
+            )
+        for o in device.get("group_objects", []):
+            todo = _object_todo(o).replace("**", "")
+            out.append(
+                box(f"{escape(_number(o))}{escape(o['object'])}: {escape(todo)}")
+            )
+        out.append("</ul>")
+        if device.get("group_objects"):
+            out.append(
+                '<p class="note">When a parameter gives an object another function, ETS may '
+                "drop its links: check that each object keeps the links shown.</p>"
+            )
+    out.append("</body></html>")
+    return "\n".join(out)

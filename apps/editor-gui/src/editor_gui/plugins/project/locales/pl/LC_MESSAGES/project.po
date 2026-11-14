@@ -3282,3 +3282,51 @@ msgstr "Wartości wewnętrzne"
 
 msgid "Acknowledge Group Address"
 msgstr "Potwierdzaj Adres Grupowy"
+
+msgid "Hand Over to ETS…"
+msgstr "Przekaż do ETS…"
+
+msgid "Hand Over to ETS"
+msgstr "Przekaż do ETS"
+
+msgid "Choose the project as ETS has it (an ETS export, or a backup). The hand-over lists what to change in ETS so it matches this project, with the new and changed group addresses as a file ETS imports. Nothing is written into or signed for ETS."
+msgstr "Wybierz projekt w takiej postaci, jaką ma ETS (eksport z ETS lub kopię zapasową). Przekazanie wymienia, co zmienić w ETS, aby odpowiadał temu projektowi, a nowe i zmienione adresy grupowe zapisuje w pliku importowanym przez ETS. Nic nie jest zapisywane ani podpisywane w ETS."
+
+msgid "Choose Baseline…"
+msgstr "Wybierz Bazę…"
+
+msgid "Choose the Project as ETS Has It"
+msgstr "Wybierz Projekt w Postaci z ETS"
+
+msgid "Projects and backups"
+msgstr "Projekty i kopie zapasowe"
+
+msgid "Comparing with this project…"
+msgstr "Porównywanie z tym projektem…"
+
+msgid "Nothing to hand over: the projects are the same."
+msgstr "Nic do przekazania: projekty są takie same."
+
+msgid "Save Hand-Over…"
+msgstr "Zapisz Przekazanie…"
+
+msgid "Save Hand-Over for ETS"
+msgstr "Zapisz Przekazanie dla ETS"
+
+msgid "ZIP archives"
+msgstr "Archiwa ZIP"
+
+msgid "Hand-over saved: {path}"
+msgstr "Przekazanie zapisane: {path}"
+
+msgid "{count} device to change in ETS"
+msgid_plural "{count} devices to change in ETS"
+msgstr[0] "{count} urządzenie do zmiany w ETS"
+msgstr[1] "{count} urządzenia do zmiany w ETS"
+msgstr[2] "{count} urządzeń do zmiany w ETS"
+
+msgid "{count} group address to change in ETS"
+msgid_plural "{count} group addresses to change in ETS"
+msgstr[0] "{count} adres grupowy do zmiany w ETS"
+msgstr[1] "{count} adresy grupowe do zmiany w ETS"
+msgstr[2] "{count} adresów grupowych do zmiany w ETS"

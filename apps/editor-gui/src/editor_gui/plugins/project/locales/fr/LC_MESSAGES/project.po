@@ -3230,3 +3230,49 @@ msgstr "Valeurs internes"
 
 msgid "Acknowledge Group Address"
 msgstr "Acquitter l’Adresse de Groupe"
+
+msgid "Hand Over to ETS…"
+msgstr "Transmettre à ETS…"
+
+msgid "Hand Over to ETS"
+msgstr "Transmettre à ETS"
+
+msgid "Choose the project as ETS has it (an ETS export, or a backup). The hand-over lists what to change in ETS so it matches this project, with the new and changed group addresses as a file ETS imports. Nothing is written into or signed for ETS."
+msgstr "Choisissez le projet tel que ETS l’a (un export ETS ou une sauvegarde). La transmission liste ce qu’il faut modifier dans ETS pour qu’il corresponde à ce projet, avec les adresses de groupe nouvelles et modifiées dans un fichier que ETS importe. Rien n’est écrit ni signé dans ETS."
+
+msgid "Choose Baseline…"
+msgstr "Choisir la Base…"
+
+msgid "Choose the Project as ETS Has It"
+msgstr "Choisir le Projet tel que ETS l’A"
+
+msgid "Projects and backups"
+msgstr "Projets et sauvegardes"
+
+msgid "Comparing with this project…"
+msgstr "Comparaison avec ce projet…"
+
+msgid "Nothing to hand over: the projects are the same."
+msgstr "Rien à transmettre : les projets sont identiques."
+
+msgid "Save Hand-Over…"
+msgstr "Enregistrer la Transmission…"
+
+msgid "Save Hand-Over for ETS"
+msgstr "Enregistrer la Transmission pour ETS"
+
+msgid "ZIP archives"
+msgstr "Archives ZIP"
+
+msgid "Hand-over saved: {path}"
+msgstr "Transmission enregistrée : {path}"
+
+msgid "{count} device to change in ETS"
+msgid_plural "{count} devices to change in ETS"
+msgstr[0] "{count} appareil à modifier dans ETS"
+msgstr[1] "{count} appareils à modifier dans ETS"
+
+msgid "{count} group address to change in ETS"
+msgid_plural "{count} group addresses to change in ETS"
+msgstr[0] "{count} adresse de groupe à modifier dans ETS"
+msgstr[1] "{count} adresses de groupe à modifier dans ETS"

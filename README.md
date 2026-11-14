@@ -134,6 +134,9 @@ The same in the light theme:
 
 ![Project editor in the light theme](docs/images/editor-light.png)
 
+**Hand Over to ETS** — make a checklist and a group address import file to apply your changes in ETS by
+hand, from a comparison with the project as ETS has it: see [Hand Over to ETS](docs/ETS_HANDOVER.md).
+
 **Import and export both work.** Open an existing project file and edit it, or export one that opens
 in ETS. Exports bundle the required product data so the project is self-contained, are signed so ETS
 accepts them. Based on [XKNXProject](https://github.com/XKNX/xknxproject) and [OpenKNXproducer](https://github.com/OpenKNX/OpenKNXproducer)

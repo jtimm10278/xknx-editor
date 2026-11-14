@@ -1054,3 +1054,38 @@ async def test_triton_import_skips_ambiguous_project_address(
             "skipped": [{"address": "1.1.1", "reason": "ambiguous device address"}],
         }
         assert project.revision == revision
+
+
+async def test_ets_handover(tmp_path: Path) -> None:
+    import zipfile
+
+    mcp, project = _server(tmp_path)
+    async with Client(mcp) as client:
+        await _data(client, "project_new", path=str(tmp_path / "old.xknx"))
+        await _data(
+            client, "project_create_group_address", address="1/0/1", name="Kept"
+        )
+        # Continue in a copy: the old file is the project as ETS has it.
+        assert project.save_as(tmp_path / "new.xknx") is not None
+        await _data(
+            client, "project_create_group_address", address="1/0/2", name="New one"
+        )
+        result = await _data(
+            client,
+            "project_ets_handover",
+            path=str(tmp_path / "old.xknx"),
+            out_path=str(tmp_path / "handover"),
+        )
+        missing = await _data(
+            client, "project_ets_handover", path=str(tmp_path / "none.xknx")
+        )
+    assert missing["error"]
+    assert result["summary"]["group_addresses"] == 1
+    assert "group-addresses.xml" in result["files"]
+    xml = result["group_addresses_xml"]
+    assert 'Address="1/0/2"' in xml and 'Address="1/0/1"' not in xml
+    assert "Nothing here is signed" in result["readme"]
+    written = Path(result["written"])
+    assert written.name == "handover.zip"
+    with zipfile.ZipFile(written) as archive:
+        assert set(archive.namelist()) == set(result["files"])

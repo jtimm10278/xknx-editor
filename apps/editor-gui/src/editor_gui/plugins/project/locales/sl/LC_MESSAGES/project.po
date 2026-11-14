@@ -3361,3 +3361,53 @@ msgstr "Notranje vrednosti"
 
 msgid "Acknowledge Group Address"
 msgstr "Potrdi Skupinski Naslov"
+
+msgid "Hand Over to ETS…"
+msgstr "Predaj v ETS…"
+
+msgid "Hand Over to ETS"
+msgstr "Predaj v ETS"
+
+msgid "Choose the project as ETS has it (an ETS export, or a backup). The hand-over lists what to change in ETS so it matches this project, with the new and changed group addresses as a file ETS imports. Nothing is written into or signed for ETS."
+msgstr "Izberite projekt, kot ga ima ETS (izvoz iz ETS ali varnostno kopijo). Predaja navede, kaj spremeniti v ETS, da se ujema s tem projektom, nove in spremenjene skupinske naslove pa shrani v datoteko, ki jo ETS uvozi. V ETS se nič ne zapiše in nič ne podpiše."
+
+msgid "Choose Baseline…"
+msgstr "Izberi Osnovo…"
+
+msgid "Choose the Project as ETS Has It"
+msgstr "Izberi Projekt, Kot Ga Ima ETS"
+
+msgid "Projects and backups"
+msgstr "Projekti in varnostne kopije"
+
+msgid "Comparing with this project…"
+msgstr "Primerjava s tem projektom…"
+
+msgid "Nothing to hand over: the projects are the same."
+msgstr "Ni česa predati: projekta sta enaka."
+
+msgid "Save Hand-Over…"
+msgstr "Shrani Predajo…"
+
+msgid "Save Hand-Over for ETS"
+msgstr "Shrani Predajo za ETS"
+
+msgid "ZIP archives"
+msgstr "Arhivi ZIP"
+
+msgid "Hand-over saved: {path}"
+msgstr "Predaja shranjena: {path}"
+
+msgid "{count} device to change in ETS"
+msgid_plural "{count} devices to change in ETS"
+msgstr[0] "{count} naprava za spremembo v ETS"
+msgstr[1] "{count} napravi za spremembo v ETS"
+msgstr[2] "{count} naprave za spremembo v ETS"
+msgstr[3] "{count} naprav za spremembo v ETS"
+
+msgid "{count} group address to change in ETS"
+msgid_plural "{count} group addresses to change in ETS"
+msgstr[0] "{count} skupinski naslov za spremembo v ETS"
+msgstr[1] "{count} skupinska naslova za spremembo v ETS"
+msgstr[2] "{count} skupinski naslovi za spremembo v ETS"
+msgstr[3] "{count} skupinskih naslovov za spremembo v ETS"

@@ -4467,6 +4467,13 @@ class KnxGuiApp:
             self._project_service.is_open,
         )[0]:
             self._import_group_addresses()
+        if imgui.menu_item(
+            PROJECT_S.ETS_HANDOVER_MENU,
+            "",
+            False,
+            self._project_service.is_open,
+        )[0]:
+            self._project_plugin.open_ets_handover()
         imgui.separator()
         if imgui.menu_item(S.MENU_LOAD_PRODUCT, "", False)[0]:
             self._choose_product_file()
@@ -6062,6 +6069,13 @@ class KnxGuiApp:
                 S.MENU_IMPORT_GA,
                 "",
                 self._import_group_addresses,
+            ),
+            (
+                is_open,
+                file,
+                PROJECT_S.ETS_HANDOVER_MENU,
+                "",
+                self._project_plugin.open_ets_handover,
             ),
             (
                 True,

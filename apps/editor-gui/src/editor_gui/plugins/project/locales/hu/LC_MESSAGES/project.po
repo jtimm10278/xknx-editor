@@ -3205,3 +3205,47 @@ msgstr "Belső értékek"
 
 msgid "Acknowledge Group Address"
 msgstr "Csoportcím Nyugtázása"
+
+msgid "Hand Over to ETS…"
+msgstr "Átadás az ETS-nek…"
+
+msgid "Hand Over to ETS"
+msgstr "Átadás az ETS-nek"
+
+msgid "Choose the project as ETS has it (an ETS export, or a backup). The hand-over lists what to change in ETS so it matches this project, with the new and changed group addresses as a file ETS imports. Nothing is written into or signed for ETS."
+msgstr "Válassza ki a projektet úgy, ahogy az ETS-ben van (ETS-export vagy biztonsági mentés). Az átadás felsorolja, mit kell az ETS-ben módosítani, hogy egyezzen ezzel a projekttel, az új és módosított csoportcímeket pedig az ETS által importálható fájlba írja. Az ETS-be semmi nem íródik és semmi nem kerül aláírásra."
+
+msgid "Choose Baseline…"
+msgstr "Alap Kiválasztása…"
+
+msgid "Choose the Project as ETS Has It"
+msgstr "A Projekt Kiválasztása, Ahogy az ETS-ben Van"
+
+msgid "Projects and backups"
+msgstr "Projektek és mentések"
+
+msgid "Comparing with this project…"
+msgstr "Összehasonlítás ezzel a projekttel…"
+
+msgid "Nothing to hand over: the projects are the same."
+msgstr "Nincs mit átadni: a projektek azonosak."
+
+msgid "Save Hand-Over…"
+msgstr "Átadás Mentése…"
+
+msgid "Save Hand-Over for ETS"
+msgstr "Átadás Mentése az ETS-hez"
+
+msgid "ZIP archives"
+msgstr "ZIP-archívumok"
+
+msgid "Hand-over saved: {path}"
+msgstr "Átadás mentve: {path}"
+
+msgid "{count} device to change in ETS"
+msgid_plural "{count} devices to change in ETS"
+msgstr[0] "{count} módosítandó eszköz az ETS-ben"
+
+msgid "{count} group address to change in ETS"
+msgid_plural "{count} group addresses to change in ETS"
+msgstr[0] "{count} módosítandó csoportcím az ETS-ben"

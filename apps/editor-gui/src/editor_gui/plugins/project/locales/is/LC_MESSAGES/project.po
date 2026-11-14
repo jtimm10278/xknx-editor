@@ -3257,3 +3257,49 @@ msgstr "Innri gildi"
 
 msgid "Acknowledge Group Address"
 msgstr "Staðfesta Hópvistfang"
+
+msgid "Hand Over to ETS…"
+msgstr "Afhenda ETS…"
+
+msgid "Hand Over to ETS"
+msgstr "Afhenda ETS"
+
+msgid "Choose the project as ETS has it (an ETS export, or a backup). The hand-over lists what to change in ETS so it matches this project, with the new and changed group addresses as a file ETS imports. Nothing is written into or signed for ETS."
+msgstr "Veldu verkefnið eins og ETS hefur það (ETS-útflutning eða afrit). Afhendingin telur upp hverju á að breyta í ETS svo það passi við þetta verkefni, með nýju og breyttu hópvistföngunum í skrá sem ETS flytur inn. Ekkert er skrifað eða undirritað í ETS."
+
+msgid "Choose Baseline…"
+msgstr "Velja Grunn…"
+
+msgid "Choose the Project as ETS Has It"
+msgstr "Velja Verkefnið Eins og ETS Hefur Það"
+
+msgid "Projects and backups"
+msgstr "Verkefni og afrit"
+
+msgid "Comparing with this project…"
+msgstr "Ber saman við þetta verkefni…"
+
+msgid "Nothing to hand over: the projects are the same."
+msgstr "Ekkert að afhenda: verkefnin eru eins."
+
+msgid "Save Hand-Over…"
+msgstr "Vista Afhendingu…"
+
+msgid "Save Hand-Over for ETS"
+msgstr "Vista Afhendingu fyrir ETS"
+
+msgid "ZIP archives"
+msgstr "ZIP-safnskrár"
+
+msgid "Hand-over saved: {path}"
+msgstr "Afhending vistuð: {path}"
+
+msgid "{count} device to change in ETS"
+msgid_plural "{count} devices to change in ETS"
+msgstr[0] "{count} tæki til að breyta í ETS"
+msgstr[1] "{count} tæki til að breyta í ETS"
+
+msgid "{count} group address to change in ETS"
+msgid_plural "{count} group addresses to change in ETS"
+msgstr[0] "{count} hópvistfang til að breyta í ETS"
+msgstr[1] "{count} hópvistföng til að breyta í ETS"

@@ -3178,3 +3178,47 @@ msgstr "内部值"
 
 msgid "Acknowledge Group Address"
 msgstr "确认组地址"
+
+msgid "Hand Over to ETS…"
+msgstr "移交给 ETS…"
+
+msgid "Hand Over to ETS"
+msgstr "移交给 ETS"
+
+msgid "Choose the project as ETS has it (an ETS export, or a backup). The hand-over lists what to change in ETS so it matches this project, with the new and changed group addresses as a file ETS imports. Nothing is written into or signed for ETS."
+msgstr "选择 ETS 中现有的项目（ETS 导出文件或备份）。移交内容列出需要在 ETS 中更改的内容，使其与本项目一致，并将新增和更改的组地址存为 ETS 可导入的文件。不会向 ETS 写入或签名任何内容。"
+
+msgid "Choose Baseline…"
+msgstr "选择基准…"
+
+msgid "Choose the Project as ETS Has It"
+msgstr "选择 ETS 中现有的项目"
+
+msgid "Projects and backups"
+msgstr "项目和备份"
+
+msgid "Comparing with this project…"
+msgstr "正在与本项目比较…"
+
+msgid "Nothing to hand over: the projects are the same."
+msgstr "无需移交：两个项目相同。"
+
+msgid "Save Hand-Over…"
+msgstr "保存移交…"
+
+msgid "Save Hand-Over for ETS"
+msgstr "保存 ETS 移交"
+
+msgid "ZIP archives"
+msgstr "ZIP 压缩包"
+
+msgid "Hand-over saved: {path}"
+msgstr "移交已保存：{path}"
+
+msgid "{count} device to change in ETS"
+msgid_plural "{count} devices to change in ETS"
+msgstr[0] "需在 ETS 中更改 {count} 个设备"
+
+msgid "{count} group address to change in ETS"
+msgid_plural "{count} group addresses to change in ETS"
+msgstr[0] "需在 ETS 中更改 {count} 个组地址"

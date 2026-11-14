@@ -3309,3 +3309,51 @@ msgstr "Interné hodnoty"
 
 msgid "Acknowledge Group Address"
 msgstr "Potvrdzovať Skupinovú Adresu"
+
+msgid "Hand Over to ETS…"
+msgstr "Odovzdať do ETS…"
+
+msgid "Hand Over to ETS"
+msgstr "Odovzdať do ETS"
+
+msgid "Choose the project as ETS has it (an ETS export, or a backup). The hand-over lists what to change in ETS so it matches this project, with the new and changed group addresses as a file ETS imports. Nothing is written into or signed for ETS."
+msgstr "Vyberte projekt tak, ako ho má ETS (export z ETS alebo zálohu). Odovzdanie vypíše, čo zmeniť v ETS, aby zodpovedal tomuto projektu, a nové a zmenené skupinové adresy uloží do súboru, ktorý ETS importuje. Do ETS sa nič nezapisuje ani nepodpisuje."
+
+msgid "Choose Baseline…"
+msgstr "Vybrať Základ…"
+
+msgid "Choose the Project as ETS Has It"
+msgstr "Vybrať Projekt, Ako Ho Má ETS"
+
+msgid "Projects and backups"
+msgstr "Projekty a zálohy"
+
+msgid "Comparing with this project…"
+msgstr "Porovnáva sa s týmto projektom…"
+
+msgid "Nothing to hand over: the projects are the same."
+msgstr "Nie je čo odovzdať: projekty sú rovnaké."
+
+msgid "Save Hand-Over…"
+msgstr "Uložiť Odovzdanie…"
+
+msgid "Save Hand-Over for ETS"
+msgstr "Uložiť Odovzdanie pre ETS"
+
+msgid "ZIP archives"
+msgstr "Archívy ZIP"
+
+msgid "Hand-over saved: {path}"
+msgstr "Odovzdanie uložené: {path}"
+
+msgid "{count} device to change in ETS"
+msgid_plural "{count} devices to change in ETS"
+msgstr[0] "{count} zariadenie na zmenu v ETS"
+msgstr[1] "{count} zariadenia na zmenu v ETS"
+msgstr[2] "{count} zariadení na zmenu v ETS"
+
+msgid "{count} group address to change in ETS"
+msgid_plural "{count} group addresses to change in ETS"
+msgstr[0] "{count} skupinová adresa na zmenu v ETS"
+msgstr[1] "{count} skupinové adresy na zmenu v ETS"
+msgstr[2] "{count} skupinových adries na zmenu v ETS"

@@ -70,6 +70,7 @@ from editor_gui.plugins.project.ui.device_certificate import (
 )
 from editor_gui.plugins.project.ui.device_compare import DeviceComparePanel
 from editor_gui.plugins.project.ui.element_details import ElementDetailsPanel
+from editor_gui.plugins.project.ui.ets_handover_dialog import EtsHandoverDialog
 from editor_gui.plugins.project.ui.group_value import GroupValueActions
 from editor_gui.plugins.project.ui.memory_preview import MemoryPreviewWindow
 from editor_gui.plugins.project.ui.paste_special import PasteSpecialDialog
@@ -232,6 +233,13 @@ class ProjectPlugin:
         )
         self._preflight_result = PreflightResultWindow()
         self._read_device_dialog = ReadDeviceDialog(self._request_device_info)
+        self._ets_handover_dialog = EtsHandoverDialog(
+            lambda path, password: self.start_project_diff(
+                path, password, file_first=True
+            ),
+            lambda result, name: self.ets_handover_files(result, name),
+            lambda text: self._api.notify(text) if self._api.notify else None,
+        )
         # The device a certificate is asked for, while the dialog is open.
         self._certificate_device: Device | None = None
         self._certificate_dialog = DeviceCertificateDialog(
@@ -2039,6 +2047,35 @@ class ProjectPlugin:
         )
         return changed, errors
 
+    def open_ets_handover(self) -> None:
+        """Show "Hand Over to ETS…"."""
+        self._ets_handover_dialog.open()
+
+    def ets_handover_files(
+        self,
+        result: DiffResult,
+        before_name: str,
+        after_name: str | None = None,
+    ) -> dict[str, bytes]:
+        """The files of a hand-over to ETS (see :mod:`.ets_handover`) from a comparison of a
+        baseline (``before_name``) with the open project; called on the UI thread."""
+        from datetime import datetime
+
+        from editor_gui.plugins.project.change_list import change_list
+        from editor_gui.plugins.project.ets_handover import build_handover
+
+        path = self._api.project.working_path
+        if path is None:
+            raise ValueError("no project is open")
+        data = change_list(
+            result,
+            before_name,
+            after_name or self.project_display_name(),
+            datetime.now().astimezone().isoformat(timespec="seconds"),
+        )
+        raw_of = {g.address: g.raw for g in self._api.project.group_addresses}
+        return build_handover(data, Path(path), raw_of)
+
     def project_display_name(self) -> str:
         """The open project's name, else its file's name ("" without a project)."""
         info = self._api.project.get_project_metadata()
@@ -3533,6 +3570,7 @@ class ProjectPlugin:
         self._comment_panel.tick()
         self._group_addresses_panel.render_import()
         self._read_device_dialog.render()
+        self._ets_handover_dialog.render()
         self._certificate_dialog.render()
         self._secure_commissioning_dialog.render()
         self._object_group_value.render()
