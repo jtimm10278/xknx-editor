@@ -39,6 +39,8 @@ can be removed in Apps & Features. In a virtual
 machine without a graphics driver, select "Software rendering" in the installer. The
 `XKNX-Editor-windows-portable-*.zip` archives run without installation.
 
+New to the editor? [Getting Started](docs/GETTING_STARTED.md) walks through a first, safe session.
+
 On macOS the app is not signed by Apple yet, so the first launch is blocked:
 
 <img src="docs/images/macwarning.png" alt="macOS Gatekeeper warning" width="200">
