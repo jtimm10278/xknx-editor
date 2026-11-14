@@ -240,3 +240,6 @@ msgstr "Automatyczna kopia zapasowa jest tworzona tylko wtedy, gdy projekt zmien
 
 msgid "Backups you create yourself are never deleted automatically"
 msgstr "Kopie zapasowe utworzone przez Ciebie nigdy nie są usuwane automatycznie"
+
+msgid "A newer backup of this project was made on {machine} at {time}. Compare it in File > Backups before going on, so no work is lost."
+msgstr "Na komputerze {machine} o {time} utworzono nowszą kopię zapasową tego projektu. Porównaj ją w Plik > Kopie zapasowe, zanim będziesz kontynuować, aby nie stracić pracy."

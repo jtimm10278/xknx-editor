@@ -240,3 +240,6 @@ msgstr "Automatická záloha sa vytvorí, len ak sa projekt od svojej najnovšej
 
 msgid "Backups you create yourself are never deleted automatically"
 msgstr "Zálohy, ktoré vytvoríte sami, sa nikdy neodstraňujú automaticky"
+
+msgid "A newer backup of this project was made on {machine} at {time}. Compare it in File > Backups before going on, so no work is lost."
+msgstr "Na počítači {machine} bola {time} vytvorená novšia záloha tohto projektu. Pred pokračovaním ju porovnajte v Súbor > Zálohy, aby sa žiadna práca nestratila."

@@ -240,3 +240,6 @@ msgstr "Een automatische back-up wordt alleen gemaakt als het project sinds de n
 
 msgid "Backups you create yourself are never deleted automatically"
 msgstr "Back-ups die u zelf maakt, worden nooit automatisch verwijderd"
+
+msgid "A newer backup of this project was made on {machine} at {time}. Compare it in File > Backups before going on, so no work is lost."
+msgstr "Er is op {machine} om {time} een nieuwere back-up van dit project gemaakt. Vergelijk die via Bestand > Back-ups voordat u verdergaat, zodat er geen werk verloren gaat."

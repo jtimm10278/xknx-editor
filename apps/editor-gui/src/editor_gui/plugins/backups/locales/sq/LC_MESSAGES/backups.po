@@ -240,3 +240,6 @@ msgstr "Një kopje rezervë automatike bëhet vetëm kur projekti ka ndryshuar q
 
 msgid "Backups you create yourself are never deleted automatically"
 msgstr "Kopjet rezervë që krijoni vetë nuk fshihen kurrë automatikisht"
+
+msgid "A newer backup of this project was made on {machine} at {time}. Compare it in File > Backups before going on, so no work is lost."
+msgstr "Një kopje rezervë më e re e këtij projekti u bë në {machine} më {time}. Krahasojeni te Skedari > Kopjet rezervë para se të vazhdoni, që të mos humbasë asnjë punë."

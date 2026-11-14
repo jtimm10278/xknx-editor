@@ -38,6 +38,13 @@ class BackupStrings:
         return _("Open a project to see its backups.")
 
     @property
+    def NEWER_ELSEWHERE(self) -> str:
+        return _(
+            "A newer backup of this project was made on {machine} at {time}. "
+            "Compare it in File > Backups before going on, so no work is lost."
+        )
+
+    @property
     def NO_BACKUPS(self) -> str:
         return _("This project has no backups yet.")
 

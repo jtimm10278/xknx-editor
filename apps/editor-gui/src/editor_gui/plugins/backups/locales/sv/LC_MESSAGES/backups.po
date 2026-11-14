@@ -240,3 +240,6 @@ msgstr "En automatisk säkerhetskopia skapas bara om projektet har ändrats seda
 
 msgid "Backups you create yourself are never deleted automatically"
 msgstr "Säkerhetskopior som du skapar själv tas aldrig bort automatiskt"
+
+msgid "A newer backup of this project was made on {machine} at {time}. Compare it in File > Backups before going on, so no work is lost."
+msgstr "En nyare säkerhetskopia av projektet gjordes på {machine} {time}. Jämför den under Fil > Säkerhetskopior innan du fortsätter, så att inget arbete går förlorat."

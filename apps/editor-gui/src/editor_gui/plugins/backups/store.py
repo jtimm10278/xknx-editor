@@ -314,6 +314,25 @@ def read_backup(path: Path) -> Backup | None:
     return Backup(path, info, stat.st_size, pinned)
 
 
+def newer_elsewhere(
+    backups: list[Backup], state: str, last_change: datetime | None, machine: str
+) -> Backup | None:
+    """The newest of ``backups`` (the newest first) when it holds a later state of the project
+    than the one open on ``machine``: made on another computer, after the open project's
+    ``last_change`` (UTC; None: never changed) and with another ``state``. Then the project was
+    worked on elsewhere since it was copied here. None otherwise, also when a backup made here
+    is the newest (it was made after the other one was seen, or knowingly without it)."""
+    if not backups:
+        return None
+    newest = backups[0]
+    info = newest.info
+    if not info.machine or info.machine == machine or info.state == state:
+        return None
+    if last_change is not None and info.created <= last_change:
+        return None
+    return newest
+
+
 def list_backups(root: Path, guid: str) -> list[Backup]:
     """The backups of the project ``guid`` in ``root``, the newest first."""
     found: list[Backup] = []

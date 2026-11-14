@@ -240,3 +240,6 @@ msgstr "Automaattinen varmuuskopio luodaan vain, jos projekti on muuttunut uusim
 
 msgid "Backups you create yourself are never deleted automatically"
 msgstr "Itse luomiasi varmuuskopioita ei koskaan poisteta automaattisesti"
+
+msgid "A newer backup of this project was made on {machine} at {time}. Compare it in File > Backups before going on, so no work is lost."
+msgstr "Tästä projektista tehtiin uudempi varmuuskopio koneella {machine} {time}. Vertaa sitä kohdassa Tiedosto > Varmuuskopiot ennen kuin jatkat, ettei työtä katoa."

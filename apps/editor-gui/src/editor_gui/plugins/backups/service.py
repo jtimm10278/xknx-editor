@@ -40,6 +40,7 @@ from editor_gui.plugins.backups.store import (
     list_backups,
     machine_name,
     move_aside,
+    newer_elsewhere,
     project_folder,
     set_pinned,
     snapshot,
@@ -126,6 +127,11 @@ class BackupService:
         self._listing_stale = True
         # The open project's GUID, by the generation of the project it was read from.
         self._guid_of: tuple[int, str] = (-1, "")
+        # The newest backup of the open project when it was made on another computer after the
+        # open project's last change (see newer_elsewhere), by the project's generation; -1
+        # until it was looked for.
+        self._newer: tuple[int, Backup | None] = (-1, None)
+        self._newer_checked = -1
         project.subscribe("closing", self._on_closing)
         project.subscribe("closed", self._on_closed)
 
@@ -381,8 +387,10 @@ class BackupService:
         self._submit(BackupJob(KIND_CLOSE), work)
 
     def tick(self) -> None:
-        """Called every frame: start an interval backup once one is due and the project changed
+        """Called every frame: look once per opened project whether a newer backup of it was
+        made elsewhere, and start an interval backup once one is due and the project changed
         since its newest backup."""
+        self._check_newer_elsewhere()
         settings = self._settings
         if not settings.interval or not self._project.is_open:
             return
@@ -411,6 +419,49 @@ class BackupService:
             return self._make_live(meta, root, KIND_INTERVAL, "", job)
 
         self._submit(BackupJob(KIND_INTERVAL), work)
+
+    # --- a newer backup made elsewhere -----------------------------------------
+
+    def last_change(self) -> datetime | None:
+        """When the open project was last changed (its newest history entry, UTC)."""
+        with self._io_lock:
+            history = self._project.history()
+        return history[0].timestamp if history else None
+
+    def _check_newer_elsewhere(self) -> None:
+        """Once per opened project: look in the background for a backup of it made on another
+        computer after its last change (see :func:`newer_elsewhere`)."""
+        project = self._project
+        generation = project.generation
+        if self._newer_checked == generation or not project.is_open:
+            return
+        meta = self.meta()
+        if meta is None:
+            return
+        self._newer_checked = generation
+        root, last_change, machine = self.root, self.last_change(), machine_name()
+
+        def work(_job: BackupJob) -> None:
+            found = newer_elsewhere(
+                list_backups(root, meta.guid), meta.state, last_change, machine
+            )
+            if found is not None:
+                self._log.warning(
+                    "a newer backup of the project was made on another computer",
+                    machine=found.info.machine,
+                    created=found.info.created.isoformat(),
+                    path=str(found.path),
+                )
+            self._newer = (generation, found)
+
+        self._submit(BackupJob("list"), work)
+
+    def newer_elsewhere(self) -> Backup | None:
+        """The newest backup of the open project when it was made on another computer after the
+        project's last change, as found when the project was opened; None otherwise or while
+        it is still looked for."""
+        generation, found = self._newer
+        return found if generation == self._project.generation else None
 
     def _opened_at(self) -> datetime:
         """When the open project was opened (first seen by :meth:`tick`)."""

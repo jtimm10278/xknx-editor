@@ -240,3 +240,6 @@ msgstr "Só é criada uma cópia de segurança automática se o projeto tiver mu
 
 msgid "Backups you create yourself are never deleted automatically"
 msgstr "As cópias de segurança que cria nunca são eliminadas automaticamente"
+
+msgid "A newer backup of this project was made on {machine} at {time}. Compare it in File > Backups before going on, so no work is lost."
+msgstr "Foi feita uma cópia de segurança mais recente deste projeto em {machine} às {time}. Compare-a em Ficheiro > Cópias de segurança antes de continuar, para não perder trabalho."

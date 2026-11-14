@@ -343,3 +343,43 @@ def test_the_state_key_follows_edits_and_undo(env: Env) -> None:
     assert env.project.state_key() == first
     env.project.set_project_password("secret")
     assert env.project.state_key() != first
+
+
+def test_a_newer_backup_made_on_another_computer_is_found_once_opened(
+    env: Env, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    env.project.set_project_name("Renamed")
+    assert env.backups.last_change() is not None
+    # The history keeps the real time: the backup is made after it, on the laptop.
+    env.now[0] = datetime.now(UTC) + timedelta(hours=1)
+    monkeypatch.setattr(service_mod, "machine_name", lambda: "laptop")
+    laptop = _wait(env.backups.create())
+    # Back on this computer, with the project as it was before the laptop's change.
+    monkeypatch.setattr(service_mod, "machine_name", lambda: "desk")
+    env.project.undo()
+    env.backups.tick()
+    env.backups.wait_idle(30)
+    found = env.backups.newer_elsewhere()
+    assert found is not None
+    assert found.path == laptop.path
+    # Looked for once per opened project.
+    calls: list[str] = []
+    monkeypatch.setattr(
+        service_mod, "list_backups", lambda *_a: calls.append("listed") or []
+    )
+    env.backups.tick()
+    env.backups.wait_idle(30)
+    assert calls == []
+
+
+def test_no_newer_backup_when_the_newest_was_made_here(env: Env) -> None:
+    env.now[0] = datetime.now(UTC) + timedelta(hours=1)
+    _wait(env.backups.create())
+    env.project.set_project_name("Renamed")
+    env.backups.tick()
+    env.backups.wait_idle(30)
+    assert env.backups.newer_elsewhere() is None
+    # None either with no project open.
+    env.project.close()
+    env.backups.tick()
+    assert env.backups.newer_elsewhere() is None

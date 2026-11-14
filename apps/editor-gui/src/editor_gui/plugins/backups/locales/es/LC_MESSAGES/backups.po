@@ -240,3 +240,6 @@ msgstr "Solo se crea una copia de seguridad automática si el proyecto ha cambia
 
 msgid "Backups you create yourself are never deleted automatically"
 msgstr "Las copias de seguridad que usted crea nunca se eliminan automáticamente"
+
+msgid "A newer backup of this project was made on {machine} at {time}. Compare it in File > Backups before going on, so no work is lost."
+msgstr "Se hizo una copia de seguridad más reciente de este proyecto en {machine} el {time}. Compárela en Archivo > Copias de seguridad antes de continuar, para no perder trabajo."

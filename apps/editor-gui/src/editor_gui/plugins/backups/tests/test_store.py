@@ -26,6 +26,7 @@ from editor_gui.plugins.backups.store import (
     extract_project,
     list_backups,
     move_aside,
+    newer_elsewhere,
     project_folder,
     read_backup,
     safe_name,
@@ -279,3 +280,32 @@ def test_a_snapshot_of_an_open_project_is_complete(tmp_path: Path) -> None:
 def test_a_snapshot_of_no_project_fails(tmp_path: Path) -> None:
     with pytest.raises(BackupError):
         snapshot(tmp_path / "missing.xknx", tmp_path / "copy.xknx")
+
+
+def _made_on(machine: str, hours: float, state: str = "theirs") -> Backup:
+    info = _info("g", _NOW + timedelta(hours=hours), machine=machine, state=state)
+    return Backup(Path(f"{machine}-{hours}.zip"), info, 1)
+
+
+def test_a_newer_backup_from_another_computer_is_found() -> None:
+    laptop = _made_on("laptop", 2)
+    assert newer_elsewhere([laptop], "mine", _NOW, "desk") is laptop
+    # A project that was never changed here.
+    assert newer_elsewhere([laptop], "mine", None, "desk") is laptop
+
+
+def test_no_newer_backup_when_it_is_not_from_elsewhere_or_not_newer() -> None:
+    assert newer_elsewhere([], "mine", _NOW, "desk") is None
+    # Made here.
+    assert newer_elsewhere([_made_on("desk", 2)], "mine", _NOW, "desk") is None
+    # Holds the state that is open.
+    assert (
+        newer_elsewhere([_made_on("laptop", 2, "mine")], "mine", _NOW, "desk") is None
+    )
+    # Made before the last change here.
+    assert newer_elsewhere([_made_on("laptop", -2)], "mine", _NOW, "desk") is None
+    # Of an editor that did not record the computer.
+    assert newer_elsewhere([_made_on("", 2)], "mine", _NOW, "desk") is None
+    # Only the newest counts: a backup made here after the other one was seen.
+    newer_here = [_made_on("desk", 3), _made_on("laptop", 2)]
+    assert newer_elsewhere(newer_here, "mine", _NOW, "desk") is None

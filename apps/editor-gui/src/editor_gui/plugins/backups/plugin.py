@@ -122,6 +122,8 @@ class BackupsPlugin:
         # The backup asked for in the Create Backup dialog: its progress and outcome are shown in
         # a dialog until confirmed.
         self._creating: BackupJob | None = None
+        # The newer backup made elsewhere that was reported (once per backup).
+        self._newer_reported: Path | None = None
 
     @property
     def service(self) -> BackupService:
@@ -208,6 +210,7 @@ class BackupsPlugin:
         """The list of backups, the dialogs and the outcome of finished backups; called every
         frame. A dialog asked for while the list is shown opens on top of it."""
         self._service.tick()
+        self._report_newer_elsewhere()
         self._report_finished()
         self._poll_dialogs()
         title = f"{S.WINDOW_TITLE}###backups_list"
@@ -229,6 +232,19 @@ class BackupsPlugin:
     def list_shown(self) -> bool:
         """Whether the list of backups is shown (for tests)."""
         return imgui.is_popup_open(f"{S.WINDOW_TITLE}###backups_list")
+
+    def _newer_text(self, backup: Backup) -> str:
+        return S.NEWER_ELSEWHERE.format(
+            machine=backup.info.machine, time=when(backup.info.created)
+        )
+
+    def _report_newer_elsewhere(self) -> None:
+        """Warn once when the opened project has a newer backup made on another computer."""
+        newer = self._service.newer_elsewhere()
+        if newer is None or newer.path == self._newer_reported:
+            return
+        self._newer_reported = newer.path
+        self._warn(self._newer_text(newer))
 
     def _report_finished(self) -> None:
         for job in self._service.take_finished():
@@ -303,6 +319,9 @@ class BackupsPlugin:
             imgui.progress_bar(-1.0 * imgui.get_time(), imgui.ImVec2(-1, 0), self._busy)
         imgui.push_text_wrap_pos(0.0)
         imgui.text_disabled(S.FOLDER.format(path=self._service.folder()))
+        newer = self._service.newer_elsewhere()
+        if newer is not None:
+            imgui.text_colored(status_color("warning"), self._newer_text(newer))
         imgui.pop_text_wrap_pos()
         if not backups:
             imgui.spacing()
