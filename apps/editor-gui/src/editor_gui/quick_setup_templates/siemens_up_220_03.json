@@ -1,0 +1,114 @@
+{
+  "format": 1,
+  "device": {
+    "name": "Siemens UP 220/03 (2207-10)",
+    "manufacturer": "M-0001",
+    "application_number": "2207",
+    "application_versions": ["10"]
+  },
+  "templates": [
+    {
+      "id": "latching-lights-blinds",
+      "name": {
+        "en": "2 latching inputs: lights on/off + blinds up/down",
+        "de": "2 rastende Eingänge: Licht ein/aus + Jalousie auf/ab"
+      },
+      "description": {
+        "en": "For two latching (on/off) switches. Input A sends On when closed and Off when opened, for a light. Input B sends Off (up) when closed and On (down) when opened, for a blind's up/down object. Both inputs send on every edge. Uses inputs A and B only.",
+        "de": "Für zwei rastende Schalter. Eingang A sendet beim Schließen Ein und beim Öffnen Aus (Licht). Eingang B sendet beim Schließen Aus (auf) und beim Öffnen Ein (ab), für das Auf/Ab-Objekt einer Jalousie. Beide Eingänge senden bei jeder Flanke. Nur Eingänge A und B."
+      },
+      "parameters": [
+        {"parameter": "P-543", "value": "0"},
+        {"parameter": "P-108", "value": "0"},
+        {"parameter": "P-355", "value": "2"},
+        {"parameter": "UP-363", "value": "1"},
+        {"parameter": "UP-356", "value": "0"},
+        {"parameter": "P-382", "value": "2"},
+        {"parameter": "UP-391", "value": "0"},
+        {"parameter": "UP-392", "value": "1"}
+      ],
+      "slots": [
+        {
+          "id": "lights",
+          "label": {"en": "Lights On/Off (Input A)", "de": "Licht Ein/Aus (Eingang A)"},
+          "object": 0,
+          "sending": true,
+          "required": true
+        },
+        {
+          "id": "blinds",
+          "label": {"en": "Blinds Up/Down (Input B)", "de": "Jalousie Auf/Ab (Eingang B)"},
+          "object": 1,
+          "sending": true,
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "push-toggle-lights",
+      "name": {
+        "en": "Push-buttons: toggle lights",
+        "de": "Taster: Licht umschalten"
+      },
+      "description": {
+        "en": "For two push-buttons. Each press (rising edge) toggles its light. Input B is optional. Uses inputs A and B only.",
+        "de": "Für zwei Taster. Jeder Druck (steigende Flanke) schaltet sein Licht um. Eingang B ist optional. Nur Eingänge A und B."
+      },
+      "parameters": [
+        {"parameter": "P-543", "value": "0"},
+        {"parameter": "P-108", "value": "0"},
+        {"parameter": "P-355", "value": "1"},
+        {"parameter": "UP-362", "value": "2"},
+        {"parameter": "P-382", "value": "1"},
+        {"parameter": "UP-395", "value": "2"}
+      ],
+      "slots": [
+        {
+          "id": "light_a",
+          "label": {"en": "Light (Input A)", "de": "Licht (Eingang A)"},
+          "object": 0,
+          "sending": true,
+          "required": true
+        },
+        {
+          "id": "light_b",
+          "label": {"en": "Light (Input B)", "de": "Licht (Eingang B)"},
+          "object": 1,
+          "sending": true,
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "push-blinds",
+      "name": {
+        "en": "Push-buttons: blinds up/down/stop",
+        "de": "Taster: Jalousie auf/ab/stopp"
+      },
+      "description": {
+        "en": "For a pair of push-buttons on one blind (input A and input B, as the application's Shutter Up / Down function defines them). A long press moves the blind; a short press stops it or steps the slats.",
+        "de": "Für ein Tasterpaar an einer Jalousie (Eingang A und B, wie die Funktion Jalousie Auf / Ab der Applikation sie festlegt). Langer Druck fährt, kurzer Druck stoppt bzw. verstellt die Lamellen."
+      },
+      "parameters": [
+        {"parameter": "P-543", "value": "0"},
+        {"parameter": "P-108", "value": "3"}
+      ],
+      "slots": [
+        {
+          "id": "move",
+          "label": {"en": "Blind Up/Down (Long Press)", "de": "Jalousie Auf/Ab (langer Druck)"},
+          "object": 1,
+          "sending": true,
+          "required": true
+        },
+        {
+          "id": "stop",
+          "label": {"en": "Stop/Slats (Short Press)", "de": "Stopp/Lamellen (kurzer Druck)"},
+          "object": 0,
+          "sending": true,
+          "required": true
+        }
+      ]
+    }
+  ]
+}

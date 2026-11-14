@@ -348,6 +348,18 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
             )
         return {"node_id": device.node_id, "lost_links": lost}
 
+    def _op_quick_setup(p: dict[str, Any]) -> dict[str, Any]:
+        from editor_gui.plugins.mcp.tools.quick_setup import apply_quick_setup
+
+        return apply_quick_setup(
+            project,
+            _parameters_device(p),
+            str(p["template"]),
+            p.get("group_address_ids"),
+            p.get("group_addresses"),
+            replace_links=bool(p.get("replace_links", True)),
+        )
+
     handlers: dict[
         str, tuple[tuple[str, ...], Callable[[dict[str, Any]], dict[str, Any]]]
     ] = {
@@ -357,6 +369,7 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
         "remove_device": ((), _op_remove_device),
         "set_individual_address": (("address",), _op_set_individual_address),
         "set_parameter": ((), _op_set_parameter),
+        "quick_setup": (("template",), _op_quick_setup),
         "setup_plugin": ((), lambda p: _op_plugin(p, "setup_plugin")),
         "import_stored_plugin_config": (
             (),
@@ -534,6 +547,9 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
           calculated side effects; lost_links lists links a function/mode change dropped;
           shown_parameters, hidden_parameters, shown_com_objects and hidden_com_objects (when not
           empty) are what the edit showed or hid, as for project_set_parameter.
+        - quick_setup: device, template [group_address_ids] [group_addresses] [replace_links] ->
+          as project_quick_setup_apply (one undo step per device): the same template on many
+          switches in one batch.
         - set_com_object_flag: device, com_object_ref_id, flag, value -> {node_id, com_object_ref_id}.
         - set_com_object_acknowledgement: device, com_object_ref_id, ga, enabled ->
           {node_id, group_address_id, acknowledges}. Powerline links only, one undo step.

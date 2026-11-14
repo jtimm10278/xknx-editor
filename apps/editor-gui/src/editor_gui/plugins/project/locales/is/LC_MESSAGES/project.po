@@ -3362,3 +3362,42 @@ msgstr "Minnisskipan breyttist við lestur. Lestu aftur til að bera saman."
 
 msgid "Compared with device memory read in this session."
 msgstr "Borið saman við minni tækisins sem var lesið í þessari lotu."
+
+msgid "Quick Setup…"
+msgstr "Flýtiuppsetning…"
+
+msgid "Quick Setup"
+msgstr "Flýtiuppsetning"
+
+msgid "Template"
+msgstr "Sniðmát"
+
+msgid "Not linked"
+msgstr "Ekki tengt"
+
+msgid "{label} (optional)"
+msgstr "{label} (valfrjálst)"
+
+msgid "Filter group addresses"
+msgstr "Sía hópvistföng"
+
+msgid "Replace the other links of these objects"
+msgstr "Skipta út öðrum tengingum þessara hluta"
+
+msgid "Sets the parameters and links in one undo step. Nothing is sent to the device until you download it."
+msgstr "Stillir færibreytur og tengingar í einu afturköllunarskrefi. Ekkert er sent í tækið fyrr en þú hleður því niður."
+
+msgid "Choose a group address for every object that is not optional"
+msgstr "Veldu hópvistfang fyrir hvern hlut sem er ekki valfrjáls"
+
+msgid "Apply"
+msgstr "Nota"
+
+msgid "Quick Setup: {template}"
+msgstr "Flýtiuppsetning: {template}"
+
+msgid "Quick Setup applied to {device}: {template}"
+msgstr "Flýtiuppsetning notuð á {device}: {template}"
+
+msgid "Quick Setup not applied: {error}"
+msgstr "Flýtiuppsetning ekki notuð: {error}"
