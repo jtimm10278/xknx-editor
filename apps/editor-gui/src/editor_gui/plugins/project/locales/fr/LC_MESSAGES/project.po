@@ -3376,3 +3376,21 @@ msgstr "Données"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Un téléchargement de l'adresse individuelle seule ne peut pas être simulé."
+
+msgid "Links on the Device"
+msgstr "Liaisons dans l’Appareil"
+
+msgid "The device holds group addresses or links that the project does not have. The download was stopped, because it would remove them:"
+msgstr "L’appareil contient des adresses de groupe ou des liaisons que le projet n’a pas. Le téléchargement a été arrêté, car il les supprimerait :"
+
+msgid "Group address {address}"
+msgstr "Adresse de groupe {address}"
+
+msgid "Link to {address} on object {number}"
+msgstr "Liaison avec {address} sur l’objet {number}"
+
+msgid "Program the device again only if these links are no longer wanted, for example when the device is reused for something else."
+msgstr "Ne reprogrammez l’appareil que si ces liaisons ne sont plus utiles, par exemple lorsque l’appareil est réutilisé pour autre chose."
+
+msgid "Remove Them and Program"
+msgstr "Les Supprimer et Programmer"

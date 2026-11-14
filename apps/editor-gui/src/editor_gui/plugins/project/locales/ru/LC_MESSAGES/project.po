@@ -3428,3 +3428,21 @@ msgstr "Данные"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Загрузку только физического адреса нельзя симулировать."
+
+msgid "Links on the Device"
+msgstr "Связи в Устройстве"
+
+msgid "The device holds group addresses or links that the project does not have. The download was stopped, because it would remove them:"
+msgstr "В устройстве есть групповые адреса или связи, которых нет в проекте. Загрузка остановлена, так как она удалила бы их:"
+
+msgid "Group address {address}"
+msgstr "Групповой адрес {address}"
+
+msgid "Link to {address} on object {number}"
+msgstr "Связь с {address} у объекта {number}"
+
+msgid "Program the device again only if these links are no longer wanted, for example when the device is reused for something else."
+msgstr "Программируйте устройство снова, только если эти связи больше не нужны, например когда устройство используется для другого."
+
+msgid "Remove Them and Program"
+msgstr "Удалить и Запрограммировать"

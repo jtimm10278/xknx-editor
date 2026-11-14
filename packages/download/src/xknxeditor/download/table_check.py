@@ -29,7 +29,12 @@ _FREE_INDEX = 0xFE
 
 
 class TableRemovalError(DownloadError):
-    """The download would drop group addresses or links the device holds."""
+    """The download would drop group addresses or links the device holds; ``extras`` lists them
+    (None when the caller did not give them)."""
+
+    def __init__(self, message: str, extras: TableExtras | None = None) -> None:
+        super().__init__(message)
+        self.extras = extras
 
 
 @dataclass(frozen=True, slots=True)

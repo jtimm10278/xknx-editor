@@ -3351,3 +3351,21 @@ msgstr "Adatok"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Csak a fizikai cím letöltése nem szimulálható."
+
+msgid "Links on the Device"
+msgstr "Kapcsolatok az Eszközben"
+
+msgid "The device holds group addresses or links that the project does not have. The download was stopped, because it would remove them:"
+msgstr "Az eszközben olyan csoportcímek vagy kapcsolatok vannak, amelyek a projektben nincsenek meg. A letöltés leállt, mert eltávolítaná őket:"
+
+msgid "Group address {address}"
+msgstr "{address} csoportcím"
+
+msgid "Link to {address} on object {number}"
+msgstr "Kapcsolat a(z) {address} címmel a(z) {number}. objektumon"
+
+msgid "Program the device again only if these links are no longer wanted, for example when the device is reused for something else."
+msgstr "Csak akkor programozza újra az eszközt, ha ezekre a kapcsolatokra már nincs szükség, például ha az eszközt másra használják."
+
+msgid "Remove Them and Program"
+msgstr "Eltávolítás és Programozás"

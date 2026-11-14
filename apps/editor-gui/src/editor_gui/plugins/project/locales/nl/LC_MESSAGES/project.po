@@ -3409,3 +3409,21 @@ msgstr "Gegevens"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Een download van alleen het fysieke adres kan niet worden gesimuleerd."
+
+msgid "Links on the Device"
+msgstr "Koppelingen in het Apparaat"
+
+msgid "The device holds group addresses or links that the project does not have. The download was stopped, because it would remove them:"
+msgstr "Het apparaat bevat groepsadressen of koppelingen die het project niet heeft. De download is gestopt, omdat hij ze zou verwijderen:"
+
+msgid "Group address {address}"
+msgstr "Groepsadres {address}"
+
+msgid "Link to {address} on object {number}"
+msgstr "Koppeling met {address} op object {number}"
+
+msgid "Program the device again only if these links are no longer wanted, for example when the device is reused for something else."
+msgstr "Programmeer het apparaat alleen opnieuw als deze koppelingen niet meer nodig zijn, bijvoorbeeld als het apparaat voor iets anders wordt hergebruikt."
+
+msgid "Remove Them and Program"
+msgstr "Verwijderen en Programmeren"

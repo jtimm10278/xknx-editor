@@ -3376,3 +3376,21 @@ msgstr "Tiedot"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Pelkän yksilöosoitteen latausta ei voi simuloida."
+
+msgid "Links on the Device"
+msgstr "Laitteen Linkit"
+
+msgid "The device holds group addresses or links that the project does not have. The download was stopped, because it would remove them:"
+msgstr "Laitteessa on ryhmäosoitteita tai linkkejä, joita projektissa ei ole. Lataus pysäytettiin, koska se poistaisi ne:"
+
+msgid "Group address {address}"
+msgstr "Ryhmäosoite {address}"
+
+msgid "Link to {address} on object {number}"
+msgstr "Linkki osoitteeseen {address} objektissa {number}"
+
+msgid "Program the device again only if these links are no longer wanted, for example when the device is reused for something else."
+msgstr "Ohjelmoi laite uudelleen vain, jos näitä linkkejä ei enää tarvita, esimerkiksi kun laite otetaan muuhun käyttöön."
+
+msgid "Remove Them and Program"
+msgstr "Poista ja Ohjelmoi"

@@ -3376,3 +3376,21 @@ msgstr "Të dhënat"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Një shkarkim vetëm i adresës individuale nuk mund të simulohet."
+
+msgid "Links on the Device"
+msgstr "Lidhjet në Pajisje"
+
+msgid "The device holds group addresses or links that the project does not have. The download was stopped, because it would remove them:"
+msgstr "Pajisja mban adresa grupi ose lidhje që projekti nuk i ka. Shkarkimi u ndal, sepse do t’i hiqte:"
+
+msgid "Group address {address}"
+msgstr "Adresa e grupit {address}"
+
+msgid "Link to {address} on object {number}"
+msgstr "Lidhje me {address} në objektin {number}"
+
+msgid "Program the device again only if these links are no longer wanted, for example when the device is reused for something else."
+msgstr "Riprogramojeni pajisjen vetëm nëse këto lidhje nuk duhen më, për shembull kur pajisja ripërdoret për diçka tjetër."
+
+msgid "Remove Them and Program"
+msgstr "Hiqi dhe Programo"

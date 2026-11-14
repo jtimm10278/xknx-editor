@@ -3455,3 +3455,21 @@ msgstr "Date"
 
 msgid "An individual address download cannot be simulated."
 msgstr "O descărcare doar a adresei individuale nu poate fi simulată."
+
+msgid "Links on the Device"
+msgstr "Legături în Dispozitiv"
+
+msgid "The device holds group addresses or links that the project does not have. The download was stopped, because it would remove them:"
+msgstr "Dispozitivul conține adrese de grup sau legături pe care proiectul nu le are. Descărcarea a fost oprită, deoarece le-ar elimina:"
+
+msgid "Group address {address}"
+msgstr "Adresa de grup {address}"
+
+msgid "Link to {address} on object {number}"
+msgstr "Legătură cu {address} pe obiectul {number}"
+
+msgid "Program the device again only if these links are no longer wanted, for example when the device is reused for something else."
+msgstr "Reprogramați dispozitivul doar dacă aceste legături nu mai sunt necesare, de exemplu când dispozitivul este refolosit pentru altceva."
+
+msgid "Remove Them and Program"
+msgstr "Elimină-le și Programează"

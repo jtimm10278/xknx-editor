@@ -617,6 +617,7 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
         without_plugin: bool = False,
         current_address: str | None = None,
         use_serial_number: bool = False,
+        accept_table_removals: bool = False,
     ) -> dict[str, Any]:
         """Download the device onto the bus (``timeout`` seconds). Identify it by ``node_id`` OR
         ``device_address`` (its individual address in the PROJECT, like "1.0.30"); pass exactly
@@ -661,6 +662,11 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
         device that does not answer at its address yet. A device whose hardware is
         NoDownloadWithoutPlugin is refused unless ``without_plugin=true``, set only after the user
         explicitly confirmed programming it without the manufacturer's plugin.
+
+        A download that would drop group addresses or links the DEVICE holds but the project lacks
+        (e.g. links deleted in the project, or a device reused from elsewhere) is refused with an
+        error listing them; ``accept_table_removals=true`` lets it remove them. Set it only after
+        the user explicitly confirmed those links are no longer wanted.
 
         The programming runs in the editor's operations queue, labelled MCP: the user sees it there
         and in its history, it waits behind operations already queued, and the user can cancel it
@@ -730,6 +736,7 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
                 without_plugin=without_plugin,
                 current_address=current_address,
                 serial_number=serial,
+                accept_table_removals=accept_table_removals,
             )
             is not None
         ):
@@ -764,6 +771,7 @@ def register(mcp: FastMCP, ctx: McpContext) -> None:
                     ip_secure=ip_secure,
                     disable_security=disable_security,
                     routing_blocking=routing_blocking,
+                    accept_table_removals=accept_table_removals,
                 )
             )
         except DeviceCertificateRequired as exc:

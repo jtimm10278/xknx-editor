@@ -123,6 +123,9 @@ class QueueItem:
     current_address: str | None = None
     # Address the device by its serial number instead of programming mode.
     serial_number: bytes | None = None
+    # Confirmed: the download may drop group addresses and links the device holds that the
+    # project lacks.
+    accept_table_removals: bool = False
     # An address download waits for the programming button.
     waiting_for_button: bool = False
     # Answered by the user: overwrite the application a download found in the device.

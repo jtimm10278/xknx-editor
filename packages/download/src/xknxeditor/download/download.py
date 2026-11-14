@@ -465,7 +465,8 @@ async def _refuse_table_removals(
     if found:
         raise TableRemovalError(
             f"the device holds {found.describe()}, which the project does not have: the "
-            "download would remove them (accept the removals to go ahead)"
+            "download would remove them (accept the removals to go ahead)",
+            found,
         )
 
 

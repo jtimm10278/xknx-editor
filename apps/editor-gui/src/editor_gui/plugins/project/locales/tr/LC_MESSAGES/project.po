@@ -3324,3 +3324,21 @@ msgstr "Veri"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Yalnızca bireysel adresin indirilmesi simüle edilemez."
+
+msgid "Links on the Device"
+msgstr "Cihazdaki Bağlantılar"
+
+msgid "The device holds group addresses or links that the project does not have. The download was stopped, because it would remove them:"
+msgstr "Cihazda projede olmayan grup adresleri veya bağlantılar var. İndirme bunları kaldıracağı için durduruldu:"
+
+msgid "Group address {address}"
+msgstr "Grup adresi {address}"
+
+msgid "Link to {address} on object {number}"
+msgstr "{number} numaralı nesnede {address} bağlantısı"
+
+msgid "Program the device again only if these links are no longer wanted, for example when the device is reused for something else."
+msgstr "Cihazı yalnızca bu bağlantılara artık gerek yoksa yeniden programlayın, örneğin cihaz başka bir iş için yeniden kullanılıyorsa."
+
+msgid "Remove Them and Program"
+msgstr "Kaldır ve Programla"

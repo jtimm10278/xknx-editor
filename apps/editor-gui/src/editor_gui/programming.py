@@ -672,6 +672,7 @@ async def download_device(
     waiting: Callable[[], None] | None = None,
     route_couplers: Sequence[IndividualAddress] = (),
     memory_progress: Callable[[int, int], None] | None = None,
+    accept_table_removals: bool = False,
 ) -> DownloadResult:
     """Program ``device``: build its image and run the load procedure on the bus.
 
@@ -701,7 +702,9 @@ async def download_device(
     access key; ``in_programming_mode`` and ``waiting`` belong to an unload of everything, for
     which the user puts the device into programming mode (see
     :func:`xknxeditor.download.download`). ``route_couplers`` are the couplers between the
-    interface and the device; the frames stay within what they pass.
+    interface and the device; the frames stay within what they pass. A download that would drop
+    group addresses or links the device holds and the project lacks is refused
+    (``TableRemovalError``, listing them) unless ``accept_table_removals``.
     """
     from editor_gui.plugin_providers import prepared_for, programming_error
 
@@ -740,4 +743,5 @@ async def download_device(
         in_programming_mode=in_programming_mode,
         waiting=waiting,
         memory_progress=memory_progress,
+        accept_table_removals=accept_table_removals,
     )

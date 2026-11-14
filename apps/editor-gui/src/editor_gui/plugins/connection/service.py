@@ -1080,6 +1080,7 @@ class ConnectionService:
         disable_security: bool = False,
         routing_blocking: bool | None = None,
         in_programming_mode: bool = False,
+        accept_table_removals: bool = False,
     ) -> Future[Any] | None:
         """Download the device's configured application/parameters onto the bus.
 
@@ -1094,6 +1095,8 @@ class ConnectionService:
         device securely; ``disable_security`` switches it to plain communication with the key it
         holds. For an unload of everything, ``in_programming_mode`` has the user put the device
         into programming mode first (``waiting`` is called while none is).
+        ``accept_table_removals`` lets the download drop group addresses and links the device holds
+        that the project lacks (the user confirmed it); otherwise it is refused, listing them.
         """
         if self.writes_refused("program_device") or self.not_connected(
             "program_device"
@@ -1176,6 +1179,7 @@ class ConnectionService:
                 in_programming_mode=in_programming_mode,
                 waiting=waiting,
                 route_couplers=self._route_couplers(device),
+                accept_table_removals=accept_table_removals,
             )
         )
         if future is not None:

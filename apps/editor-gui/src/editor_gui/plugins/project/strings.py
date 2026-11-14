@@ -5263,5 +5263,35 @@ class ProjectStrings:
     def TOOLS_TOPOLOGY_DUPLICATE(self) -> str:
         return _("{device}: duplicate address {address}")
 
+    @property
+    def LINK_REMOVAL_TITLE(self) -> str:
+        return _("Links on the Device")
+
+    @property
+    def LINK_REMOVAL_TEXT(self) -> str:
+        return _(
+            "The device holds group addresses or links that the project does not have. The "
+            "download was stopped, because it would remove them:"
+        )
+
+    @property
+    def LINK_REMOVAL_ADDRESS(self) -> str:
+        return _("Group address {address}")
+
+    @property
+    def LINK_REMOVAL_LINK(self) -> str:
+        return _("Link to {address} on object {number}")
+
+    @property
+    def LINK_REMOVAL_HINT(self) -> str:
+        return _(
+            "Program the device again only if these links are no longer wanted, for example "
+            "when the device is reused for something else."
+        )
+
+    @property
+    def LINK_REMOVAL_CONFIRM(self) -> str:
+        return _("Remove Them and Program")
+
 
 S = ProjectStrings()

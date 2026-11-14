@@ -3376,3 +3376,21 @@ msgstr "Data"
 
 msgid "An individual address download cannot be simulated."
 msgstr "En download af kun den fysiske adresse kan ikke simuleres."
+
+msgid "Links on the Device"
+msgstr "Forbindelser i Enheden"
+
+msgid "The device holds group addresses or links that the project does not have. The download was stopped, because it would remove them:"
+msgstr "Enheden indeholder gruppeadresser eller forbindelser, som projektet ikke har. Downloadet blev stoppet, fordi det ville fjerne dem:"
+
+msgid "Group address {address}"
+msgstr "Gruppeadresse {address}"
+
+msgid "Link to {address} on object {number}"
+msgstr "Forbindelse til {address} på objekt {number}"
+
+msgid "Program the device again only if these links are no longer wanted, for example when the device is reused for something else."
+msgstr "Programmer kun enheden igen, hvis disse forbindelser ikke længere skal bruges, for eksempel når enheden genbruges til noget andet."
+
+msgid "Remove Them and Program"
+msgstr "Fjern Dem og Programmer"

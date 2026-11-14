@@ -3403,3 +3403,21 @@ msgstr "Gögn"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Ekki er hægt að herma niðurhal eingöngu einstaklingsvistfangs."
+
+msgid "Links on the Device"
+msgstr "Tengingar í Tæki"
+
+msgid "The device holds group addresses or links that the project does not have. The download was stopped, because it would remove them:"
+msgstr "Tækið geymir hópvistföng eða tengingar sem verkefnið hefur ekki. Niðurhleðslan var stöðvuð því hún myndi fjarlægja þær:"
+
+msgid "Group address {address}"
+msgstr "Hópvistfang {address}"
+
+msgid "Link to {address} on object {number}"
+msgstr "Tenging við {address} á hlut {number}"
+
+msgid "Program the device again only if these links are no longer wanted, for example when the device is reused for something else."
+msgstr "Forritaðu tækið aftur aðeins ef þessar tengingar eru ekki lengur í notkun, til dæmis þegar tækið er notað í annað."
+
+msgid "Remove Them and Program"
+msgstr "Fjarlægja og Forrita"

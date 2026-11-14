@@ -3507,3 +3507,21 @@ msgstr "Podatki"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Prenosa samo fizičnega naslova ni mogoče simulirati."
+
+msgid "Links on the Device"
+msgstr "Povezave v Napravi"
+
+msgid "The device holds group addresses or links that the project does not have. The download was stopped, because it would remove them:"
+msgstr "Naprava vsebuje skupinske naslove ali povezave, ki jih projekt nima. Prenos je bil ustavljen, ker bi jih odstranil:"
+
+msgid "Group address {address}"
+msgstr "Skupinski naslov {address}"
+
+msgid "Link to {address} on object {number}"
+msgstr "Povezava z {address} na objektu {number}"
+
+msgid "Program the device again only if these links are no longer wanted, for example when the device is reused for something else."
+msgstr "Napravo znova programirajte le, če teh povezav ne potrebujete več, na primer ko napravo uporabite za kaj drugega."
+
+msgid "Remove Them and Program"
+msgstr "Odstrani in Programiraj"

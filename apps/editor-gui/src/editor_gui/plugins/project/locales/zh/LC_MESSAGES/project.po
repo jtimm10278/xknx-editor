@@ -3324,3 +3324,21 @@ msgstr "数据"
 
 msgid "An individual address download cannot be simulated."
 msgstr "无法模拟仅下载个别地址。"
+
+msgid "Links on the Device"
+msgstr "设备中的链接"
+
+msgid "The device holds group addresses or links that the project does not have. The download was stopped, because it would remove them:"
+msgstr "设备中存有项目中没有的组地址或链接。下载已停止，因为它会删除这些内容："
+
+msgid "Group address {address}"
+msgstr "组地址 {address}"
+
+msgid "Link to {address} on object {number}"
+msgstr "对象 {number} 上与 {address} 的链接"
+
+msgid "Program the device again only if these links are no longer wanted, for example when the device is reused for something else."
+msgstr "仅当不再需要这些链接时（例如设备被改作他用）才重新编程设备。"
+
+msgid "Remove Them and Program"
+msgstr "删除并编程"

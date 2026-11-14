@@ -3428,3 +3428,21 @@ msgstr "Дані"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Завантаження лише фізичної адреси не можна симулювати."
+
+msgid "Links on the Device"
+msgstr "Зв’язки в Пристрої"
+
+msgid "The device holds group addresses or links that the project does not have. The download was stopped, because it would remove them:"
+msgstr "У пристрої є групові адреси або зв’язки, яких немає в проєкті. Завантаження зупинено, бо воно видалило б їх:"
+
+msgid "Group address {address}"
+msgstr "Групова адреса {address}"
+
+msgid "Link to {address} on object {number}"
+msgstr "Зв’язок з {address} на об’єкті {number}"
+
+msgid "Program the device again only if these links are no longer wanted, for example when the device is reused for something else."
+msgstr "Програмуйте пристрій знову, лише якщо ці зв’язки більше не потрібні, наприклад коли пристрій використовують для іншого."
+
+msgid "Remove Them and Program"
+msgstr "Видалити та Запрограмувати"

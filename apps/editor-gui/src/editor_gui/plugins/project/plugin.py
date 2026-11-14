@@ -85,6 +85,7 @@ from editor_gui.plugins.project.ui.dry_run_window import DryRunWindow
 from editor_gui.plugins.project.ui.element_details import ElementDetailsPanel
 from editor_gui.plugins.project.ui.generic_plugin_panel import GenericPluginPanel
 from editor_gui.plugins.project.ui.group_value import GroupValueActions
+from editor_gui.plugins.project.ui.link_removal_dialog import LinkRemovalDialog
 from editor_gui.plugins.project.ui.memory_preview import MemoryPreviewWindow
 from editor_gui.plugins.project.ui.paste_special import PasteSpecialDialog
 from editor_gui.plugins.project.ui.plugin_params_panel import PluginParamsPanel
@@ -248,6 +249,7 @@ class ProjectPlugin:
         self._preflight_result = PreflightResultWindow()
         self._dry_run_window = DryRunWindow(self.dry_run_download)
         self._read_device_dialog = ReadDeviceDialog(self._request_device_info)
+        self._link_removal_dialog = LinkRemovalDialog(self._program_accepting_removals)
         # The device a certificate is asked for, while the dialog is open.
         self._certificate_device: Device | None = None
         self._certificate_dialog = DeviceCertificateDialog(
@@ -1662,6 +1664,23 @@ class ProjectPlugin:
             return
         self._queue_bus_action(device.node_id, "siemens_dca", data=entry.data)
 
+    def _program_accepting_removals(self, item: QueueItem) -> None:
+        """Queue ``item``'s programming again, this time allowed to drop the group addresses and
+        links the device holds that the project lacks (the user confirmed it)."""
+        self._program_queue.enqueue(
+            QueueItem(
+                node_id=item.node_id,
+                address=item.address,
+                name=item.name,
+                scope=item.scope,
+                medium_config=item.medium_config,
+                without_plugin=item.without_plugin,
+                current_address=item.current_address,
+                serial_number=item.serial_number,
+                accept_table_removals=True,
+            )
+        )
+
     def _read_device_info(self, device: "Device") -> None:
         self._open_read_dialog(device.node_id)
 
@@ -2733,6 +2752,7 @@ class ProjectPlugin:
         current_address: str | None = None,
         serial_number: bytes | None = None,
         test: bool = False,
+        accept_table_removals: bool = False,
     ) -> QueueItem | None:
         """Queue a programming started outside the editor's UI (``origin``, e.g. an MCP client),
         shown in Operations like one started here; ``test`` only tests it (the item's ``result``
@@ -2756,6 +2776,7 @@ class ProjectPlugin:
             test=test,
             origin=origin,
             ended=Future(),
+            accept_table_removals=accept_table_removals,
         )
         self._program_queue.enqueue(item)
         return item
@@ -3260,6 +3281,7 @@ class ProjectPlugin:
                 # An unload of everything from the editor waits for the user's programming
                 # mode; over MCP it writes the address by serial number or switches it on.
                 in_programming_mode=True,
+                accept_table_removals=item.accept_table_removals,
             )
         except DeviceCertificateRequired:
             item.message = S.DEVICE_CERTIFICATE_REQUIRED
@@ -3300,6 +3322,12 @@ class ProjectPlugin:
         scope_value = getattr(item.scope, "value", "full")
 
         def _on_done(f: "Future[Any]") -> None:
+            from xknxeditor.download.table_check import TableRemovalError
+
+            error = None if f.cancelled() else f.exception()
+            if isinstance(error, TableRemovalError) and item.origin is None:
+                # Asked on the UI thread (render_overlays): remove them and program again?
+                self._link_removal_dialog.ask(item, error.extras)
             if f.cancelled() or f.exception() is not None:
                 self._api.log.debug(
                     "program: finished without commissioning record",
@@ -3653,6 +3681,7 @@ class ProjectPlugin:
         self._comment_panel.tick()
         self._group_addresses_panel.render_import()
         self._read_device_dialog.render()
+        self._link_removal_dialog.render()
         self._certificate_dialog.render()
         self._secure_commissioning_dialog.render()
         self._object_group_value.render()

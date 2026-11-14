@@ -3455,3 +3455,21 @@ msgstr "Dáta"
 
 msgid "An individual address download cannot be simulated."
 msgstr "Nahratie iba fyzickej adresy nie je možné simulovať."
+
+msgid "Links on the Device"
+msgstr "Prepojenia v Zariadení"
+
+msgid "The device holds group addresses or links that the project does not have. The download was stopped, because it would remove them:"
+msgstr "Zariadenie obsahuje skupinové adresy alebo prepojenia, ktoré projekt nemá. Nahrávanie sa zastavilo, pretože by ich odstránilo:"
+
+msgid "Group address {address}"
+msgstr "Skupinová adresa {address}"
+
+msgid "Link to {address} on object {number}"
+msgstr "Prepojenie s {address} na objekte {number}"
+
+msgid "Program the device again only if these links are no longer wanted, for example when the device is reused for something else."
+msgstr "Zariadenie znova naprogramujte, len ak tieto prepojenia už nie sú potrebné, napríklad keď sa zariadenie použije na niečo iné."
+
+msgid "Remove Them and Program"
+msgstr "Odstrániť a Naprogramovať"

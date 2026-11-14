@@ -3324,3 +3324,21 @@ msgstr "データ"
 
 msgid "An individual address download cannot be simulated."
 msgstr "個別アドレスのみのダウンロードはシミュレートできません。"
+
+msgid "Links on the Device"
+msgstr "デバイス内のリンク"
+
+msgid "The device holds group addresses or links that the project does not have. The download was stopped, because it would remove them:"
+msgstr "デバイスにはプロジェクトにないグループアドレスまたはリンクがあります。ダウンロードするとそれらが削除されるため、中止しました："
+
+msgid "Group address {address}"
+msgstr "グループアドレス {address}"
+
+msgid "Link to {address} on object {number}"
+msgstr "オブジェクト {number} の {address} へのリンク"
+
+msgid "Program the device again only if these links are no longer wanted, for example when the device is reused for something else."
+msgstr "これらのリンクが不要な場合（デバイスを別の用途に再利用する場合など）にのみ、デバイスを再度プログラムしてください。"
+
+msgid "Remove Them and Program"
+msgstr "削除してプログラム"

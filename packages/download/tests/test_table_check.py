@@ -98,3 +98,12 @@ def test_holds_tables_and_masked_image() -> None:
     )
     assert not holds_tables(masked)
     assert asyncio.run(image_reader(masked)(0x0116, 2)) == b"\xff\x11"
+
+
+def test_the_refusal_carries_what_it_would_remove() -> None:
+    from xknxeditor.download.table_check import TableExtras, TableRemovalError
+
+    extras = TableExtras(addresses=(0x0927,), links=((0x0927, 0),))
+    error = TableRemovalError("would remove them", extras)
+    assert error.extras is extras
+    assert TableRemovalError("no list").extras is None
