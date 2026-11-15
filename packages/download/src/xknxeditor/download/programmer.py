@@ -619,6 +619,12 @@ class DeviceProgrammer:
             self.extended_memory = False
             return await standard()
 
+    def reset_read_cap(self) -> None:
+        """Forget a smaller block size learned from a short or empty reply, so the next read
+        asks for full blocks again (a single lost reply must not leave every later read at
+        one octet)."""
+        self._memory_read_cap = None
+
     async def read_memory(
         self, address: int, size: int, *, user: bool = False
     ) -> bytes:

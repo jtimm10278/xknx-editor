@@ -148,3 +148,101 @@ async def test_snapshot_fails_cleanly() -> None:
         await take_snapshot(
             _Refusing(), SnapshotPlan(memory=[(0x100, 2)]), address="1.1.31"
         )  # type: ignore[arg-type]
+
+
+class _LosesOneReply:
+    """A connection manager around the recorder's session whose first connection loses the
+    reply to the read at ``lost`` (the device then drops it, as a Crabtree 7172 did)."""
+
+    def __init__(self, recorder: Recorder, lost: int) -> None:
+        self._session = recorder.session(None, None)  # type: ignore[arg-type]
+        self._lost = lost
+        self.opened = 0
+
+    async def open(self) -> object:
+        connection = await self._session.open()
+        self.opened += 1
+        if self.opened == 1:
+            inner = connection.request
+            lost = self._lost
+
+            async def request(
+                payload: object, *args: object, **kwargs: object
+            ) -> object:
+                if getattr(payload, "address", None) == lost:
+                    raise TimeoutError("lost reply")
+                return await inner(payload, *args, **kwargs)  # type: ignore[arg-type]
+
+            connection.request = request  # type: ignore[method-assign]
+        return connection
+
+    async def close(self) -> None:
+        await self._session.close()
+
+
+async def test_snapshot_retries_a_lost_reply_on_a_fresh_connection() -> None:
+    recorder = _device()[0]
+    manager = _LosesOneReply(recorder, lost=0x0118)
+    plan = SnapshotPlan(memory=[(0x0100, 0x30)], properties=[(6, 205, 1, 1)])
+    snap = await take_snapshot(manager, plan, address="1.0.123")  # type: ignore[arg-type]
+    assert snap.memory == [(0x0100, bytes(range(0x30)))]
+    assert snap.properties == [(6, 205, 1, 1, b"\x33")]
+    assert manager.opened == 2
+
+
+async def test_snapshot_gives_up_after_the_attempts() -> None:
+    class _AlwaysLoses(_LosesOneReply):
+        async def open(self) -> object:
+            self.opened = 0  # every connection loses the reply
+            return await super().open()
+
+    recorder = _device()[0]
+    with pytest.raises(SnapshotError, match="memory at 0x0100: TimeoutError"):
+        await take_snapshot(
+            _AlwaysLoses(recorder, lost=0x0100),
+            SnapshotPlan(memory=[(0x0100, 4)]),
+            address="1.0.123",
+            attempts=2,
+        )  # type: ignore[arg-type]
+
+
+async def test_snapshot_reads_each_range_in_full_blocks() -> None:
+    recorder = _device()[0]
+    plan = SnapshotPlan(memory=[(0x0100, 2), (0x0110, 0x24)])
+    session = recorder.session(None, None)  # type: ignore[arg-type]
+
+    class _CapsFirst:
+        """The first read learns a one-octet cap (as after a lost reply); the next range
+        must still be read in full blocks."""
+
+        async def open(self) -> object:
+            connection = await session.open()
+            return connection
+
+        async def close(self) -> None:
+            await session.close()
+
+    from xknxeditor.download.programmer import DeviceProgrammer
+
+    real_read = DeviceProgrammer.read_memory
+
+    async def read_memory(
+        self: DeviceProgrammer, address: int, size: int, **kw: object
+    ) -> bytes:
+        data = await real_read(self, address, size, **kw)  # type: ignore[arg-type]
+        if address == 0x0100:
+            self._memory_read_cap = 1  # pyright: ignore[reportPrivateUsage]
+        return data
+
+    DeviceProgrammer.read_memory = read_memory  # type: ignore[method-assign]
+    try:
+        snap = await take_snapshot(_CapsFirst(), plan, address="1.0.123")  # type: ignore[arg-type]
+    finally:
+        DeviceProgrammer.read_memory = real_read  # type: ignore[method-assign]
+    assert snap.memory[1] == (0x0110, bytes(range(0x10, 0x34)))
+    reads = [
+        f
+        for f in recorder.frames
+        if f.kind is FrameKind.MEMORY_READ and (f.address or 0) >= 0x0110
+    ]
+    assert len(reads) == 3  # 36 octets in blocks of 12, not 36 single octets

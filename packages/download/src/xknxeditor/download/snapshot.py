@@ -13,9 +13,11 @@ check after the write tells.
 
 from __future__ import annotations
 
+import contextlib
 import datetime as dt
 import json
-from collections.abc import Collection
+import logging
+from collections.abc import Awaitable, Callable, Collection
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -26,7 +28,12 @@ if TYPE_CHECKING:
     from .dry_run import DryRunResult
     from .programmer import ConnectionManager, DeviceProgrammer
 
+logger = logging.getLogger(__name__)
+
 _LOAD_STATE_CONTROL = 5
+# How often a range or property is read before the snapshot gives up; every attempt after
+# the first one opens a fresh connection (a lost reply makes the device drop the old one).
+SNAPSHOT_ATTEMPTS = 3
 
 
 @dataclass
@@ -142,6 +149,59 @@ async def _programmer(
     return DeviceProgrammer(connection, max_apdu_length=max_apdu_length)
 
 
+class _ShortRead(Exception):
+    """A read that came back with fewer octets than asked for."""
+
+
+class _Reader:
+    """Reads for a snapshot on one connection, opening a fresh one after a failed read."""
+
+    def __init__(self, manager: ConnectionManager, max_apdu_length: int) -> None:
+        self._manager = manager
+        self._max_apdu_length = max_apdu_length
+        self._programmer: DeviceProgrammer | None = None
+        self.connections = 0
+
+    async def _current(self) -> DeviceProgrammer:
+        if self._programmer is None:
+            self._programmer = await _programmer(self._manager, self._max_apdu_length)
+            self.connections += 1
+        return self._programmer
+
+    async def _drop(self) -> None:
+        self._programmer = None
+        with contextlib.suppress(Exception):
+            await self._manager.close()
+
+    async def run(
+        self,
+        what: str,
+        read: Callable[[DeviceProgrammer], Awaitable[bytes]],
+        attempts: int,
+    ) -> bytes:
+        last: Exception | None = None
+        for attempt in range(1, max(1, attempts) + 1):
+            try:
+                return await read(await self._current())
+            except Exception as exc:  # no answer, dropped connection, short read
+                last = exc
+                logger.info(
+                    "snapshot: %s failed (attempt %d of %d): %s",
+                    what,
+                    attempt,
+                    attempts,
+                    exc,
+                )
+                await self._drop()
+        assert last is not None
+        if isinstance(last, _ShortRead):
+            raise SnapshotError(str(last)) from last
+        raise SnapshotError(f"{what}: {type(last).__name__}: {last}") from last
+
+    async def close(self) -> None:
+        await self._drop()
+
+
 async def take_snapshot(
     manager: ConnectionManager,
     plan: SnapshotPlan,
@@ -149,36 +209,56 @@ async def take_snapshot(
     address: str,
     scope: str = "",
     max_apdu_length: int = 15,
+    attempts: int = SNAPSHOT_ATTEMPTS,
 ) -> Snapshot:
-    """Read ``plan`` from the device behind ``manager`` (reads only). Raises
-    :class:`SnapshotError` when a read fails."""
+    """Read ``plan`` from the device behind ``manager`` (reads only). Every memory range is
+    read in full blocks (as large as the APDU allows, smaller only where the device itself
+    answers short); a range or property whose read fails is read again on a fresh connection,
+    up to ``attempts`` times. Raises :class:`SnapshotError` when a read still fails."""
     snap = Snapshot(
         address=address,
         taken=dt.datetime.now(dt.UTC).isoformat(timespec="seconds"),
         scope=scope,
         skipped=list(plan.skipped),
     )
+    reader = _Reader(manager, max_apdu_length)
     try:
-        programmer = await _programmer(manager, max_apdu_length)
-        try:
-            for start, size in plan.memory:
-                data = await programmer.read_memory(start, size)
+        for start, size in plan.memory:
+
+            async def read_range(
+                p: DeviceProgrammer, start: int = start, size: int = size
+            ) -> bytes:
+                p.reset_read_cap()
+                data = await p.read_memory(start, size)
                 if len(data) != size:
-                    raise SnapshotError(
+                    raise _ShortRead(
                         f"read {len(data)} of {size} octets at {start:#06x}"
                     )
-                snap.memory.append((start, data))
-            for obj, pid, start_index, count in plan.properties:
-                value = await programmer.read_property(
+                return data
+
+            snap.memory.append(
+                (
+                    start,
+                    await reader.run(f"memory at {start:#06x}", read_range, attempts),
+                )
+            )
+        for obj, pid, start_index, count in plan.properties:
+
+            async def read_prop(
+                p: DeviceProgrammer,
+                obj: int = obj,
+                pid: int = pid,
+                start_index: int = start_index,
+                count: int = count,
+            ) -> bytes:
+                return await p.read_property(
                     obj, pid, count=count, start_index=start_index
                 )
-                snap.properties.append((obj, pid, start_index, count, value))
-        finally:
-            await manager.close()
-    except SnapshotError:
-        raise
-    except Exception as exc:  # no answer, refused, timeout: the download must not start
-        raise SnapshotError(f"{type(exc).__name__}: {exc}") from exc
+
+            value = await reader.run(f"property {obj}/{pid}", read_prop, attempts)
+            snap.properties.append((obj, pid, start_index, count, value))
+    finally:
+        await reader.close()
     return snap
 
 
