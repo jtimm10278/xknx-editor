@@ -58,9 +58,9 @@
         "read_back",
         "plugin_edit"
       ],
-      "date": "2026-11-13",
-      "editor_version": "0.12.0 with the download fixes queued upstream",
-      "notes": "Full download with a setting changed in the Generic Plug-in view (queued upstream); the parameters read back the same (140 of 140 blocks)."
+      "date": "2026-11-15",
+      "editor_version": "0.14.1",
+      "notes": "Full download with a setting changed through the Siemens generic plug-in provider: the parameter image, table and write order matched ETS byte for byte, and the parameter area read back the same as planned."
     }
   ]
 }
